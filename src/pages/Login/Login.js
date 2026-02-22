@@ -16,7 +16,7 @@ export default {
     handleLogin(e) {
       e.preventDefault();
       // Simulação de login bem-sucedido
-      this.$router.push('/orders');
+      this.$router.push('/home');
     }
   }
 };
