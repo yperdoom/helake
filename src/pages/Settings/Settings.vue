@@ -30,3 +30,4 @@
     </main>
   </div>
 </template>
+<script src="./Settings.js"></script>
