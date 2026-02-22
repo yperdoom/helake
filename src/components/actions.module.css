@@ -1,0 +1,49 @@
+.quickActionsWrap {
+	flex: 1;
+	display: flex;
+	flex-direction: column;
+	gap: 32px;
+	min-width: 320px;
+	max-width: 360px;
+}
+.quickActionsSection {
+	background: #fff;
+	border-radius: 20px;
+	border: 1px solid #e7dbcf;
+	box-shadow: 0 2px 8px rgb(0 0 0 / 0.04);
+	padding: 24px;
+	display: flex;
+	flex-direction: column;
+	gap: 16px;
+}
+.quickActionsTitle {
+	font-size: 1.25rem;
+	font-weight: bold;
+	color: #221910;
+	margin-bottom: 8px;
+}
+.quickActionsGrid {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	gap: 12px;
+}
+.quickActionBtn {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	gap: 6px;
+	padding: 16px;
+	border-radius: 16px;
+	background: #fff;
+	border: 1px solid #e7dbcf;
+	color: #ec7f13;
+	font-weight: 600;
+	font-size: 1rem;
+	cursor: pointer;
+	transition: background 0.2s, border 0.2s;
+}
+.quickActionBtn:hover {
+	background: #fdecd9;
+	border: 1px solid #ec7f13;
+}
