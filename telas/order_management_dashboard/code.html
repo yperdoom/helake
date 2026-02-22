@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Order Management Dashboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@300;400;500;600;700;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#ec7f13",
+                        "primary-dark": "#d16b0e",
+                        "primary-light": "#fdecd9",
+                        "background-light": "#fcfaf8",
+                        "background-dark": "#221910",
+                        "surface-light": "#ffffff",
+                        "surface-dark": "#2d241b",
+                        "text-main": "#1b140d",
+                        "text-secondary": "#9a734c",
+                    },
+                    fontFamily: {
+                        "display": ["Work Sans", "sans-serif"],
+                        "body": ["Work Sans", "sans-serif"],
+                    },
+                    borderRadius: {"DEFAULT": "0.5rem", "lg": "0.75rem", "xl": "1rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Work Sans', sans-serif;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .material-symbols-outlined.fill {
+            font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-text-main dark:text-gray-100 min-h-screen flex overflow-hidden">
+<!-- Sidebar -->
+<aside class="hidden lg:flex w-72 flex-col border-r border-[#e7dbcf] dark:border-gray-800 bg-surface-light dark:bg-surface-dark h-screen sticky top-0">
+<div class="flex flex-col h-full justify-between p-6">
+<div class="flex flex-col gap-8">
+<!-- Branding -->
+<div class="flex items-center gap-3">
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-12 shadow-sm border border-primary/20" data-alt="Bakery logo featuring a stylized cupcake" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCAvPr3Wd2HqjqZYeo6-32Xgw6dIgfLyj1Bnl3pvQjAhF93ulyljB64BMBnk02SpOAePkN06z20lcy2wC5fVttc5UkwD9Vm34rPvefPmJTMxvXeVk3llWvYDe3XskouQWDq4FHJ0TtZhPEHdfHtluEmAzVxyOy9FzUGYak3AmEYjNOCKOJOh5KsHi2IifZXgXrBMuR53QUPIHPKpX0xJ8F_vYoPhMpLZ_xoDGp3fYocLfQgrsxmHGsLrNfUZQHFM30VSbs0TDmup8Xm");'></div>
+<div class="flex flex-col">
+<h1 class="text-lg font-bold leading-tight tracking-tight">Sweet Tooth</h1>
+<p class="text-text-secondary dark:text-gray-400 text-sm font-medium">Admin Panel</p>
+</div>
+</div>
+<!-- Navigation -->
+<nav class="flex flex-col gap-2">
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg bg-primary/10 text-primary dark:text-primary font-semibold transition-colors" href="#">
+<span class="material-symbols-outlined fill">dashboard</span>
+<span class="text-sm">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-text-main dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors group" href="#">
+<span class="material-symbols-outlined group-hover:text-primary transition-colors">shopping_bag</span>
+<span class="text-sm font-medium">Orders</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-text-main dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors group" href="#">
+<span class="material-symbols-outlined group-hover:text-primary transition-colors">inventory_2</span>
+<span class="text-sm font-medium">Inventory</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-text-main dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors group" href="#">
+<span class="material-symbols-outlined group-hover:text-primary transition-colors">calculate</span>
+<span class="text-sm font-medium">Cost Calculator</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-text-main dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors group" href="#">
+<span class="material-symbols-outlined group-hover:text-primary transition-colors">group</span>
+<span class="text-sm font-medium">Customers</span>
+</a>
+</nav>
+</div>
+<div class="flex flex-col gap-4">
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-text-main dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors group" href="#">
+<span class="material-symbols-outlined group-hover:text-primary transition-colors">settings</span>
+<span class="text-sm font-medium">Settings</span>
+</a>
+<div class="pt-4 border-t border-[#e7dbcf] dark:border-gray-800">
+<button class="flex w-full cursor-pointer items-center justify-center gap-2 rounded-lg h-12 px-6 bg-primary hover:bg-primary-dark text-white text-sm font-bold shadow-md shadow-primary/20 transition-all">
+<span class="material-symbols-outlined text-[20px]">add_circle</span>
+<span>New Order</span>
+</button>
+</div>
+</div>
+</div>
+</aside>
+<!-- Main Content -->
+<main class="flex-1 flex flex-col h-screen overflow-hidden relative">
+<!-- Header -->
+<header class="flex items-center justify-between px-8 py-6 bg-surface-light dark:bg-surface-dark border-b border-[#e7dbcf] dark:border-gray-800">
+<div class="flex flex-col gap-1">
+<h2 class="text-2xl font-bold text-text-main dark:text-white">Dashboard</h2>
+<p class="text-text-secondary dark:text-gray-400 text-sm">Overview of today's production and upcoming orders.</p>
+</div>
+<div class="flex items-center gap-4">
+<div class="relative hidden sm:block">
+<span class="absolute inset-y-0 left-0 flex items-center pl-3 text-text-secondary">
+<span class="material-symbols-outlined text-[20px]">search</span>
+</span>
+<input class="pl-10 pr-4 py-2.5 bg-[#f3ede7] dark:bg-gray-800 border-none rounded-lg text-sm focus:ring-2 focus:ring-primary w-64 placeholder-text-secondary/70" placeholder="Search orders..." type="text"/>
+</div>
+<button class="relative p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 text-text-main dark:text-white transition-colors">
+<span class="material-symbols-outlined">notifications</span>
+<span class="absolute top-2 right-2 w-2 h-2 bg-red-500 rounded-full border border-white dark:border-surface-dark"></span>
+</button>
+<div class="size-10 rounded-full bg-cover bg-center border-2 border-white dark:border-gray-700 shadow-sm" data-alt="User profile picture of a woman smiling" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBpMGQD0L0HyCpE8bPnboWU2l_jDdGTXzO_ZLVITGiXZhwb8c7N98oGtSxN3yWPoyrpl3hXgcqhmWiXDFzbMLj2uhRzqT94vBGBRCe6z8aKKgLfxCDMyxT1kp8enfJcX-2C65n_FoY6TZ0DAi0nuwkOTMhZPFYTBpW51fKhKcp-v7U6Uxg-YkuLcjMrKY43ej7L0GkQjs6WF7clp9yYkL4Kqr70DMtDVhdiuGJgM0cT0RUL4Piad2xekgm_WJWwnHcjX-La5w5KdvAC");'></div>
+</div>
+</header>
+<!-- Scrollable Content Area -->
+<div class="flex-1 overflow-y-auto p-8 bg-background-light dark:bg-background-dark">
+<div class="max-w-[1400px] mx-auto flex flex-col gap-8">
+<!-- KPI Cards -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+<!-- Card 1 -->
+<div class="bg-surface-light dark:bg-surface-dark p-6 rounded-xl border border-[#e7dbcf] dark:border-gray-800 shadow-sm flex flex-col gap-4">
+<div class="flex items-center justify-between">
+<div class="p-2 rounded-lg bg-orange-100 dark:bg-orange-900/30 text-primary">
+<span class="material-symbols-outlined">shopping_basket</span>
+</div>
+<span class="text-xs font-semibold px-2 py-1 bg-green-100 text-green-700 rounded-full">+2 today</span>
+</div>
+<div>
+<p class="text-text-secondary dark:text-gray-400 text-sm font-medium">Active Orders</p>
+<h3 class="text-3xl font-bold text-text-main dark:text-white mt-1">12</h3>
+</div>
+</div>
+<!-- Card 2 -->
+<div class="bg-surface-light dark:bg-surface-dark p-6 rounded-xl border border-[#e7dbcf] dark:border-gray-800 shadow-sm flex flex-col gap-4">
+<div class="flex items-center justify-between">
+<div class="p-2 rounded-lg bg-blue-100 dark:bg-blue-900/30 text-blue-600">
+<span class="material-symbols-outlined">payments</span>
+</div>
+<span class="text-xs font-semibold px-2 py-1 bg-green-100 text-green-700 rounded-full">+15%</span>
+</div>
+<div>
+<p class="text-text-secondary dark:text-gray-400 text-sm font-medium">Revenue Today</p>
+<h3 class="text-3xl font-bold text-text-main dark:text-white mt-1">$450</h3>
+</div>
+</div>
+<!-- Card 3 -->
+<div class="bg-surface-light dark:bg-surface-dark p-6 rounded-xl border border-[#e7dbcf] dark:border-gray-800 shadow-sm flex flex-col gap-4">
+<div class="flex items-center justify-between">
+<div class="p-2 rounded-lg bg-red-100 dark:bg-red-900/30 text-red-600">
+<span class="material-symbols-outlined">alarm</span>
+</div>
+<span class="text-xs font-semibold px-2 py-1 bg-red-100 text-red-700 rounded-full">Urgent</span>
+</div>
+<div>
+<p class="text-text-secondary dark:text-gray-400 text-sm font-medium">Upcoming Deadlines</p>
+<h3 class="text-3xl font-bold text-text-main dark:text-white mt-1">3</h3>
+</div>
+</div>
+<!-- Card 4 -->
+<div class="bg-surface-light dark:bg-surface-dark p-6 rounded-xl border border-[#e7dbcf] dark:border-gray-800 shadow-sm flex flex-col gap-4">
+<div class="flex items-center justify-between">
+<div class="p-2 rounded-lg bg-purple-100 dark:bg-purple-900/30 text-purple-600">
+<span class="material-symbols-outlined">checklist</span>
+</div>
+<span class="text-xs font-semibold px-2 py-1 bg-gray-100 text-gray-600 rounded-full">Needs review</span>
+</div>
+<div>
+<p class="text-text-secondary dark:text-gray-400 text-sm font-medium">Pending Approvals</p>
+<h3 class="text-3xl font-bold text-text-main dark:text-white mt-1">5</h3>
+</div>
+</div>
+</div>
+<!-- Main Layout Split -->
+<div class="flex flex-col xl:flex-row gap-8">
+<!-- Left: Active Orders Table -->
+<div class="flex-1 flex flex-col gap-4 min-w-0">
+<div class="flex items-center justify-between">
+<h3 class="text-xl font-bold text-text-main dark:text-white">Active Orders</h3>
+<button class="text-sm font-medium text-primary hover:text-primary-dark transition-colors">View All</button>
+</div>
+<div class="bg-surface-light dark:bg-surface-dark rounded-xl border border-[#e7dbcf] dark:border-gray-800 shadow-sm overflow-hidden">
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-gray-50/50 dark:bg-gray-800/50 border-b border-[#e7dbcf] dark:border-gray-800">
+<th class="py-4 px-6 text-xs font-semibold uppercase tracking-wider text-text-secondary dark:text-gray-400">Order ID</th>
+<th class="py-4 px-6 text-xs font-semibold uppercase tracking-wider text-text-secondary dark:text-gray-400">Customer</th>
+<th class="py-4 px-6 text-xs font-semibold uppercase tracking-wider text-text-secondary dark:text-gray-400">Product</th>
+<th class="py-4 px-6 text-xs font-semibold uppercase tracking-wider text-text-secondary dark:text-gray-400">Delivery</th>
+<th class="py-4 px-6 text-xs font-semibold uppercase tracking-wider text-text-secondary dark:text-gray-400">Status</th>
+<th class="py-4 px-6 text-xs font-semibold uppercase tracking-wider text-text-secondary dark:text-gray-400 text-right">Value</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-[#e7dbcf] dark:divide-gray-800">
+<tr class="hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors">
+<td class="py-4 px-6 text-sm font-medium text-text-main dark:text-white">#ORD-3921</td>
+<td class="py-4 px-6">
+<div class="flex items-center gap-3">
+<div class="size-8 rounded-full bg-gray-200 dark:bg-gray-700 flex items-center justify-center text-xs font-bold text-gray-500">SJ</div>
+<span class="text-sm font-medium text-text-main dark:text-white">Sarah Jenkins</span>
+</div>
+</td>
+<td class="py-4 px-6 text-sm text-text-secondary dark:text-gray-300">Wedding Cake (3-tier)</td>
+<td class="py-4 px-6 text-sm text-text-main dark:text-white font-medium">Today, 2:00 PM</td>
+<td class="py-4 px-6">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-orange-100 text-orange-700 dark:bg-orange-900/30 dark:text-orange-400 border border-orange-200 dark:border-orange-900/50">
+<span class="w-1.5 h-1.5 rounded-full bg-orange-500 animate-pulse"></span>
+                                                    Decorating
+                                                </span>
+</td>
+<td class="py-4 px-6 text-sm font-bold text-text-main dark:text-white text-right">$450.00</td>
+</tr>
+<tr class="hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors">
+<td class="py-4 px-6 text-sm font-medium text-text-main dark:text-white">#ORD-3920</td>
+<td class="py-4 px-6">
+<div class="flex items-center gap-3">
+<div class="size-8 rounded-full bg-gray-200 dark:bg-gray-700 flex items-center justify-center text-xs font-bold text-gray-500">MK</div>
+<span class="text-sm font-medium text-text-main dark:text-white">Mike K.</span>
+</div>
+</td>
+<td class="py-4 px-6 text-sm text-text-secondary dark:text-gray-300">Choc. Truffles (50ct)</td>
+<td class="py-4 px-6 text-sm text-text-main dark:text-white font-medium">Tomorrow, 10:00 AM</td>
+<td class="py-4 px-6">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400 border border-blue-200 dark:border-blue-900/50">
+                                                    Baking
+                                                </span>
+</td>
+<td class="py-4 px-6 text-sm font-bold text-text-main dark:text-white text-right">$125.00</td>
+</tr>
+<tr class="hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors">
+<td class="py-4 px-6 text-sm font-medium text-text-main dark:text-white">#ORD-3919</td>
+<td class="py-4 px-6">
+<div class="flex items-center gap-3">
+<div class="size-8 rounded-full bg-cover bg-center" data-alt="Small thumbnail of customer portrait" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuAivNhIsUyY5lF0U5sC7YA9yvLNEgJkdyfXMth1308icoKJjeLW32BcCONPpeM8dGKGPH0i0UsqGabEYkmamGijYHzU9bowRdwDLtHjW7eAWMcCYYGg6eyy4ei3MTAKRym9aflMhCUohPSX52hS2spB6vEGgVGzJRQRP1y1nvhQu1NFb1USSNqKnH4YnXJfa0odSZ3Zn1933LUHoParum-DIJgc1C36xM4Na_JnmguKfejCxZ398FO0kO8AWswwkyVhjo3ItY8aLolT");'></div>
+<span class="text-sm font-medium text-text-main dark:text-white">Lara Croft</span>
+</div>
+</td>
+<td class="py-4 px-6 text-sm text-text-secondary dark:text-gray-300">Birthday Pie (Apple)</td>
+<td class="py-4 px-6 text-sm text-text-main dark:text-white font-medium">Oct 26, 4:00 PM</td>
+<td class="py-4 px-6">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400 border border-green-200 dark:border-green-900/50">
+                                                    Ready
+                                                </span>
+</td>
+<td class="py-4 px-6 text-sm font-bold text-text-main dark:text-white text-right">$45.00</td>
+</tr>
+<tr class="hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors">
+<td class="py-4 px-6 text-sm font-medium text-text-main dark:text-white">#ORD-3918</td>
+<td class="py-4 px-6">
+<div class="flex items-center gap-3">
+<div class="size-8 rounded-full bg-gray-200 dark:bg-gray-700 flex items-center justify-center text-xs font-bold text-gray-500">JB</div>
+<span class="text-sm font-medium text-text-main dark:text-white">Jason Bourne</span>
+</div>
+</td>
+<td class="py-4 px-6 text-sm text-text-secondary dark:text-gray-300">Custom Macarons</td>
+<td class="py-4 px-6 text-sm text-text-main dark:text-white font-medium">Oct 28, 9:00 AM</td>
+<td class="py-4 px-6">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-700 dark:bg-gray-700 dark:text-gray-300 border border-gray-200 dark:border-gray-600">
+                                                    New
+                                                </span>
+</td>
+<td class="py-4 px-6 text-sm font-bold text-text-main dark:text-white text-right">$80.00</td>
+</tr>
+<tr class="hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors">
+<td class="py-4 px-6 text-sm font-medium text-text-main dark:text-white">#ORD-3917</td>
+<td class="py-4 px-6">
+<div class="flex items-center gap-3">
+<div class="size-8 rounded-full bg-gray-200 dark:bg-gray-700 flex items-center justify-center text-xs font-bold text-gray-500">EW</div>
+<span class="text-sm font-medium text-text-main dark:text-white">Emma Watson</span>
+</div>
+</td>
+<td class="py-4 px-6 text-sm text-text-secondary dark:text-gray-300">Sourdough Loaves (10)</td>
+<td class="py-4 px-6 text-sm text-text-main dark:text-white font-medium">Oct 29, 7:00 AM</td>
+<td class="py-4 px-6">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400 border border-blue-200 dark:border-blue-900/50">
+                                                    Mixing
+                                                </span>
+</td>
+<td class="py-4 px-6 text-sm font-bold text-text-main dark:text-white text-right">$65.00</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<!-- Right: Quick Actions & Deadlines -->
+<div class="w-full xl:w-[360px] flex flex-col gap-6">
+<!-- Quick Actions Section -->
+<div class="flex flex-col gap-4">
+<h3 class="text-xl font-bold text-text-main dark:text-white">Quick Actions</h3>
+<div class="grid grid-cols-2 gap-3">
+<button class="flex flex-col items-center justify-center gap-2 p-4 rounded-xl bg-surface-light dark:bg-surface-dark border border-[#e7dbcf] dark:border-gray-800 hover:border-primary/50 hover:shadow-md transition-all group">
+<div class="p-2 rounded-full bg-primary/10 text-primary group-hover:bg-primary group-hover:text-white transition-colors">
+<span class="material-symbols-outlined">add</span>
+</div>
+<span class="text-sm font-semibold text-text-main dark:text-white">Create Order</span>
+</button>
+<button class="flex flex-col items-center justify-center gap-2 p-4 rounded-xl bg-surface-light dark:bg-surface-dark border border-[#e7dbcf] dark:border-gray-800 hover:border-primary/50 hover:shadow-md transition-all group">
+<div class="p-2 rounded-full bg-primary/10 text-primary group-hover:bg-primary group-hover:text-white transition-colors">
+<span class="material-symbols-outlined">calculate</span>
+</div>
+<span class="text-sm font-semibold text-text-main dark:text-white">Cost Calc</span>
+</button>
+</div>
+</div>
+<!-- Upcoming Deadlines -->
+<div class="flex flex-col gap-4 flex-1">
+<h3 class="text-xl font-bold text-text-main dark:text-white">Upcoming (72h)</h3>
+<div class="bg-surface-light dark:bg-surface-dark rounded-xl border border-[#e7dbcf] dark:border-gray-800 p-4 flex flex-col gap-4 h-full">
+<!-- Deadline Item 1 -->
+<div class="flex gap-4 p-3 rounded-lg bg-red-50 dark:bg-red-900/10 border-l-4 border-red-500">
+<div class="flex flex-col items-center justify-center min-w-[50px] bg-white dark:bg-gray-800 rounded p-1 shadow-sm">
+<span class="text-xs font-bold text-red-500 uppercase">Today</span>
+<span class="text-lg font-black text-text-main dark:text-white">24</span>
+</div>
+<div class="flex flex-col justify-center">
+<h4 class="text-sm font-bold text-text-main dark:text-white">Wedding Cake Delivery</h4>
+<p class="text-xs text-text-secondary dark:text-gray-400">Due by 2:00 PM</p>
+</div>
+</div>
+<!-- Deadline Item 2 -->
+<div class="flex gap-4 p-3 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors border-l-4 border-primary">
+<div class="flex flex-col items-center justify-center min-w-[50px] bg-white dark:bg-gray-800 rounded p-1 border border-gray-100 dark:border-gray-700">
+<span class="text-xs font-bold text-primary uppercase">Tmrw</span>
+<span class="text-lg font-black text-text-main dark:text-white">25</span>
+</div>
+<div class="flex flex-col justify-center">
+<h4 class="text-sm font-bold text-text-main dark:text-white">Pickup: 50 Truffles</h4>
+<p class="text-xs text-text-secondary dark:text-gray-400">Due by 10:00 AM</p>
+</div>
+</div>
+<!-- Deadline Item 3 -->
+<div class="flex gap-4 p-3 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors border-l-4 border-gray-300 dark:border-gray-600">
+<div class="flex flex-col items-center justify-center min-w-[50px] bg-white dark:bg-gray-800 rounded p-1 border border-gray-100 dark:border-gray-700">
+<span class="text-xs font-bold text-gray-400 uppercase">Oct</span>
+<span class="text-lg font-black text-text-main dark:text-white">26</span>
+</div>
+<div class="flex flex-col justify-center">
+<h4 class="text-sm font-bold text-text-main dark:text-white">Birthday Pie (Apple)</h4>
+<p class="text-xs text-text-secondary dark:text-gray-400">Due by 4:00 PM</p>
+</div>
+</div>
+<!-- Deadline Item 4 -->
+<div class="flex gap-4 p-3 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors border-l-4 border-gray-300 dark:border-gray-600">
+<div class="flex flex-col items-center justify-center min-w-[50px] bg-white dark:bg-gray-800 rounded p-1 border border-gray-100 dark:border-gray-700">
+<span class="text-xs font-bold text-gray-400 uppercase">Oct</span>
+<span class="text-lg font-black text-text-main dark:text-white">26</span>
+</div>
+<div class="flex flex-col justify-center">
+<h4 class="text-sm font-bold text-text-main dark:text-white">Gluten Free Cupcakes</h4>
+<p class="text-xs text-text-secondary dark:text-gray-400">Due by 5:30 PM</p>
+</div>
+</div>
+</div>
+<!-- Mini Inventory Alert -->
+<div class="mt-2 p-4 bg-orange-50 dark:bg-orange-900/20 border border-orange-100 dark:border-orange-900/30 rounded-xl flex gap-3 items-start">
+<span class="material-symbols-outlined text-orange-600 text-xl mt-0.5">warning</span>
+<div>
+<h4 class="text-sm font-bold text-orange-800 dark:text-orange-200">Low Stock Alert</h4>
+<p class="text-xs text-orange-700/80 dark:text-orange-300/80 mt-1">Dark Chocolate (70%) is running low. <a class="underline font-semibold" href="#">Reorder now</a></p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+</body></html>

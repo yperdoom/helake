@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Ingredient Inventory - CulinaryOS</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@300;400;500;600;700;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#ec7f13",
+                        "background-light": "#fcfaf8",
+                        "background-dark": "#221910",
+                        "surface-light": "#ffffff",
+                        "surface-dark": "#2d241b",
+                    },
+                    fontFamily: {
+                        "display": ["Work Sans", "sans-serif"],
+                        "body": ["Work Sans", "sans-serif"],
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "2xl": "1rem",
+                    },
+                },
+            },
+        }
+    </script>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 font-display min-h-screen flex flex-col overflow-x-hidden">
+<!-- Top Navigation -->
+<header class="sticky top-0 z-30 flex items-center justify-between whitespace-nowrap border-b border-solid border-slate-200 dark:border-slate-800 bg-surface-light dark:bg-surface-dark px-6 py-3 shadow-sm">
+<div class="flex items-center gap-3 text-slate-900 dark:text-slate-100">
+<div class="size-8 flex items-center justify-center rounded bg-primary/10 text-primary">
+<span class="material-symbols-outlined text-2xl">bakery_dining</span>
+</div>
+<h2 class="text-xl font-bold leading-tight tracking-tight">CulinaryOS</h2>
+</div>
+<nav class="hidden md:flex flex-1 justify-center gap-8">
+<a class="text-slate-600 dark:text-slate-400 hover:text-primary dark:hover:text-primary transition-colors text-sm font-medium" href="#">Dashboard</a>
+<a class="text-slate-600 dark:text-slate-400 hover:text-primary dark:hover:text-primary transition-colors text-sm font-medium" href="#">Orders</a>
+<a class="text-primary font-bold text-sm" href="#">Inventory</a>
+<a class="text-slate-600 dark:text-slate-400 hover:text-primary dark:hover:text-primary transition-colors text-sm font-medium" href="#">Recipes</a>
+<a class="text-slate-600 dark:text-slate-400 hover:text-primary dark:hover:text-primary transition-colors text-sm font-medium" href="#">Settings</a>
+</nav>
+<div class="flex items-center gap-3">
+<button class="flex size-10 items-center justify-center rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-400 transition-colors relative">
+<span class="material-symbols-outlined">notifications</span>
+<span class="absolute top-2 right-2 size-2 bg-red-500 rounded-full border border-white dark:border-slate-900"></span>
+</button>
+<button class="flex size-10 items-center justify-center rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-400 transition-colors">
+<span class="material-symbols-outlined">account_circle</span>
+</button>
+</div>
+</header>
+<!-- Main Content Area -->
+<main class="flex-1 flex flex-col md:flex-row h-[calc(100vh-65px)] overflow-hidden">
+<!-- Inventory List Section -->
+<section class="flex-1 flex flex-col h-full overflow-hidden relative">
+<!-- Page Header -->
+<div class="px-6 py-6 md:px-8 md:py-8 flex flex-wrap items-end justify-between gap-4 bg-background-light dark:bg-background-dark">
+<div>
+<h1 class="text-3xl font-black tracking-tight text-slate-900 dark:text-slate-100 mb-2">Ingredient Pantry</h1>
+<p class="text-slate-500 dark:text-slate-400 text-base max-w-2xl">Track stock levels, monitor price fluctuations, and manage supplier details for your bakery.</p>
+</div>
+<button class="flex items-center gap-2 bg-primary hover:bg-primary/90 text-white font-semibold py-2.5 px-5 rounded-lg shadow-lg shadow-primary/20 transition-all active:scale-95">
+<span class="material-symbols-outlined text-xl">add</span>
+<span>Add Ingredient</span>
+</button>
+</div>
+<!-- Filters & Search Toolbar -->
+<div class="px-6 md:px-8 pb-4 flex flex-wrap gap-4 items-center border-b border-slate-200 dark:border-slate-800">
+<!-- Search -->
+<div class="relative flex-1 min-w-[280px] max-w-md">
+<span class="absolute inset-y-0 left-0 flex items-center pl-3 text-slate-400">
+<span class="material-symbols-outlined">search</span>
+</span>
+<input class="w-full bg-white dark:bg-surface-dark border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-slate-100 text-sm rounded-lg focus:ring-primary focus:border-primary block pl-10 p-2.5 shadow-sm" placeholder="Search ingredients (e.g. Flour, Chocolate)..." type="text"/>
+</div>
+<!-- Category Filters -->
+<div class="flex gap-2 overflow-x-auto pb-1 md:pb-0 scrollbar-hide">
+<button class="px-4 py-2 rounded-lg bg-slate-800 text-white text-sm font-medium shadow-sm whitespace-nowrap">All</button>
+<button class="px-4 py-2 rounded-lg bg-white dark:bg-surface-dark border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 text-sm font-medium transition-colors whitespace-nowrap">Dry Goods</button>
+<button class="px-4 py-2 rounded-lg bg-white dark:bg-surface-dark border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 text-sm font-medium transition-colors whitespace-nowrap">Dairy &amp; Eggs</button>
+<button class="px-4 py-2 rounded-lg bg-white dark:bg-surface-dark border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 text-sm font-medium transition-colors whitespace-nowrap">Spices</button>
+<button class="px-4 py-2 rounded-lg bg-white dark:bg-surface-dark border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 text-sm font-medium transition-colors whitespace-nowrap">Packaging</button>
+</div>
+<div class="ml-auto flex gap-2">
+<button class="p-2 text-slate-400 hover:text-primary transition-colors" title="Export CSV">
+<span class="material-symbols-outlined">download</span>
+</button>
+<button class="p-2 text-slate-400 hover:text-primary transition-colors" title="Filter Settings">
+<span class="material-symbols-outlined">tune</span>
+</button>
+</div>
+</div>
+<!-- Table Container -->
+<div class="flex-1 overflow-auto bg-background-light dark:bg-background-dark p-6 md:p-8 pt-4">
+<div class="bg-surface-light dark:bg-surface-dark border border-slate-200 dark:border-slate-800 rounded-xl shadow-sm overflow-hidden">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-slate-50/50 dark:bg-slate-800/50 border-b border-slate-200 dark:border-slate-800 text-xs uppercase tracking-wider text-slate-500 dark:text-slate-400 font-semibold">
+<th class="px-6 py-4 w-1/3">Ingredient Name</th>
+<th class="px-6 py-4 hidden md:table-cell">Category</th>
+<th class="px-6 py-4 hidden lg:table-cell">Supplier</th>
+<th class="px-6 py-4 hidden sm:table-cell text-right">Unit Size</th>
+<th class="px-6 py-4 text-right">Cost</th>
+<th class="px-6 py-4 hidden xl:table-cell text-right">Trend</th>
+<th class="px-6 py-4 text-center">Actions</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-slate-100 dark:divide-slate-800">
+<!-- Row 1 -->
+<tr class="group hover:bg-slate-50 dark:hover:bg-slate-800/40 transition-colors">
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="size-10 rounded-lg bg-orange-100 dark:bg-orange-900/30 flex items-center justify-center text-primary shrink-0">
+<span class="material-symbols-outlined">cookie</span>
+</div>
+<div>
+<div class="font-bold text-slate-900 dark:text-slate-100">Belgian Dark Chocolate (54%)</div>
+<div class="text-xs text-slate-500 dark:text-slate-400 lg:hidden">Callebaut • 10kg</div>
+</div>
+</div>
+</td>
+<td class="px-6 py-4 hidden md:table-cell">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-amber-100 text-amber-800 dark:bg-amber-900/40 dark:text-amber-300">
+                                        Chocolate
+                                    </span>
+</td>
+<td class="px-6 py-4 hidden lg:table-cell text-slate-600 dark:text-slate-300 text-sm">Callebaut</td>
+<td class="px-6 py-4 hidden sm:table-cell text-right text-slate-600 dark:text-slate-300 text-sm">10 kg</td>
+<td class="px-6 py-4 text-right">
+<div class="font-bold text-slate-900 dark:text-slate-100">$185.00</div>
+<div class="text-xs text-slate-400">($18.50/kg)</div>
+</td>
+<td class="px-6 py-4 hidden xl:table-cell text-right">
+<div class="flex items-center justify-end gap-1 text-red-500 text-xs font-medium bg-red-50 dark:bg-red-900/20 py-1 px-2 rounded ml-auto w-fit">
+<span class="material-symbols-outlined text-sm">trending_up</span>
+<span>+2.4%</span>
+</div>
+</td>
+<td class="px-6 py-4 text-center">
+<button class="p-2 text-slate-400 hover:text-primary transition-colors rounded-lg hover:bg-orange-50 dark:hover:bg-orange-900/20 group-hover:visible" title="View History">
+<span class="material-symbols-outlined">history</span>
+</button>
+</td>
+</tr>
+<!-- Row 2 -->
+<tr class="group hover:bg-slate-50 dark:hover:bg-slate-800/40 transition-colors bg-slate-50/30 dark:bg-slate-800/10"> <!-- Active Row Style Simulation -->
+<td class="px-6 py-4 border-l-4 border-primary bg-primary/5">
+<div class="flex items-center gap-3">
+<div class="size-10 rounded-lg bg-yellow-100 dark:bg-yellow-900/30 flex items-center justify-center text-yellow-600 shrink-0">
+<span class="material-symbols-outlined">water_drop</span>
+</div>
+<div>
+<div class="font-bold text-slate-900 dark:text-slate-100">Unsalted Butter AA</div>
+<div class="text-xs text-slate-500 dark:text-slate-400 lg:hidden">Local Farms • 1lb</div>
+</div>
+</div>
+</td>
+<td class="px-6 py-4 hidden md:table-cell bg-primary/5">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800 dark:bg-blue-900/40 dark:text-blue-300">
+                                        Dairy
+                                    </span>
+</td>
+<td class="px-6 py-4 hidden lg:table-cell text-slate-600 dark:text-slate-300 text-sm bg-primary/5">Local Farms</td>
+<td class="px-6 py-4 hidden sm:table-cell text-right text-slate-600 dark:text-slate-300 text-sm bg-primary/5">1 lb block</td>
+<td class="px-6 py-4 text-right bg-primary/5">
+<div class="font-bold text-slate-900 dark:text-slate-100">$6.20</div>
+<div class="text-xs text-slate-400">($6.20/lb)</div>
+</td>
+<td class="px-6 py-4 hidden xl:table-cell text-right bg-primary/5">
+<div class="flex items-center justify-end gap-1 text-emerald-500 text-xs font-medium bg-emerald-50 dark:bg-emerald-900/20 py-1 px-2 rounded ml-auto w-fit">
+<span class="material-symbols-outlined text-sm">trending_down</span>
+<span>-1.1%</span>
+</div>
+</td>
+<td class="px-6 py-4 text-center bg-primary/5">
+<button class="p-2 text-primary transition-colors rounded-lg bg-orange-100 dark:bg-orange-900/20" title="View History">
+<span class="material-symbols-outlined">history</span>
+</button>
+</td>
+</tr>
+<!-- Row 3 -->
+<tr class="group hover:bg-slate-50 dark:hover:bg-slate-800/40 transition-colors">
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="size-10 rounded-lg bg-stone-100 dark:bg-stone-800 flex items-center justify-center text-stone-500 shrink-0">
+<span class="material-symbols-outlined">grain</span>
+</div>
+<div>
+<div class="font-bold text-slate-900 dark:text-slate-100">Cake Flour</div>
+<div class="text-xs text-slate-500 dark:text-slate-400 lg:hidden">King Arthur • 50lb</div>
+</div>
+</div>
+</td>
+<td class="px-6 py-4 hidden md:table-cell">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-stone-100 text-stone-800 dark:bg-stone-700 dark:text-stone-300">
+                                        Dry Goods
+                                    </span>
+</td>
+<td class="px-6 py-4 hidden lg:table-cell text-slate-600 dark:text-slate-300 text-sm">King Arthur</td>
+<td class="px-6 py-4 hidden sm:table-cell text-right text-slate-600 dark:text-slate-300 text-sm">50 lb bag</td>
+<td class="px-6 py-4 text-right">
+<div class="font-bold text-slate-900 dark:text-slate-100">$55.00</div>
+<div class="text-xs text-slate-400">($1.10/lb)</div>
+</td>
+<td class="px-6 py-4 hidden xl:table-cell text-right">
+<div class="flex items-center justify-end gap-1 text-slate-400 text-xs font-medium py-1 px-2 rounded ml-auto w-fit">
+<span class="material-symbols-outlined text-sm">remove</span>
+<span>0.0%</span>
+</div>
+</td>
+<td class="px-6 py-4 text-center">
+<button class="p-2 text-slate-400 hover:text-primary transition-colors rounded-lg hover:bg-orange-50 dark:hover:bg-orange-900/20 group-hover:visible" title="View History">
+<span class="material-symbols-outlined">history</span>
+</button>
+</td>
+</tr>
+<!-- Row 4 -->
+<tr class="group hover:bg-slate-50 dark:hover:bg-slate-800/40 transition-colors">
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="size-10 rounded-lg bg-purple-100 dark:bg-purple-900/30 flex items-center justify-center text-purple-600 shrink-0">
+<span class="material-symbols-outlined">local_florist</span>
+</div>
+<div>
+<div class="font-bold text-slate-900 dark:text-slate-100">Vanilla Bean Paste</div>
+<div class="text-xs text-slate-500 dark:text-slate-400 lg:hidden">Nielsen-Massey • 1qt</div>
+</div>
+</div>
+</td>
+<td class="px-6 py-4 hidden md:table-cell">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-purple-100 text-purple-800 dark:bg-purple-900/40 dark:text-purple-300">
+                                        Spices
+                                    </span>
+</td>
+<td class="px-6 py-4 hidden lg:table-cell text-slate-600 dark:text-slate-300 text-sm">Nielsen-Massey</td>
+<td class="px-6 py-4 hidden sm:table-cell text-right text-slate-600 dark:text-slate-300 text-sm">1 qt bottle</td>
+<td class="px-6 py-4 text-right">
+<div class="font-bold text-slate-900 dark:text-slate-100">$42.50</div>
+<div class="text-xs text-slate-400">($1.32/oz)</div>
+</td>
+<td class="px-6 py-4 hidden xl:table-cell text-right">
+<div class="flex items-center justify-end gap-1 text-red-500 text-xs font-medium bg-red-50 dark:bg-red-900/20 py-1 px-2 rounded ml-auto w-fit">
+<span class="material-symbols-outlined text-sm">trending_up</span>
+<span>+5.2%</span>
+</div>
+</td>
+<td class="px-6 py-4 text-center">
+<button class="p-2 text-slate-400 hover:text-primary transition-colors rounded-lg hover:bg-orange-50 dark:hover:bg-orange-900/20 group-hover:visible" title="View History">
+<span class="material-symbols-outlined">history</span>
+</button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Pagination -->
+<div class="flex items-center justify-between mt-6">
+<p class="text-sm text-slate-500 dark:text-slate-400">Showing <span class="font-medium text-slate-900 dark:text-slate-100">1</span> to <span class="font-medium text-slate-900 dark:text-slate-100">4</span> of <span class="font-medium text-slate-900 dark:text-slate-100">42</span> results</p>
+<div class="flex gap-2">
+<button class="px-3 py-1 rounded border border-slate-200 dark:border-slate-700 text-sm text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 disabled:opacity-50" disabled="">Previous</button>
+<button class="px-3 py-1 rounded border border-slate-200 dark:border-slate-700 text-sm text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800">Next</button>
+</div>
+</div>
+</div>
+</section>
+<!-- Right Side Panel (Context: Visualizing "Unsalted Butter" History) -->
+<!-- In a real app, this would slide over or be a modal. Here it acts as a persistent details panel for the demo. -->
+<aside class="w-full md:w-[400px] bg-surface-light dark:bg-surface-dark border-l border-slate-200 dark:border-slate-800 flex flex-col h-full z-20 shadow-xl overflow-hidden shrink-0">
+<div class="flex items-center justify-between p-6 border-b border-slate-200 dark:border-slate-800 bg-background-light dark:bg-background-dark">
+<div>
+<div class="text-xs font-bold text-primary tracking-wider uppercase mb-1">Price History</div>
+<h3 class="text-xl font-bold text-slate-900 dark:text-slate-100">Unsalted Butter</h3>
+<p class="text-sm text-slate-500 dark:text-slate-400">Local Farms • 1 lb block</p>
+</div>
+<button class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-300">
+<span class="material-symbols-outlined">close</span>
+</button>
+</div>
+<div class="flex-1 overflow-y-auto p-6 space-y-8">
+<!-- Chart Placeholder -->
+<div class="bg-white dark:bg-slate-800 rounded-xl p-4 border border-slate-100 dark:border-slate-700 shadow-sm">
+<div class="flex items-end justify-between mb-4">
+<div>
+<span class="text-xs text-slate-500">Current Price</span>
+<div class="text-2xl font-black text-slate-900 dark:text-slate-100">$6.20</div>
+</div>
+<div class="text-right">
+<div class="inline-flex items-center gap-1 text-emerald-600 bg-emerald-100 dark:bg-emerald-900/30 px-2 py-1 rounded text-xs font-bold">
+<span class="material-symbols-outlined text-sm">trending_down</span>
+                                -1.1%
+                             </div>
+<div class="text-xs text-slate-400 mt-1">vs last month</div>
+</div>
+</div>
+<!-- CSS-only simple chart visualization -->
+<div class="h-40 w-full flex items-end justify-between gap-1 mt-6 relative" data-alt="Line chart showing price fluctuations of butter over 6 months">
+<!-- Grid lines -->
+<div class="absolute inset-0 flex flex-col justify-between pointer-events-none">
+<div class="border-t border-dashed border-slate-200 dark:border-slate-700 w-full h-px"></div>
+<div class="border-t border-dashed border-slate-200 dark:border-slate-700 w-full h-px"></div>
+<div class="border-t border-dashed border-slate-200 dark:border-slate-700 w-full h-px"></div>
+<div class="border-t border-dashed border-slate-200 dark:border-slate-700 w-full h-px"></div>
+</div>
+<!-- Bars representing trend points -->
+<div class="w-1/6 bg-orange-100 dark:bg-orange-900/20 rounded-t h-[60%] relative group cursor-pointer">
+<div class="absolute -top-8 left-1/2 -translate-x-1/2 bg-slate-900 text-white text-[10px] py-1 px-2 rounded opacity-0 group-hover:opacity-100 transition-opacity">$6.50</div>
+</div>
+<div class="w-1/6 bg-orange-100 dark:bg-orange-900/20 rounded-t h-[55%] relative group cursor-pointer">
+<div class="absolute -top-8 left-1/2 -translate-x-1/2 bg-slate-900 text-white text-[10px] py-1 px-2 rounded opacity-0 group-hover:opacity-100 transition-opacity">$6.45</div>
+</div>
+<div class="w-1/6 bg-orange-100 dark:bg-orange-900/20 rounded-t h-[65%] relative group cursor-pointer">
+<div class="absolute -top-8 left-1/2 -translate-x-1/2 bg-slate-900 text-white text-[10px] py-1 px-2 rounded opacity-0 group-hover:opacity-100 transition-opacity">$6.80</div>
+</div>
+<div class="w-1/6 bg-orange-200 dark:bg-orange-800/40 rounded-t h-[50%] relative group cursor-pointer">
+<div class="absolute -top-8 left-1/2 -translate-x-1/2 bg-slate-900 text-white text-[10px] py-1 px-2 rounded opacity-0 group-hover:opacity-100 transition-opacity">$6.25</div>
+</div>
+<div class="w-1/6 bg-orange-200 dark:bg-orange-800/40 rounded-t h-[52%] relative group cursor-pointer">
+<div class="absolute -top-8 left-1/2 -translate-x-1/2 bg-slate-900 text-white text-[10px] py-1 px-2 rounded opacity-0 group-hover:opacity-100 transition-opacity">$6.30</div>
+</div>
+<div class="w-1/6 bg-primary rounded-t h-[48%] relative group cursor-pointer shadow-lg shadow-primary/20">
+<div class="absolute -top-8 left-1/2 -translate-x-1/2 bg-slate-900 text-white text-[10px] py-1 px-2 rounded opacity-100">$6.20</div>
+</div>
+</div>
+<div class="flex justify-between text-[10px] text-slate-400 mt-2 font-medium uppercase tracking-wider">
+<span>May</span>
+<span>Jun</span>
+<span>Jul</span>
+<span>Aug</span>
+<span>Sep</span>
+<span>Oct</span>
+</div>
+</div>
+<!-- History Timeline -->
+<div>
+<h4 class="text-sm font-bold text-slate-900 dark:text-slate-100 mb-4">Recent Changes</h4>
+<div class="relative border-l border-slate-200 dark:border-slate-700 ml-3 space-y-6 pb-2">
+<!-- Timeline Item 1 -->
+<div class="relative pl-6 group">
+<span class="absolute -left-1.5 top-1.5 size-3 rounded-full bg-primary ring-4 ring-white dark:ring-surface-dark"></span>
+<div class="flex flex-col gap-1">
+<div class="flex justify-between items-start">
+<span class="text-sm font-bold text-slate-900 dark:text-slate-100">Price Update</span>
+<span class="text-xs text-slate-400">Oct 24, 2023</span>
+</div>
+<div class="text-sm text-slate-600 dark:text-slate-400">
+                                    Updated from <span class="line-through text-slate-400">$6.30</span> to <span class="font-bold text-slate-900 dark:text-slate-100">$6.20</span>
+</div>
+<div class="flex items-center gap-2 mt-1">
+<div class="size-5 rounded-full bg-slate-200 dark:bg-slate-700 flex items-center justify-center text-[10px] font-bold text-slate-600 dark:text-slate-300">JD</div>
+<span class="text-xs text-slate-400">Updated by John Doe</span>
+</div>
+</div>
+</div>
+<!-- Timeline Item 2 -->
+<div class="relative pl-6 group">
+<span class="absolute -left-1.5 top-1.5 size-3 rounded-full bg-slate-300 dark:bg-slate-600 ring-4 ring-white dark:ring-surface-dark"></span>
+<div class="flex flex-col gap-1">
+<div class="flex justify-between items-start">
+<span class="text-sm font-bold text-slate-700 dark:text-slate-300">Price Update</span>
+<span class="text-xs text-slate-400">Sep 15, 2023</span>
+</div>
+<div class="text-sm text-slate-600 dark:text-slate-400">
+                                    Updated from <span class="line-through text-slate-400">$6.25</span> to <span class="font-bold text-slate-700 dark:text-slate-300">$6.30</span>
+</div>
+<div class="flex items-center gap-2 mt-1">
+<div class="size-5 rounded-full bg-slate-200 dark:bg-slate-700 flex items-center justify-center text-[10px] font-bold text-slate-600 dark:text-slate-300">JD</div>
+<span class="text-xs text-slate-400">Updated by John Doe</span>
+</div>
+</div>
+</div>
+<!-- Timeline Item 3 -->
+<div class="relative pl-6 group">
+<span class="absolute -left-1.5 top-1.5 size-3 rounded-full bg-slate-300 dark:bg-slate-600 ring-4 ring-white dark:ring-surface-dark"></span>
+<div class="flex flex-col gap-1">
+<div class="flex justify-between items-start">
+<span class="text-sm font-bold text-slate-700 dark:text-slate-300">New Supplier</span>
+<span class="text-xs text-slate-400">Aug 02, 2023</span>
+</div>
+<div class="text-sm text-slate-600 dark:text-slate-400">
+                                    Changed supplier from <span class="italic">Sysco</span> to <span class="font-bold text-slate-700 dark:text-slate-300">Local Farms</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Quick Action -->
+<div class="bg-orange-50 dark:bg-orange-900/10 rounded-xl p-4 border border-orange-100 dark:border-orange-900/20">
+<h4 class="text-sm font-bold text-primary mb-2 flex items-center gap-2">
+<span class="material-symbols-outlined text-lg">edit</span>
+                        Quick Actions
+                    </h4>
+<button class="w-full bg-white dark:bg-surface-dark border border-orange-200 dark:border-orange-900 text-primary font-semibold py-2 px-4 rounded-lg text-sm hover:bg-orange-50 dark:hover:bg-orange-900/20 transition-colors shadow-sm mb-2">
+                        Update Current Price
+                    </button>
+<button class="w-full bg-transparent text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200 font-medium py-2 px-4 rounded-lg text-sm transition-colors">
+                        Edit Item Details
+                    </button>
+</div>
+</div>
+</aside>
+</main>
+</body></html>

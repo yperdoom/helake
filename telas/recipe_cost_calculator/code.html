@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Recipe Cost Calculator - CulinaryCalc</title>
+<link href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#ec7f13",
+                        "background-light": "#f8f7f6",
+                        "background-dark": "#221910",
+                    },
+                    fontFamily: {
+                        "display": ["Work Sans", "sans-serif"],
+                        "body": ["Work Sans", "sans-serif"],
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "2xl": "1rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        body { font-family: 'Work Sans', sans-serif; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        /* Custom scrollbar for tables */
+        .scrollbar-hide::-webkit-scrollbar { display: none; }
+        .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 font-display min-h-screen flex flex-col">
+<!-- Top Navbar -->
+<div class="w-full bg-white dark:bg-[#1a120b] border-b border-slate-200 dark:border-slate-800">
+<div class="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8">
+<header class="flex items-center justify-between h-16">
+<!-- Logo & Search -->
+<div class="flex items-center gap-8">
+<div class="flex items-center gap-3">
+<div class="size-8 text-primary">
+<svg class="w-full h-full" fill="none" viewbox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+<path d="M24 45.8096C19.6865 45.8096 15.4698 44.5305 11.8832 42.134C8.29667 39.7376 5.50128 36.3314 3.85056 32.3462C2.19985 28.361 1.76794 23.9758 2.60947 19.7452C3.451 15.5145 5.52816 11.6284 8.57829 8.5783C11.6284 5.52817 15.5145 3.45101 19.7452 2.60948C23.9758 1.76795 28.361 2.19986 32.3462 3.85057C36.3314 5.50129 39.7376 8.29668 42.134 11.8833C44.5305 15.4698 45.8096 19.6865 45.8096 24L24 24L24 45.8096Z" fill="currentColor"></path>
+</svg>
+</div>
+<h2 class="text-xl font-bold tracking-tight">CulinaryCalc</h2>
+</div>
+<div class="hidden md:flex items-center relative">
+<span class="material-symbols-outlined absolute left-3 text-slate-400">search</span>
+<input class="pl-10 pr-4 py-2 bg-slate-100 dark:bg-slate-800 border-none rounded-lg text-sm w-64 focus:ring-2 focus:ring-primary/50 placeholder-slate-400" placeholder="Search recipes, ingredients..." type="text"/>
+</div>
+</div>
+<!-- Nav Links & Profile -->
+<div class="flex items-center gap-6">
+<nav class="hidden lg:flex items-center gap-6">
+<a class="text-sm font-medium hover:text-primary transition-colors" href="#">Dashboard</a>
+<a class="text-sm font-medium text-primary" href="#">Recipes</a>
+<a class="text-sm font-medium hover:text-primary transition-colors" href="#">Inventory</a>
+<a class="text-sm font-medium hover:text-primary transition-colors" href="#">Orders</a>
+</nav>
+<div class="h-8 w-px bg-slate-200 dark:bg-slate-700 mx-2"></div>
+<button class="flex items-center gap-2">
+<div class="size-8 rounded-full bg-slate-200 bg-cover bg-center" data-alt="User profile picture showing a smiling baker" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAFiw_luRPNkfkWTEH1QmO3Olt1hPjziw3wa4tG4SlfOekcpHxs0oLsQmefBUhy7BJIdYEW_xsvOqGYykzmOkoCpe1p4Ep_Jv7m_k6BC677FlkW2yetqLr56wsz0X9feaXJ-JXaRhP2v7Sxx9r0EiEBI4Bz7i8U0sXhv3YE5Z40Mu5gzvS1iHnoDzms5Fdqfkwe7t3AXXxRXSgEngmcyiCR1qx4_m1Fy5jVOgEweBse0AI08c5DDiwR6VT4pzUf2xA02JySHuM2_hfg');"></div>
+</button>
+</div>
+</header>
+</div>
+</div>
+<!-- Main Layout -->
+<main class="flex-grow w-full max-w-[1440px] mx-auto p-4 sm:p-6 lg:p-8 gap-6 flex flex-col lg:flex-row">
+<!-- Left Column: Recipe Builder -->
+<div class="flex-1 flex flex-col gap-6">
+<!-- Header Section -->
+<div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+<div>
+<h1 class="text-3xl font-bold tracking-tight">Chocolate Ganache Cake</h1>
+<p class="text-slate-500 dark:text-slate-400 mt-1 flex items-center gap-2">
+<span class="inline-block size-2 rounded-full bg-green-500"></span> 
+                        Active Recipe • Last edited 2 hours ago
+                    </p>
+</div>
+<div class="flex gap-3">
+<button class="px-4 py-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-sm font-medium hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors flex items-center gap-2 shadow-sm">
+<span class="material-symbols-outlined text-lg">print</span> Export PDF
+                    </button>
+<button class="px-4 py-2 bg-primary text-white rounded-lg text-sm font-bold shadow-md shadow-primary/20 hover:bg-primary/90 transition-colors flex items-center gap-2">
+<span class="material-symbols-outlined text-lg">save</span> Save Changes
+                    </button>
+</div>
+</div>
+<!-- Basic Info Card -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-4 bg-white dark:bg-[#1a120b] p-5 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm">
+<label class="flex flex-col gap-1.5">
+<span class="text-xs font-semibold uppercase tracking-wider text-slate-500">Recipe Name</span>
+<input class="form-input rounded-lg border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 focus:border-primary focus:ring-primary/20 transition-all font-medium" type="text" value="Chocolate Ganache Cake"/>
+</label>
+<label class="flex flex-col gap-1.5">
+<span class="text-xs font-semibold uppercase tracking-wider text-slate-500">Category</span>
+<select class="form-select rounded-lg border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 focus:border-primary focus:ring-primary/20 transition-all font-medium">
+<option>Cakes &amp; Tortes</option>
+<option>Pastries</option>
+<option>Breads</option>
+</select>
+</label>
+<label class="flex flex-col gap-1.5">
+<span class="text-xs font-semibold uppercase tracking-wider text-slate-500">Yield Amount</span>
+<div class="relative">
+<input class="form-input w-full rounded-lg border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 focus:border-primary focus:ring-primary/20 transition-all font-medium pr-10" type="text" value="12 Slices"/>
+<span class="material-symbols-outlined absolute right-3 top-2.5 text-slate-400 text-lg">pie_chart</span>
+</div>
+</label>
+</div>
+<!-- Ingredients Table -->
+<div class="bg-white dark:bg-[#1a120b] rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden flex flex-col">
+<div class="p-5 border-b border-slate-200 dark:border-slate-800 flex justify-between items-center">
+<h3 class="font-bold text-lg flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">grocery</span> Ingredients
+                    </h3>
+<button class="text-primary text-sm font-bold hover:underline flex items-center gap-1">
+<span class="material-symbols-outlined text-lg">add_circle</span> Add Ingredient
+                    </button>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left text-sm">
+<thead class="bg-slate-50 dark:bg-slate-900/50 border-b border-slate-200 dark:border-slate-800">
+<tr>
+<th class="px-5 py-3 font-semibold text-slate-500 w-[35%]">Item</th>
+<th class="px-5 py-3 font-semibold text-slate-500 w-[15%]">Unit Cost</th>
+<th class="px-5 py-3 font-semibold text-slate-500 w-[15%]">Qty</th>
+<th class="px-5 py-3 font-semibold text-slate-500 w-[15%]">Unit</th>
+<th class="px-5 py-3 font-semibold text-slate-500 text-right w-[15%]">Subtotal</th>
+<th class="px-5 py-3 w-[5%]"></th>
+</tr>
+</thead>
+<tbody class="divide-y divide-slate-100 dark:divide-slate-800">
+<tr class="group hover:bg-slate-50 dark:hover:bg-slate-900/50 transition-colors">
+<td class="px-5 py-3">
+<div class="font-medium text-slate-900 dark:text-slate-100">Cake Flour (Type 45)</div>
+<div class="text-xs text-slate-400">Supplier: GrainCorp</div>
+</td>
+<td class="px-5 py-3 text-slate-600 dark:text-slate-400">$2.00 / kg</td>
+<td class="px-5 py-3">
+<input class="w-20 px-2 py-1 text-sm rounded border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 focus:ring-1 focus:ring-primary focus:border-primary" type="number" value="0.5"/>
+</td>
+<td class="px-5 py-3">
+<select class="w-24 px-2 py-1 text-sm rounded border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900">
+<option>kg</option>
+<option>g</option>
+<option>lb</option>
+</select>
+</td>
+<td class="px-5 py-3 text-right font-medium text-slate-900 dark:text-slate-100">$1.00</td>
+<td class="px-5 py-3 text-center">
+<button class="text-slate-400 hover:text-red-500 transition-colors opacity-0 group-hover:opacity-100">
+<span class="material-symbols-outlined text-lg">delete</span>
+</button>
+</td>
+</tr>
+<tr class="group hover:bg-slate-50 dark:hover:bg-slate-900/50 transition-colors">
+<td class="px-5 py-3">
+<div class="font-medium text-slate-900 dark:text-slate-100">Dark Chocolate (70%)</div>
+<div class="text-xs text-slate-400">Supplier: Callebaut</div>
+</td>
+<td class="px-5 py-3 text-slate-600 dark:text-slate-400">$18.50 / kg</td>
+<td class="px-5 py-3">
+<input class="w-20 px-2 py-1 text-sm rounded border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 focus:ring-1 focus:ring-primary focus:border-primary" type="number" value="300"/>
+</td>
+<td class="px-5 py-3">
+<select class="w-24 px-2 py-1 text-sm rounded border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900">
+<option>g</option>
+<option>kg</option>
+<option>oz</option>
+</select>
+</td>
+<td class="px-5 py-3 text-right font-medium text-slate-900 dark:text-slate-100">$5.55</td>
+<td class="px-5 py-3 text-center">
+<button class="text-slate-400 hover:text-red-500 transition-colors opacity-0 group-hover:opacity-100">
+<span class="material-symbols-outlined text-lg">delete</span>
+</button>
+</td>
+</tr>
+<tr class="group hover:bg-slate-50 dark:hover:bg-slate-900/50 transition-colors">
+<td class="px-5 py-3">
+<div class="font-medium text-slate-900 dark:text-slate-100">Large Eggs (Free Range)</div>
+<div class="text-xs text-slate-400">Supplier: Local Farm</div>
+</td>
+<td class="px-5 py-3 text-slate-600 dark:text-slate-400">$0.20 / unit</td>
+<td class="px-5 py-3">
+<input class="w-20 px-2 py-1 text-sm rounded border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 focus:ring-1 focus:ring-primary focus:border-primary" type="number" value="4"/>
+</td>
+<td class="px-5 py-3">
+<select class="w-24 px-2 py-1 text-sm rounded border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900">
+<option>unit</option>
+<option>dozen</option>
+</select>
+</td>
+<td class="px-5 py-3 text-right font-medium text-slate-900 dark:text-slate-100">$0.80</td>
+<td class="px-5 py-3 text-center">
+<button class="text-slate-400 hover:text-red-500 transition-colors opacity-0 group-hover:opacity-100">
+<span class="material-symbols-outlined text-lg">delete</span>
+</button>
+</td>
+</tr>
+<tr class="group hover:bg-slate-50 dark:hover:bg-slate-900/50 transition-colors">
+<td class="px-5 py-3">
+<div class="font-medium text-slate-900 dark:text-slate-100">Heavy Cream</div>
+<div class="text-xs text-slate-400">Supplier: DairyCo</div>
+</td>
+<td class="px-5 py-3 text-slate-600 dark:text-slate-400">$4.50 / L</td>
+<td class="px-5 py-3">
+<input class="w-20 px-2 py-1 text-sm rounded border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 focus:ring-1 focus:ring-primary focus:border-primary" type="number" value="250"/>
+</td>
+<td class="px-5 py-3">
+<select class="w-24 px-2 py-1 text-sm rounded border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900">
+<option>ml</option>
+<option>L</option>
+</select>
+</td>
+<td class="px-5 py-3 text-right font-medium text-slate-900 dark:text-slate-100">$1.12</td>
+<td class="px-5 py-3 text-center">
+<button class="text-slate-400 hover:text-red-500 transition-colors opacity-0 group-hover:opacity-100">
+<span class="material-symbols-outlined text-lg">delete</span>
+</button>
+</td>
+</tr>
+</tbody>
+<tfoot class="bg-slate-50 dark:bg-slate-900/30 border-t border-slate-200 dark:border-slate-800">
+<tr>
+<td class="px-5 py-3 text-right font-semibold text-slate-600 dark:text-slate-400 uppercase text-xs tracking-wider" colspan="4">Ingredients Subtotal</td>
+<td class="px-5 py-3 text-right font-bold text-lg text-slate-900 dark:text-slate-100">$8.47</td>
+<td></td>
+</tr>
+</tfoot>
+</table>
+</div>
+</div>
+<!-- Labor & Overhead Grid -->
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+<!-- Labor Cost -->
+<div class="bg-white dark:bg-[#1a120b] rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm p-5">
+<div class="flex items-center gap-2 mb-4 border-b border-slate-100 dark:border-slate-800 pb-3">
+<span class="material-symbols-outlined text-primary">engineering</span>
+<h3 class="font-bold text-lg">Labor Cost</h3>
+</div>
+<div class="space-y-4">
+<div class="flex items-center justify-between">
+<label class="text-sm font-medium text-slate-600 dark:text-slate-300">Staff Role</label>
+<select class="form-select w-40 text-sm rounded border-slate-200 bg-slate-50">
+<option>Head Baker</option>
+<option>Assistant</option>
+</select>
+</div>
+<div class="flex items-center justify-between">
+<label class="text-sm font-medium text-slate-600 dark:text-slate-300">Hourly Rate</label>
+<div class="relative w-40">
+<span class="absolute left-3 top-2 text-slate-400 text-sm">$</span>
+<input class="w-full pl-6 pr-3 py-1.5 text-sm rounded border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800" type="number" value="25.00"/>
+</div>
+</div>
+<div class="flex items-center justify-between">
+<label class="text-sm font-medium text-slate-600 dark:text-slate-300">Prep Time (hrs)</label>
+<input class="w-40 px-3 py-1.5 text-sm rounded border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800" type="number" value="1.5"/>
+</div>
+<div class="pt-3 border-t border-slate-100 dark:border-slate-800 flex justify-between items-center">
+<span class="text-sm font-semibold text-slate-500">Labor Subtotal</span>
+<span class="font-bold text-lg">$37.50</span>
+</div>
+</div>
+</div>
+<!-- Overhead & Packaging -->
+<div class="bg-white dark:bg-[#1a120b] rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm p-5">
+<div class="flex items-center gap-2 mb-4 border-b border-slate-100 dark:border-slate-800 pb-3">
+<span class="material-symbols-outlined text-primary">inventory_2</span>
+<h3 class="font-bold text-lg">Overhead &amp; Packaging</h3>
+</div>
+<div class="space-y-4">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<label class="text-sm font-medium text-slate-600 dark:text-slate-300">Utilities Markup</label>
+<span class="material-symbols-outlined text-slate-400 text-[16px] cursor-help" title="Percentage added for electricity, water, gas">help</span>
+</div>
+<div class="flex items-center gap-2">
+<input class="w-24 h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-primary" max="20" min="0" type="range" value="10"/>
+<span class="text-sm font-mono text-slate-500 w-10 text-right">10%</span>
+</div>
+</div>
+<div class="flex items-center justify-between">
+<label class="text-sm font-medium text-slate-600 dark:text-slate-300">Cake Box (10")</label>
+<div class="flex items-center gap-2">
+<input checked="" class="rounded border-slate-300 text-primary focus:ring-primary" type="checkbox"/>
+<span class="text-sm text-slate-500 w-16 text-right">$1.20</span>
+</div>
+</div>
+<div class="flex items-center justify-between">
+<label class="text-sm font-medium text-slate-600 dark:text-slate-300">Gold Base Board</label>
+<div class="flex items-center gap-2">
+<input checked="" class="rounded border-slate-300 text-primary focus:ring-primary" type="checkbox"/>
+<span class="text-sm text-slate-500 w-16 text-right">$0.85</span>
+</div>
+</div>
+<div class="pt-3 border-t border-slate-100 dark:border-slate-800 flex justify-between items-center">
+<span class="text-sm font-semibold text-slate-500">Overhead Total</span>
+<span class="font-bold text-lg">$6.65</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Right Sidebar: Financial Summary -->
+<div class="w-full lg:w-96 flex-shrink-0">
+<div class="sticky top-6 flex flex-col gap-6">
+<!-- Main Calculation Card -->
+<div class="bg-white dark:bg-[#1a120b] rounded-2xl shadow-lg border border-primary/20 overflow-hidden relative">
+<!-- Decorative header bar -->
+<div class="h-2 w-full bg-primary"></div>
+<div class="p-6 flex flex-col gap-6">
+<div>
+<h2 class="text-xl font-bold mb-1">Financial Summary</h2>
+<p class="text-sm text-slate-500">Real-time cost analysis per batch.</p>
+</div>
+<!-- Cost Breakdown -->
+<div class="space-y-3 p-4 bg-slate-50 dark:bg-slate-900 rounded-lg border border-slate-100 dark:border-slate-800">
+<div class="flex justify-between text-sm">
+<span class="text-slate-600 dark:text-slate-400">Ingredients</span>
+<span class="font-medium">$8.47</span>
+</div>
+<div class="flex justify-between text-sm">
+<span class="text-slate-600 dark:text-slate-400">Labor</span>
+<span class="font-medium">$37.50</span>
+</div>
+<div class="flex justify-between text-sm">
+<span class="text-slate-600 dark:text-slate-400">Overhead</span>
+<span class="font-medium">$6.65</span>
+</div>
+<div class="h-px bg-slate-200 dark:bg-slate-700 my-2"></div>
+<div class="flex justify-between text-base font-bold text-slate-800 dark:text-white">
+<span>Total COGS</span>
+<span>$52.62</span>
+</div>
+</div>
+<!-- Margin Input -->
+<div>
+<div class="flex justify-between items-center mb-2">
+<label class="text-sm font-semibold text-slate-700 dark:text-slate-300">Target Profit Margin</label>
+<span class="text-xs font-bold text-primary bg-primary/10 px-2 py-0.5 rounded">35%</span>
+</div>
+<input class="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-primary mb-1" max="100" min="0" type="range" value="35"/>
+<div class="flex justify-between text-xs text-slate-400">
+<span>0%</span>
+<span>Target: 30-40%</span>
+<span>100%</span>
+</div>
+</div>
+<!-- Final Price Display -->
+<div class="bg-primary/5 dark:bg-primary/10 rounded-xl p-5 border border-primary/20 text-center">
+<span class="text-sm font-medium text-primary uppercase tracking-wider">Suggested Selling Price</span>
+<div class="text-4xl font-extrabold text-slate-900 dark:text-white mt-1 mb-2 tracking-tight">$80.95</div>
+<div class="text-sm text-slate-600 dark:text-slate-400">
+                                Profit: <span class="font-bold text-green-600 dark:text-green-400">+$28.33</span> per batch
+                            </div>
+</div>
+</div>
+<!-- Per Unit Breakdown Footer -->
+<div class="bg-slate-50 dark:bg-slate-900/50 p-4 border-t border-slate-100 dark:border-slate-800 flex justify-between items-center">
+<span class="text-xs font-semibold uppercase text-slate-500">Per Slice (12)</span>
+<div class="text-right">
+<div class="text-sm font-bold text-slate-900 dark:text-slate-100">$6.75 / slice</div>
+<div class="text-[10px] text-slate-500">Cost: $4.38</div>
+</div>
+</div>
+</div>
+<!-- Quick Actions -->
+<div class="grid grid-cols-2 gap-3">
+<button class="flex flex-col items-center justify-center p-4 bg-white dark:bg-[#1a120b] border border-slate-200 dark:border-slate-800 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800 transition-all group">
+<span class="material-symbols-outlined text-slate-400 group-hover:text-primary mb-2">history</span>
+<span class="text-xs font-medium text-slate-600 dark:text-slate-300">Price History</span>
+</button>
+<button class="flex flex-col items-center justify-center p-4 bg-white dark:bg-[#1a120b] border border-slate-200 dark:border-slate-800 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800 transition-all group">
+<span class="material-symbols-outlined text-slate-400 group-hover:text-primary mb-2">sync</span>
+<span class="text-xs font-medium text-slate-600 dark:text-slate-300">Update Costs</span>
+</button>
+</div>
+<!-- Alert/Notification -->
+<div class="bg-blue-50 dark:bg-blue-900/20 border border-blue-100 dark:border-blue-800 rounded-lg p-4 flex gap-3">
+<span class="material-symbols-outlined text-blue-500 shrink-0">info</span>
+<div>
+<h4 class="text-sm font-bold text-blue-900 dark:text-blue-100 mb-1">Chocolate Price Increase</h4>
+<p class="text-xs text-blue-700 dark:text-blue-300 leading-relaxed">The unit price of Dark Chocolate has risen by 5% since your last calculation.</p>
+</div>
+</div>
+</div>
+</div>
+</main>
+</body></html>
