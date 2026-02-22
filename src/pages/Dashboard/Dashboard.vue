@@ -180,13 +180,6 @@
             </div>
           </div>
           <div :class="$actions.quickActionsWrap">
-            <div :class="$actions.quickActionsSection">
-              <h3 :class="$actions.quickActionsTitle">Quick Actions</h3>
-              <div :class="$actions.quickActionsGrid">
-                <button :class="$actions.quickActionBtn"><span class="material-symbols-outlined">add</span><span>Create Order</span></button>
-                <button :class="$actions.quickActionBtn"><span class="material-symbols-outlined">calculate</span><span>Cost Calc</span></button>
-              </div>
-            </div>
             <div :class="$deadlines.deadlinesSection">
               <h3 :class="$deadlines.deadlinesTitle">Upcoming (72h)</h3>
               <div :class="$deadlines.deadlinesList">
