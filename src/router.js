@@ -1,8 +1,8 @@
 import { createRouter, createWebHistory } from 'vue-router';
-import Login from './pages/Login.vue';
-import Ingredients from './pages/Ingredients.vue';
-import Orders from './pages/Orders.vue';
-import Recipes from './pages/Recipes.vue';
+import Login from './pages/Login/Login.vue';
+import Ingredients from './pages/Ingredients/Ingredients.vue';
+import Orders from './pages/Orders/Orders.vue';
+import Recipes from './pages/Recipes/Recipes.vue';
 
 const routes = [
   { path: '/', name: 'Login', component: Login },

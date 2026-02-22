@@ -1,0 +1,170 @@
+/* Estilos exclusivos para a tela de login */
+.loginBg {
+  background-image: linear-gradient(rgba(248, 247, 246, 0.85), rgba(248, 247, 246, 0.95)), url('https://lh3.googleusercontent.com/aida-public/AB6AXuCIilbXnfVMp6dkVPC877k0MMKHr8mqxwQKLdMmzWKOZm7zJ_-T1GsFDC3xFa82CrX6kagi_bEcC7W_Jiwln6v5rfYS06ev8-9VD5mEE5x1-UEhbid_VPk_wq7TvuG-hCg2ZzCHjGlIDHfSZRQ4xYy-hCkxBkZrooPr7d0qCnq7i0Jr5MLeu7zwmjMW_wl2TgnQV_miHMe35B1utqW4e6f6G7gI2MIOs3kym7gAsy-2jUXYBnJ9NZliMnNISHprZoSIZPG9w6xQqNz9');
+  background-size: cover;
+  background-position: center;
+  min-height: 100vh;
+  font-family: 'Work Sans', sans-serif;
+  color: #221910;
+}
+.loginOverlay {
+  position: absolute;
+  inset: 0;
+  background-image: url('https://www.transparenttextures.com/patterns/cubes.png');
+  opacity: 0.10;
+  pointer-events: none;
+}
+.loginContainer {
+  position: relative;
+  max-width: 420px;
+  margin: 0 auto;
+  z-index: 10;
+  padding-top: 48px;
+}
+.loginBrand {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 32px;
+  gap: 12px;
+}
+.loginLogo img {
+  width: 110px;
+  height: 110px;
+  border-radius: 30%;
+  object-fit: contain;
+}
+.loginLogo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 130px;
+  height: 130px;
+  border-radius: 30%;
+  background: rgba(236, 127, 19, 0.1);
+  color: #ec7f13;
+  margin-bottom: 8px;
+  box-shadow: 0 2px 8px rgb(0 0 0 / 0.04);
+  border: 1px solid rgba(236, 127, 19, 0.2);
+
+}
+.loginLogoIcon {
+  font-size: 2.5rem;
+}
+.loginTitle {
+  text-align: center;
+  font-size: 2rem;
+  font-weight: 900;
+  color: #221910;
+  letter-spacing: -0.5px;
+}
+.loginDesc {
+  text-align: center;
+  font-size: 1rem;
+  color: #9a734c;
+  max-width: 80%;
+}
+.loginCard {
+  background: #fff;
+  padding: 32px 16px;
+  box-shadow: 0 8px 30px rgb(0 0 0 / 0.04);
+  border-radius: 12px;
+  border: 1px solid rgba(0,0,0,0.05);
+}
+.loginField {
+  margin-bottom: 24px;
+  position: relative;
+}
+.loginField label {
+  display: block;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #221910;
+  margin-bottom: 6px;
+}
+.loginFieldRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.loginForgot {
+  font-size: 0.95rem;
+  color: #ec7f13;
+  font-weight: 600;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+.loginForgot:hover {
+  color: #d16b0e;
+}
+.loginInputIcon {
+  position: absolute;
+  left: 0;
+  top: 30px;
+  width: 40px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #9a734c;
+  pointer-events: none;
+}
+.loginField input {
+  width: 100%;
+  border-radius: 8px;
+  border: 1px solid #e5e7eb;
+  padding: 12px 12px 12px 40px;
+  font-size: 1rem;
+  color: #221910;
+  background: #f8f7f6;
+  transition: border-color 0.2s;
+}
+.loginField input:focus {
+  border-color: #ec7f13;
+  outline: none;
+}
+.loginActions {
+  margin-top: 16px;
+}
+.loginActions button {
+  width: 100%;
+  border-radius: 8px;
+  background: #ec7f13;
+  color: #fff;
+  font-size: 1rem;
+  font-weight: 700;
+  padding: 14px 0;
+  border: none;
+  box-shadow: 0 2px 8px rgb(236 127 19 / 0.10);
+  transition: background 0.2s, transform 0.1s;
+  cursor: pointer;
+}
+.loginActions button:hover {
+  background: #d16b0e;
+  transform: scale(0.98);
+}
+.loginFooter {
+  margin-top: 32px;
+  border-top: 1px solid #e5e7eb;
+  padding-top: 24px;
+  text-align: center;
+  color: #9a734c;
+  font-size: 1rem;
+}
+.loginFooter a {
+  color: #ec7f13;
+  font-weight: 600;
+  text-decoration: none;
+  margin-left: 4px;
+  transition: color 0.2s;
+}
+.loginFooter a:hover {
+  color: #d16b0e;
+}
+.loginCopyright {
+  margin-top: 32px;
+  text-align: center;
+  color: #9a734c;
+  font-size: 0.85rem;
+}
