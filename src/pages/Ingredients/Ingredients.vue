@@ -19,7 +19,7 @@
         <div :class="$main.sidebarFooter">
           <a :class="$main.sidebarNavItem" href="/settings"><span class="material-symbols-outlined">settings</span><span>Settings</span></a>
           <div :class="$main.sidebarNewOrderWrap">
-            <button :class="$main.sidebarNewOrderBtn"><span class="material-symbols-outlined">add_circle</span><span>New Order</span></button>
+            <button :class="$main.sidebarNewOrderBtn" @click="$router.push('/orders')"><span class="material-symbols-outlined">add_circle</span><span>New Order</span></button>
           </div>
         </div>
       </div>
@@ -33,33 +33,31 @@
         <div :class="$main.headerActions">
           <div :class="$main.headerSearchWrap">
             <span class="material-symbols-outlined">search</span>
-            <input :class="$main.headerSearchInput" placeholder="Search ingredients..." type="text" />
+            <input :class="$main.headerSearchInput" v-model="search" placeholder="Search ingredients..." type="text" />
           </div>
-          <button :class="$style.addBtn"><span class="material-symbols-outlined">add</span><span>Add Ingredient</span></button>
-          <button :class="$main.headerNotifBtn">
-            <span class="material-symbols-outlined">notifications</span>
-            <span :class="$main.headerNotifDot"></span>
-          </button>
+          <button :class="$style.addBtn" @click="openModal()"><span class="material-symbols-outlined">add</span><span>Add Ingredient</span></button>
           <div :class="$main.headerProfile" />
         </div>
       </header>
       <section :class="$main.ordersContent">
         <div :class="$style.filterBar">
-          <button :class="$style.filterChipActive">All</button>
-          <button :class="$style.filterChip">Dry Goods</button>
-          <button :class="$style.filterChip">Dairy & Eggs</button>
-          <button :class="$style.filterChip">Chocolates</button>
-          <button :class="$style.filterChip">Spices</button>
-          <button :class="$style.filterChip">Packaging</button>
+          <button :class="activeFilter === 'All' ? $style.filterChipActive : $style.filterChip" @click="activeFilter = 'All'">All</button>
+          <button v-for="cat in CATEGORIES" :key="cat"
+            :class="activeFilter === cat ? $style.filterChipActive : $style.filterChip"
+            @click="activeFilter = cat">{{ cat }}</button>
         </div>
-        <div :class="$main.ordersTableCard">
+        <div v-if="loading" :class="$style.emptyState">Loading...</div>
+        <div v-else-if="!filtered.length" :class="$style.emptyState">No ingredients found.</div>
+        <div v-else :class="$main.ordersTableCard">
           <div :class="$main.ordersTableScroll">
             <table :class="$main.ordersTable">
               <thead>
                 <tr>
                   <th>Ingredient</th>
                   <th>Category</th>
-                  <th>Qty in Stock</th>
+                  <th>In Stock</th>
+                  <th>Projected</th>
+                  <th>Min. Stock</th>
                   <th>Unit</th>
                   <th class="text-right">Cost / unit</th>
                   <th>Status</th>
@@ -67,81 +65,22 @@
                 </tr>
               </thead>
               <tbody>
-                <tr>
-                  <td><span :class="$style.ingredientName">Farinha de Trigo</span></td>
-                  <td><span :class="$style.badgeDryGoods">Dry Goods</span></td>
-                  <td>5</td><td>kg</td>
-                  <td class="text-right">R$4,50</td>
-                  <td><span :class="$main.statusReady">In Stock</span></td>
-                  <td :class="$style.actionCell">
-                    <button :class="$style.actionBtn"><span class="material-symbols-outlined">edit</span></button>
-                    <button :class="$style.actionBtnDanger"><span class="material-symbols-outlined">delete</span></button>
+                <tr v-for="ing in filtered" :key="ing._id">
+                  <td><span :class="$style.ingredientName">{{ ing.name }}</span></td>
+                  <td><span :class="$style['badge' + ing.category.replace(/[^a-zA-Z]/g, '')]">{{ ing.category }}</span></td>
+                  <td>{{ ing.currentStock }}</td>
+                  <td>{{ ing.projectedStock?.toFixed(2) }}</td>
+                  <td>{{ ing.minimumStock }}</td>
+                  <td>{{ ing.unit }}</td>
+                  <td class="text-right">{{ fmtCurrency(ing.costPerUnit) }}</td>
+                  <td>
+                    <span v-if="stockStatus(ing) === 'critical'" :class="$style.statusCritical"><span :class="$main.statusDotOrange"></span>Critical</span>
+                    <span v-else-if="stockStatus(ing) === 'low'" :class="$main.statusDecorating"><span :class="$main.statusDotOrange"></span>Low Stock</span>
+                    <span v-else :class="$main.statusReady">In Stock</span>
                   </td>
-                </tr>
-                <tr>
-                  <td><span :class="$style.ingredientName">Manteiga sem Sal</span></td>
-                  <td><span :class="$style.badgeDairy">Dairy</span></td>
-                  <td>0,5</td><td>kg</td>
-                  <td class="text-right">R$22,00</td>
-                  <td><span :class="$main.statusDecorating"><span :class="$main.statusDotOrange"></span>Low Stock</span></td>
                   <td :class="$style.actionCell">
-                    <button :class="$style.actionBtn"><span class="material-symbols-outlined">edit</span></button>
-                    <button :class="$style.actionBtnDanger"><span class="material-symbols-outlined">delete</span></button>
-                  </td>
-                </tr>
-                <tr>
-                  <td><span :class="$style.ingredientName">Chocolate 70%</span></td>
-                  <td><span :class="$style.badgeChocolate">Chocolate</span></td>
-                  <td>2</td><td>kg</td>
-                  <td class="text-right">R$35,00</td>
-                  <td><span :class="$main.statusReady">In Stock</span></td>
-                  <td :class="$style.actionCell">
-                    <button :class="$style.actionBtn"><span class="material-symbols-outlined">edit</span></button>
-                    <button :class="$style.actionBtnDanger"><span class="material-symbols-outlined">delete</span></button>
-                  </td>
-                </tr>
-                <tr>
-                  <td><span :class="$style.ingredientName">Ovos</span></td>
-                  <td><span :class="$style.badgeDairy">Dairy</span></td>
-                  <td>24</td><td>un</td>
-                  <td class="text-right">R$0,80</td>
-                  <td><span :class="$main.statusReady">In Stock</span></td>
-                  <td :class="$style.actionCell">
-                    <button :class="$style.actionBtn"><span class="material-symbols-outlined">edit</span></button>
-                    <button :class="$style.actionBtnDanger"><span class="material-symbols-outlined">delete</span></button>
-                  </td>
-                </tr>
-                <tr>
-                  <td><span :class="$style.ingredientName">Açúcar Refinado</span></td>
-                  <td><span :class="$style.badgeDryGoods">Dry Goods</span></td>
-                  <td>1</td><td>kg</td>
-                  <td class="text-right">R$4,00</td>
-                  <td><span :class="$main.statusDecorating"><span :class="$main.statusDotOrange"></span>Low Stock</span></td>
-                  <td :class="$style.actionCell">
-                    <button :class="$style.actionBtn"><span class="material-symbols-outlined">edit</span></button>
-                    <button :class="$style.actionBtnDanger"><span class="material-symbols-outlined">delete</span></button>
-                  </td>
-                </tr>
-                <tr>
-                  <td><span :class="$style.ingredientName">Leite Condensado</span></td>
-                  <td><span :class="$style.badgeDairy">Dairy</span></td>
-                  <td>3</td><td>un</td>
-                  <td class="text-right">R$5,50</td>
-                  <td><span :class="$main.statusReady">In Stock</span></td>
-                  <td :class="$style.actionCell">
-                    <button :class="$style.actionBtn"><span class="material-symbols-outlined">edit</span></button>
-                    <button :class="$style.actionBtnDanger"><span class="material-symbols-outlined">delete</span></button>
-                  </td>
-                </tr>
-                <tr>
-                  <td><span :class="$style.ingredientName">Creme de Leite</span></td>
-                  <td><span :class="$style.badgeDairy">Dairy</span></td>
-                  <td>0</td><td>un</td>
-                  <td class="text-right">R$4,20</td>
-                  <td><span :class="$main.statusNew">Out of Stock</span></td>
-                  <td :class="$style.actionCell">
-                    <button :class="$style.actionBtn"><span class="material-symbols-outlined">edit</span></button>
-                    <button :class="$style.actionBtnDanger"><span class="material-symbols-outlined">delete</span></button>
+                    <button :class="$style.actionBtn" @click="openModal(ing)"><span class="material-symbols-outlined">edit</span></button>
+                    <button :class="$style.actionBtnDanger" @click="remove(ing._id)"><span class="material-symbols-outlined">delete</span></button>
                   </td>
                 </tr>
               </tbody>
@@ -150,6 +89,54 @@
         </div>
       </section>
     </main>
+
+    <!-- Modal -->
+    <div v-if="showModal" :class="$style.modalOverlay" @click.self="closeModal">
+      <div :class="$style.modal">
+        <div :class="$style.modalHeader">
+          <h3>{{ editingId ? 'Edit Ingredient' : 'New Ingredient' }}</h3>
+          <button :class="$style.modalClose" @click="closeModal"><span class="material-symbols-outlined">close</span></button>
+        </div>
+        <div :class="$style.modalBody">
+          <div :class="$style.formRow">
+            <label :class="$style.formLabel">Name *</label>
+            <input :class="$style.formInput" v-model="form.name" type="text" placeholder="e.g. Farinha de Trigo" />
+          </div>
+          <div :class="$style.formGrid2">
+            <div :class="$style.formRow">
+              <label :class="$style.formLabel">Category</label>
+              <select :class="$style.formInput" v-model="form.category">
+                <option v-for="cat in CATEGORIES" :key="cat" :value="cat">{{ cat }}</option>
+              </select>
+            </div>
+            <div :class="$style.formRow">
+              <label :class="$style.formLabel">Unit</label>
+              <select :class="$style.formInput" v-model="form.unit">
+                <option v-for="u in UNITS" :key="u" :value="u">{{ u }}</option>
+              </select>
+            </div>
+          </div>
+          <div :class="$style.formRow">
+            <label :class="$style.formLabel">Cost per unit (R$)</label>
+            <input :class="$style.formInput" v-model.number="form.costPerUnit" type="number" min="0" step="0.01" />
+          </div>
+          <div :class="$style.formGrid2">
+            <div :class="$style.formRow">
+              <label :class="$style.formLabel">Current Stock</label>
+              <input :class="$style.formInput" v-model.number="form.currentStock" type="number" min="0" step="0.01" />
+            </div>
+            <div :class="$style.formRow">
+              <label :class="$style.formLabel">Minimum Stock (alert)</label>
+              <input :class="$style.formInput" v-model.number="form.minimumStock" type="number" min="0" step="0.01" />
+            </div>
+          </div>
+        </div>
+        <div :class="$style.modalFooter">
+          <button :class="$style.btnCancel" @click="closeModal">Cancel</button>
+          <button :class="$style.btnSave" @click="save" :disabled="!form.name">Save</button>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 <script src="./Ingredients.js"></script>

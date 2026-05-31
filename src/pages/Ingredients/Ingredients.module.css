@@ -1,106 +1,88 @@
 .addBtn {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  background: #ec7f13;
-  color: #fff;
-  border: none;
-  border-radius: 10px;
-  padding: 10px 18px;
-  font-size: 0.95rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background 0.2s;
-  white-space: nowrap;
+  display: flex; align-items: center; gap: 6px;
+  background: #ec7f13; color: #fff; border: none;
+  border-radius: 10px; padding: 10px 18px;
+  font-size: 0.95rem; font-weight: 600; cursor: pointer;
+  transition: background 0.2s; white-space: nowrap;
 }
 .addBtn:hover { background: #d16b0e; }
 
-.filterBar {
-  display: flex;
-  gap: 8px;
-  margin-bottom: 20px;
-  flex-wrap: wrap;
+.emptyState { text-align: center; padding: 64px; color: #9a734c; }
+
+.filterBar { display: flex; gap: 8px; margin-bottom: 20px; flex-wrap: wrap; }
+.filterChip, .filterChipActive {
+  padding: 6px 16px; border-radius: 20px; font-size: 0.9rem;
+  font-weight: 500; cursor: pointer; border: 1px solid #e7dbcf;
+  background: #fff; color: #221910; transition: all 0.2s;
 }
-.filterChip,
-.filterChipActive {
-  padding: 6px 16px;
-  border-radius: 20px;
-  font-size: 0.9rem;
-  font-weight: 500;
-  cursor: pointer;
-  border: 1px solid #e7dbcf;
-  background: #fff;
-  color: #221910;
-  transition: all 0.2s;
-}
-.filterChipActive {
-  background: #221910;
-  color: #fff;
-  border-color: #221910;
-}
+.filterChipActive { background: #221910; color: #fff; border-color: #221910; }
 .filterChip:hover { background: #f3ede7; }
 
-.ingredientName {
-  font-weight: 600;
-  color: #221910;
+.ingredientName { font-weight: 600; color: #221910; }
+.badgeDryGoods { background: #fef3c7; color: #92400e; border-radius: 8px; padding: 2px 10px; font-size: 0.9rem; font-weight: 600; }
+.badgeDairy { background: #dbeafe; color: #1d4ed8; border-radius: 8px; padding: 2px 10px; font-size: 0.9rem; font-weight: 600; }
+.badgeChocolate { background: #f5d0a9; color: #7c3303; border-radius: 8px; padding: 2px 10px; font-size: 0.9rem; font-weight: 600; }
+.badgeSpices { background: #fce7f3; color: #be185d; border-radius: 8px; padding: 2px 10px; font-size: 0.9rem; font-weight: 600; }
+.badgePackaging { background: #e0e7ff; color: #4338ca; border-radius: 8px; padding: 2px 10px; font-size: 0.9rem; font-weight: 600; }
+.badgeOther { background: #f3f4f6; color: #6b7280; border-radius: 8px; padding: 2px 10px; font-size: 0.9rem; font-weight: 600; }
+
+.statusCritical {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: #fee2e2; color: #e53e3e;
+  border-radius: 8px; padding: 2px 10px; font-size: 0.95rem; font-weight: 600;
 }
 
-.badgeDryGoods {
-  background: #fef3c7;
-  color: #92400e;
-  border-radius: 8px;
-  padding: 2px 10px;
-  font-size: 0.9rem;
-  font-weight: 600;
+.actionCell { display: flex; gap: 4px; }
+.actionBtn, .actionBtnDanger {
+  background: none; border: none; padding: 6px; border-radius: 8px;
+  cursor: pointer; color: #9a734c; transition: background 0.2s, color 0.2s;
+  display: flex; align-items: center;
 }
-.badgeDairy {
-  background: #dbeafe;
-  color: #1d4ed8;
-  border-radius: 8px;
-  padding: 2px 10px;
-  font-size: 0.9rem;
-  font-weight: 600;
-}
-.badgeChocolate {
-  background: #f5d0a9;
-  color: #7c3303;
-  border-radius: 8px;
-  padding: 2px 10px;
-  font-size: 0.9rem;
-  font-weight: 600;
-}
+.actionBtn:hover { background: #f3ede7; color: #ec7f13; }
+.actionBtnDanger:hover { background: #fee2e2; color: #e53e3e; }
 
-.actionCell {
-  display: flex;
-  gap: 4px;
+/* Modal */
+.modalOverlay {
+  position: fixed; inset: 0; background: rgba(0,0,0,0.4);
+  display: flex; align-items: center; justify-content: center; z-index: 100;
 }
-.actionBtn {
-  background: none;
-  border: none;
-  padding: 6px;
-  border-radius: 8px;
-  cursor: pointer;
-  color: #9a734c;
-  transition: background 0.2s, color 0.2s;
-  display: flex;
-  align-items: center;
+.modal {
+  background: #fff; border-radius: 20px; width: 100%;
+  max-width: 520px; box-shadow: 0 8px 32px rgba(0,0,0,0.15);
+  display: flex; flex-direction: column; max-height: 90vh; overflow-y: auto;
 }
-.actionBtn:hover {
-  background: #f3ede7;
-  color: #ec7f13;
+.modalHeader {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 24px 28px 16px; border-bottom: 1px solid #e7dbcf; position: sticky; top: 0; background: #fff;
 }
-.actionBtnDanger {
-  background: none;
-  border: none;
-  padding: 6px;
-  border-radius: 8px;
-  cursor: pointer;
-  color: #9a734c;
-  transition: background 0.2s, color 0.2s;
-  display: flex;
-  align-items: center;
+.modalHeader h3 { font-size: 1.15rem; font-weight: bold; color: #221910; }
+.modalClose {
+  background: none; border: none; cursor: pointer; color: #9a734c;
+  display: flex; align-items: center; border-radius: 8px; padding: 4px; transition: background 0.2s;
 }
-.actionBtnDanger:hover {
-  background: #fee2e2;
-  color: #e53e3e;
+.modalClose:hover { background: #f3ede7; }
+.modalBody { padding: 20px 28px; display: flex; flex-direction: column; gap: 16px; }
+.modalFooter {
+  padding: 16px 28px 24px; display: flex; gap: 12px; justify-content: flex-end;
+  border-top: 1px solid #e7dbcf; position: sticky; bottom: 0; background: #fff;
 }
+.formGrid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.formRow { display: flex; flex-direction: column; gap: 6px; }
+.formLabel { font-size: 0.82rem; font-weight: 600; color: #9a734c; text-transform: uppercase; letter-spacing: 0.04em; }
+.formInput {
+  border: 1px solid #e7dbcf; border-radius: 10px; padding: 10px 14px;
+  font-size: 0.95rem; color: #221910; background: #fcfaf8;
+  outline: none; font-family: inherit; transition: border-color 0.2s; width: 100%;
+}
+.formInput:focus { border-color: #ec7f13; background: #fff; }
+.btnCancel {
+  background: #f3ede7; color: #221910; border: none; border-radius: 10px;
+  padding: 10px 20px; font-size: 0.95rem; font-weight: 600; cursor: pointer; transition: background 0.2s;
+}
+.btnCancel:hover { background: #e7dbcf; }
+.btnSave {
+  background: #ec7f13; color: #fff; border: none; border-radius: 10px;
+  padding: 10px 24px; font-size: 0.95rem; font-weight: 700; cursor: pointer; transition: background 0.2s;
+}
+.btnSave:hover:not(:disabled) { background: #d16b0e; }
+.btnSave:disabled { opacity: 0.5; cursor: not-allowed; }

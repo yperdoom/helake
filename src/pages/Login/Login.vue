@@ -16,20 +16,20 @@
             <div :class="$style.loginInputIcon">
               <span class="material-symbols-outlined">mail</span>
             </div>
-            <input id="email" name="email" type="email" placeholder="chef@bakery.com" required autocomplete="email" />
+            <input id="email" name="email" type="email" v-model="email" placeholder="chef@bakery.com" required autocomplete="email" />
           </div>
           <div :class="$style.loginField">
             <div :class="$style.loginFieldRow">
               <label for="password">Password</label>
-              <a :class="$style.loginForgot" href="#">Forgot password?</a>
             </div>
             <div :class="$style.loginInputIcon">
               <span class="material-symbols-outlined">lock</span>
             </div>
-            <input id="password" name="password" type="password" placeholder="••••••••" required autocomplete="current-password" />
+            <input id="password" name="password" type="password" v-model="password" placeholder="••••••••" required autocomplete="current-password" />
           </div>
+          <p v-if="error" style="color:#e53e3e;font-size:0.9rem;margin-bottom:8px;">{{ error }}</p>
           <div :class="$style.loginActions">
-            <button type="submit">Sign in</button>
+            <button type="submit" :disabled="loading">{{ loading ? 'Signing in...' : 'Sign in' }}</button>
           </div>
         </form>
         <div :class="$style.loginFooter">

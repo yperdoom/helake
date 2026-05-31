@@ -2,9 +2,8 @@
   display: flex;
   flex-direction: column;
   gap: 24px;
-  max-width: 640px;
+  max-width: 680px;
 }
-
 .settingsSection {
   background: #fff;
   border-radius: 20px;
@@ -12,9 +11,8 @@
   padding: 28px 32px;
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 18px;
 }
-
 .sectionTitle {
   display: flex;
   align-items: center;
@@ -24,21 +22,23 @@
   color: #221910;
   margin-bottom: 4px;
 }
-
+.formGrid2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
 .formRow {
   display: flex;
   flex-direction: column;
   gap: 6px;
 }
-
 .formLabel {
-  font-size: 0.9rem;
+  font-size: 0.85rem;
   font-weight: 600;
   color: #9a734c;
   text-transform: uppercase;
   letter-spacing: 0.04em;
 }
-
 .formInput {
   border: 1px solid #e7dbcf;
   border-radius: 10px;
@@ -51,18 +51,16 @@
   transition: border-color 0.2s;
   width: 100%;
 }
-.formInput:focus {
-  border-color: #ec7f13;
-  background: #fff;
-}
-
+.formInput:focus { border-color: #ec7f13; background: #fff; }
 .saveRow {
   margin-top: 8px;
-  max-width: 640px;
+  max-width: 680px;
   display: flex;
+  align-items: center;
   justify-content: flex-end;
+  gap: 16px;
 }
-
+.savedMsg { color: #059669; font-weight: 600; }
 .saveBtn {
   background: #ec7f13;
   color: #fff;
@@ -74,4 +72,5 @@
   cursor: pointer;
   transition: background 0.2s;
 }
-.saveBtn:hover { background: #d16b0e; }
+.saveBtn:hover:not(:disabled) { background: #d16b0e; }
+.saveBtn:disabled { opacity: 0.6; cursor: not-allowed; }

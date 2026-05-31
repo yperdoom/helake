@@ -19,7 +19,7 @@
         <div :class="$main.sidebarFooter">
           <a :class="$main.sidebarNavItem" href="/settings"><span class="material-symbols-outlined">settings</span><span>Settings</span></a>
           <div :class="$main.sidebarNewOrderWrap">
-            <button :class="$main.sidebarNewOrderBtn"><span class="material-symbols-outlined">add_circle</span><span>New Order</span></button>
+            <button :class="$main.sidebarNewOrderBtn" @click="$router.push('/orders')"><span class="material-symbols-outlined">add_circle</span><span>New Order</span></button>
           </div>
         </div>
       </div>
@@ -33,18 +33,16 @@
         <div :class="$main.headerActions">
           <div :class="$main.headerSearchWrap">
             <span class="material-symbols-outlined">search</span>
-            <input :class="$main.headerSearchInput" placeholder="Search customers..." type="text" />
+            <input :class="$main.headerSearchInput" v-model="search" placeholder="Search customers..." type="text" />
           </div>
-          <button :class="$style.addBtn"><span class="material-symbols-outlined">person_add</span><span>Add Customer</span></button>
-          <button :class="$main.headerNotifBtn">
-            <span class="material-symbols-outlined">notifications</span>
-            <span :class="$main.headerNotifDot"></span>
-          </button>
+          <button :class="$style.addBtn" @click="openModal()"><span class="material-symbols-outlined">person_add</span><span>Add Customer</span></button>
           <div :class="$main.headerProfile" />
         </div>
       </header>
       <section :class="$main.ordersContent">
-        <div :class="$main.ordersTableCard">
+        <div v-if="loading" :class="$style.emptyState">Loading...</div>
+        <div v-else-if="!filtered.length" :class="$style.emptyState">No customers yet. Add your first customer!</div>
+        <div v-else :class="$main.ordersTableCard">
           <div :class="$main.ordersTableScroll">
             <table :class="$main.ordersTable">
               <thead>
@@ -58,84 +56,20 @@
                 </tr>
               </thead>
               <tbody>
-                <tr>
+                <tr v-for="c in filtered" :key="c._id">
                   <td>
                     <div :class="$main.customerCell">
-                      <div :class="$main.customerAvatar">MS</div>
-                      <span>Maria Silva</span>
+                      <div :class="$main.customerAvatar">{{ c.name.slice(0, 2).toUpperCase() }}</div>
+                      <span>{{ c.name }}</span>
                     </div>
                   </td>
-                  <td>(11) 99999-0001</td>
-                  <td>5</td>
-                  <td class="text-right">R$780,00</td>
-                  <td>28/05/2026</td>
+                  <td>{{ c.phone || '—' }}</td>
+                  <td>{{ c.totalOrders }}</td>
+                  <td class="text-right">{{ fmtCurrency(c.totalSpent) }}</td>
+                  <td>{{ fmtDate(c.lastOrder) }}</td>
                   <td :class="$style.actionCell">
-                    <button :class="$style.actionBtn"><span class="material-symbols-outlined">receipt_long</span></button>
-                    <button :class="$style.actionBtn"><span class="material-symbols-outlined">edit</span></button>
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    <div :class="$main.customerCell">
-                      <div :class="$main.customerAvatar">JS</div>
-                      <span>João Santos</span>
-                    </div>
-                  </td>
-                  <td>(11) 99999-0002</td>
-                  <td>2</td>
-                  <td class="text-right">R$180,00</td>
-                  <td>15/04/2026</td>
-                  <td :class="$style.actionCell">
-                    <button :class="$style.actionBtn"><span class="material-symbols-outlined">receipt_long</span></button>
-                    <button :class="$style.actionBtn"><span class="material-symbols-outlined">edit</span></button>
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    <div :class="$main.customerCell">
-                      <div :class="$main.customerAvatar">AO</div>
-                      <span>Ana Oliveira</span>
-                    </div>
-                  </td>
-                  <td>(19) 99999-0003</td>
-                  <td>8</td>
-                  <td class="text-right">R$1.240,00</td>
-                  <td>30/05/2026</td>
-                  <td :class="$style.actionCell">
-                    <button :class="$style.actionBtn"><span class="material-symbols-outlined">receipt_long</span></button>
-                    <button :class="$style.actionBtn"><span class="material-symbols-outlined">edit</span></button>
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    <div :class="$main.customerCell">
-                      <div :class="$main.customerAvatar">CF</div>
-                      <span>Carla Ferreira</span>
-                    </div>
-                  </td>
-                  <td>(11) 99999-0004</td>
-                  <td>3</td>
-                  <td class="text-right">R$320,00</td>
-                  <td>10/05/2026</td>
-                  <td :class="$style.actionCell">
-                    <button :class="$style.actionBtn"><span class="material-symbols-outlined">receipt_long</span></button>
-                    <button :class="$style.actionBtn"><span class="material-symbols-outlined">edit</span></button>
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    <div :class="$main.customerCell">
-                      <div :class="$main.customerAvatar">RL</div>
-                      <span>Ricardo Lima</span>
-                    </div>
-                  </td>
-                  <td>(11) 99999-0005</td>
-                  <td>1</td>
-                  <td class="text-right">R$85,00</td>
-                  <td>02/05/2026</td>
-                  <td :class="$style.actionCell">
-                    <button :class="$style.actionBtn"><span class="material-symbols-outlined">receipt_long</span></button>
-                    <button :class="$style.actionBtn"><span class="material-symbols-outlined">edit</span></button>
+                    <button :class="$style.actionBtn" @click="openModal(c)"><span class="material-symbols-outlined">edit</span></button>
+                    <button :class="$style.actionBtnDanger" @click="remove(c._id)"><span class="material-symbols-outlined">delete</span></button>
                   </td>
                 </tr>
               </tbody>
@@ -144,6 +78,34 @@
         </div>
       </section>
     </main>
+
+    <!-- Modal -->
+    <div v-if="showModal" :class="$style.modalOverlay" @click.self="closeModal">
+      <div :class="$style.modal">
+        <div :class="$style.modalHeader">
+          <h3>{{ editingId ? 'Edit Customer' : 'New Customer' }}</h3>
+          <button :class="$style.modalClose" @click="closeModal"><span class="material-symbols-outlined">close</span></button>
+        </div>
+        <div :class="$style.modalBody">
+          <div :class="$style.formRow">
+            <label :class="$style.formLabel">Name *</label>
+            <input :class="$style.formInput" v-model="form.name" type="text" placeholder="Customer name" />
+          </div>
+          <div :class="$style.formRow">
+            <label :class="$style.formLabel">Phone</label>
+            <input :class="$style.formInput" v-model="form.phone" type="text" placeholder="(11) 99999-0000" />
+          </div>
+          <div :class="$style.formRow">
+            <label :class="$style.formLabel">Notes</label>
+            <textarea :class="$style.formInput" v-model="form.notes" rows="3" placeholder="Any notes about this customer..."></textarea>
+          </div>
+        </div>
+        <div :class="$style.modalFooter">
+          <button :class="$style.btnCancel" @click="closeModal">Cancel</button>
+          <button :class="$style.btnSave" @click="save" :disabled="!form.name">Save</button>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 <script src="./Customers.js"></script>

@@ -1,18 +1,117 @@
-import styles from './Orders.module.css';
-// import actions from '../../components/actions.module.css';
 import main from '../../components/main.module.css';
+import styles from './Orders.module.css';
+
+const STATUSES = ['new', 'in_production', 'ready', 'delivered', 'cancelled'];
+const STATUS_LABELS = {
+  new: 'Novo', in_production: 'Em Produção', ready: 'Pronto',
+  delivered: 'Entregue', cancelled: 'Cancelado',
+};
+const EMPTY_FORM = {
+  customer: '', recipe: '', quantity: 1, deliveryDate: '',
+  paidPrice: 0, notes: '',
+};
 
 export default {
   name: 'Orders',
+  data() {
+    return {
+      orders: [],
+      customers: [],
+      recipes: [],
+      loading: false,
+      showModal: false,
+      editingId: null,
+      form: { ...EMPTY_FORM },
+      STATUSES,
+      STATUS_LABELS,
+    };
+  },
+  async mounted() {
+    await Promise.all([this.fetchOrders(), this.fetchCustomers(), this.fetchRecipes()]);
+  },
   computed: {
-    $main() {
-      return main;
+    $main() { return main; },
+    $style() { return styles; },
+  },
+  methods: {
+    async fetchOrders() {
+      this.loading = true;
+      try {
+        const r = await fetch('/api/orders');
+        const { orders } = await r.json();
+        this.orders = orders;
+      } finally {
+        this.loading = false;
+      }
     },
-    // $actions() {
-    //   return actions
-    // },
-    $style() {
-      return styles;
-    }
-  }
+    async fetchCustomers() {
+      const r = await fetch('/api/customers');
+      const { customers } = await r.json();
+      this.customers = customers;
+    },
+    async fetchRecipes() {
+      const r = await fetch('/api/recipes');
+      const { recipes } = await r.json();
+      this.recipes = recipes;
+    },
+    openModal(order = null) {
+      this.editingId = order?._id || null;
+      if (order) {
+        const d = order.deliveryDate ? new Date(order.deliveryDate).toISOString().split('T')[0] : '';
+        this.form = {
+          customer: order.customer?._id || order.customer,
+          recipe: order.recipe?._id || order.recipe,
+          quantity: order.quantity,
+          deliveryDate: d,
+          paidPrice: order.paidPrice,
+          notes: order.notes,
+        };
+      } else {
+        this.form = { ...EMPTY_FORM };
+      }
+      this.showModal = true;
+    },
+    closeModal() { this.showModal = false; },
+    async save() {
+      const url = this.editingId ? `/api/orders/${this.editingId}` : '/api/orders';
+      const method = this.editingId ? 'PUT' : 'POST';
+      await fetch(url, {
+        method,
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(this.form),
+      });
+      this.closeModal();
+      await this.fetchOrders();
+    },
+    async updateStatus(id, status) {
+      await fetch(`/api/orders/${id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ status }),
+      });
+      await this.fetchOrders();
+    },
+    async remove(id) {
+      if (!confirm('Remover pedido?')) return;
+      await fetch(`/api/orders/${id}`, { method: 'DELETE' });
+      await this.fetchOrders();
+    },
+    statusClass(status) {
+      const map = {
+        new: this.$main.statusNew,
+        in_production: this.$main.statusBaking,
+        ready: this.$main.statusReady,
+        delivered: this.$main.statusReady,
+        cancelled: this.$main.statusNew,
+      };
+      return map[status] || this.$main.statusNew;
+    },
+    fmtDate(d) {
+      if (!d) return '—';
+      return new Date(d).toLocaleDateString('pt-BR');
+    },
+    fmtCurrency(v) {
+      return (v || 0).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+    },
+  },
 };
