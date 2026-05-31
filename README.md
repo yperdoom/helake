@@ -70,7 +70,7 @@ Após o banco conectar com sucesso, crie o usuário administrador:
 ```bash
 curl -X POST http://localhost:3000/api/auth/setup \
   -H "Content-Type: application/json" \
-  -d '{"email":"heloisatizziani31@gmail.com","password":"loloca31"}'
+  -d '{"email":"seu@email.com","password":"suasenha"}'
 ```
 
 Este endpoint se auto-bloqueia após o primeiro uso — não é possível criar um segundo usuário por ele.
