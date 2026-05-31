@@ -1,0 +1,94 @@
+.addBtn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: #ec7f13;
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  padding: 10px 18px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+  white-space: nowrap;
+}
+.addBtn:hover { background: #d16b0e; }
+
+.recipeIcon {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  background: #fdecd9;
+  color: #ec7f13;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.recipeName {
+  font-weight: 600;
+  color: #221910;
+}
+
+.badgeCake {
+  background: #ede9fe;
+  color: #5b21b6;
+  border-radius: 8px;
+  padding: 2px 10px;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+.badgeSweet {
+  background: #fce7f3;
+  color: #be185d;
+  border-radius: 8px;
+  padding: 2px 10px;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.marginHigh {
+  background: #d1fae5;
+  color: #059669;
+  border-radius: 8px;
+  padding: 2px 10px;
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+.marginMid {
+  background: #fef3c7;
+  color: #d97706;
+  border-radius: 8px;
+  padding: 2px 10px;
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+.marginLow {
+  background: #fee2e2;
+  color: #e53e3e;
+  border-radius: 8px;
+  padding: 2px 10px;
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
+.actionCell {
+  display: flex;
+  gap: 4px;
+}
+.actionBtn {
+  background: none;
+  border: none;
+  padding: 6px;
+  border-radius: 8px;
+  cursor: pointer;
+  color: #9a734c;
+  transition: background 0.2s, color 0.2s;
+  display: flex;
+  align-items: center;
+}
+.actionBtn:hover {
+  background: #f3ede7;
+  color: #ec7f13;
+}
