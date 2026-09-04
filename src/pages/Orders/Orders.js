@@ -1,5 +1,6 @@
 import main from '../../components/main.module.css';
 import styles from './Orders.module.css';
+import { apiFetch } from '@/lib/api.js';
 
 const STATUSES = ['new', 'in_production', 'ready', 'delivered', 'cancelled'];
 const STATUS_LABELS = {
@@ -37,7 +38,7 @@ export default {
     async fetchOrders() {
       this.loading = true;
       try {
-        const r = await fetch('/api/orders');
+        const r = await apiFetch('/api/orders');
         const { orders } = await r.json();
         this.orders = orders;
       } finally {
@@ -45,12 +46,12 @@ export default {
       }
     },
     async fetchCustomers() {
-      const r = await fetch('/api/customers');
+      const r = await apiFetch('/api/customers');
       const { customers } = await r.json();
       this.customers = customers;
     },
     async fetchRecipes() {
-      const r = await fetch('/api/recipes');
+      const r = await apiFetch('/api/recipes');
       const { recipes } = await r.json();
       this.recipes = recipes;
     },
@@ -75,7 +76,7 @@ export default {
     async save() {
       const url = this.editingId ? `/api/orders/${this.editingId}` : '/api/orders';
       const method = this.editingId ? 'PUT' : 'POST';
-      await fetch(url, {
+      await apiFetch(url, {
         method,
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(this.form),
@@ -84,7 +85,7 @@ export default {
       await this.fetchOrders();
     },
     async updateStatus(id, status) {
-      await fetch(`/api/orders/${id}`, {
+      await apiFetch(`/api/orders/${id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ status }),
@@ -93,7 +94,7 @@ export default {
     },
     async remove(id) {
       if (!confirm('Remover pedido?')) return;
-      await fetch(`/api/orders/${id}`, { method: 'DELETE' });
+      await apiFetch(`/api/orders/${id}`, { method: 'DELETE' });
       await this.fetchOrders();
     },
     statusClass(status) {

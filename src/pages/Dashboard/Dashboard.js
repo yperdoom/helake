@@ -2,6 +2,7 @@ import styles from './Dashboard.module.css';
 import kpi from '../../components/kpi.module.css';
 import main from '../../components/main.module.css';
 import deadlines from '../../components/deadlines.module.css';
+import { apiFetch } from '@/lib/api.js';
 
 export default {
   name: 'Dashboard',
@@ -26,7 +27,7 @@ export default {
     async fetchDashboard() {
       this.loading = true;
       try {
-        const r = await fetch('/api/dashboard');
+        const r = await apiFetch('/api/dashboard');
         const data = await r.json();
         this.activeOrders = data.activeOrders;
         this.revenueThisMonth = data.revenueThisMonth;

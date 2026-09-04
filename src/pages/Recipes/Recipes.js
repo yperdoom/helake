@@ -1,5 +1,6 @@
 import styles from './Recipes.module.css';
 import main from '../../components/main.module.css';
+import { apiFetch } from '@/lib/api.js';
 
 const CATEGORIES = ['Cakes', 'Sweets', 'Breads', 'Pastries', 'Other'];
 const YIELD_UNITS = ['un', 'fatias', 'dz', 'kg', 'L'];
@@ -34,7 +35,7 @@ export default {
     async fetchRecipes() {
       this.loading = true;
       try {
-        const r = await fetch('/api/recipes');
+        const r = await apiFetch('/api/recipes');
         const { recipes } = await r.json();
         this.recipes = recipes;
       } finally {
@@ -42,7 +43,7 @@ export default {
       }
     },
     async fetchIngredients() {
-      const r = await fetch('/api/ingredients');
+      const r = await apiFetch('/api/ingredients');
       const { ingredients } = await r.json();
       this.availableIngredients = ingredients;
     },
@@ -78,7 +79,7 @@ export default {
         ...this.form,
         ingredients: this.form.ingredients.filter((i) => i.ingredient),
       };
-      await fetch(url, {
+      await apiFetch(url, {
         method,
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(body),
@@ -88,7 +89,7 @@ export default {
     },
     async remove(id) {
       if (!confirm('Remover receita?')) return;
-      await fetch(`/api/recipes/${id}`, { method: 'DELETE' });
+      await apiFetch(`/api/recipes/${id}`, { method: 'DELETE' });
       await this.fetchRecipes();
     },
     fmtCurrency(v) {

@@ -1,5 +1,6 @@
 import styles from './Settings.module.css';
 import main from '../../components/main.module.css';
+import { apiFetch } from '@/lib/api.js';
 
 const DEFAULT = {
   businessName: '', ownerName: '', whatsapp: '', currency: 'BRL',
@@ -15,7 +16,7 @@ export default {
   async mounted() {
     this.loading = true;
     try {
-      const r = await fetch('/api/settings');
+      const r = await apiFetch('/api/settings');
       const { settings } = await r.json();
       this.form = { ...DEFAULT, ...settings };
     } finally {
@@ -27,7 +28,7 @@ export default {
       this.loading = true;
       this.saved = false;
       try {
-        await fetch('/api/settings', {
+        await apiFetch('/api/settings', {
           method: 'PUT',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(this.form),

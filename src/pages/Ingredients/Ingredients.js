@@ -1,5 +1,6 @@
 import styles from './Ingredients.module.css';
 import main from '../../components/main.module.css';
+import { apiFetch } from '@/lib/api.js';
 
 const CATEGORIES = ['Dry Goods', 'Dairy', 'Chocolate', 'Spices', 'Packaging', 'Other'];
 const UNITS = ['kg', 'g', 'un', 'L', 'ml', 'dz'];
@@ -36,7 +37,7 @@ export default {
     async fetchIngredients() {
       this.loading = true;
       try {
-        const r = await fetch('/api/ingredients');
+        const r = await apiFetch('/api/ingredients');
         const { ingredients } = await r.json();
         this.ingredients = ingredients;
       } finally {
@@ -54,7 +55,7 @@ export default {
     async save() {
       const url = this.editingId ? `/api/ingredients/${this.editingId}` : '/api/ingredients';
       const method = this.editingId ? 'PUT' : 'POST';
-      await fetch(url, {
+      await apiFetch(url, {
         method,
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(this.form),
@@ -64,7 +65,7 @@ export default {
     },
     async remove(id) {
       if (!confirm('Remover ingrediente?')) return;
-      await fetch(`/api/ingredients/${id}`, { method: 'DELETE' });
+      await apiFetch(`/api/ingredients/${id}`, { method: 'DELETE' });
       await this.fetchIngredients();
     },
     stockStatus(ing) {

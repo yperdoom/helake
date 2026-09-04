@@ -1,5 +1,6 @@
 import styles from './Customers.module.css';
 import main from '../../components/main.module.css';
+import { apiFetch } from '@/lib/api.js';
 
 const EMPTY_FORM = { name: '', phone: '', notes: '' };
 
@@ -30,7 +31,7 @@ export default {
     async fetchCustomers() {
       this.loading = true;
       try {
-        const r = await fetch('/api/customers');
+        const r = await apiFetch('/api/customers');
         const { customers } = await r.json();
         this.customers = customers;
       } finally {
@@ -46,7 +47,7 @@ export default {
     async save() {
       const url = this.editingId ? `/api/customers/${this.editingId}` : '/api/customers';
       const method = this.editingId ? 'PUT' : 'POST';
-      await fetch(url, {
+      await apiFetch(url, {
         method,
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(this.form),
@@ -56,7 +57,7 @@ export default {
     },
     async remove(id) {
       if (!confirm('Remover cliente?')) return;
-      await fetch(`/api/customers/${id}`, { method: 'DELETE' });
+      await apiFetch(`/api/customers/${id}`, { method: 'DELETE' });
       await this.fetchCustomers();
     },
     fmtDate(d) {

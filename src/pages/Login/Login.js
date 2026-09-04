@@ -1,5 +1,6 @@
 import logo from '@/assets/logo.png';
 import styles from './Login.module.css';
+import { setSession } from '@/lib/api.js';
 
 export default {
   name: 'Login',
@@ -31,8 +32,8 @@ export default {
           this.error = data.error || 'Login failed';
           return;
         }
-        localStorage.setItem('helake_token', data.token);
-        this.$router.push('/home');
+        setSession(data);
+        this.$router.push(this.$route.query.redirect || '/');
       } catch {
         this.error = 'Connection error. Try again.';
       } finally {
