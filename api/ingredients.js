@@ -1,6 +1,10 @@
 import { connectDB } from './lib/db.js';
 import Ingredient from './lib/models/Ingredient.js';
 import Order from './lib/models/Order.js';
+// Registered for populate() only: each Vercel function is bundled
+// separately, so a ref whose model is never imported throws
+// MissingSchemaError at query time.
+import './lib/models/Recipe.js';
 import { applyCors } from './lib/cors.js';
 import { requireAuth } from './lib/auth.js';
 

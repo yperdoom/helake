@@ -1,5 +1,9 @@
 import { connectDB } from './lib/db.js';
 import Routine from './lib/models/Routine.js';
+// Registered for populate() only: each Vercel function is bundled
+// separately, so a ref whose model is never imported throws
+// MissingSchemaError at query time.
+import './lib/models/Exercise.js';
 import { applyCors } from './lib/cors.js';
 import { requireAuth } from './lib/auth.js';
 import { scopedFilter } from './lib/ownership.js';
