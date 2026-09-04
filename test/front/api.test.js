@@ -64,6 +64,30 @@ describe('apiFetch', () => {
     expect(location.assign).toHaveBeenCalledWith('/login');
   });
 
+  it('lança com a mensagem do servidor quando a resposta não é ok', async () => {
+    stubFetch({
+      status: 400,
+      ok: false,
+      json: () => Promise.resolve({ error: 'Cannot delete the last admin' }),
+    });
+
+    await expect(apiFetch('/api/users/u1', { method: 'DELETE' }))
+      .rejects.toThrow('Cannot delete the last admin');
+  });
+
+  it('expõe o status no erro', async () => {
+    stubFetch({ status: 409, ok: false, json: () => Promise.resolve({ error: 'duplicado' }) });
+
+    await expect(apiFetch('/api/users', { method: 'POST' }))
+      .rejects.toMatchObject({ status: 409 });
+  });
+
+  it('lança mesmo sem corpo JSON no erro', async () => {
+    stubFetch({ status: 500, ok: false, json: () => Promise.reject(new Error('sem corpo')) });
+
+    await expect(apiFetch('/api/users')).rejects.toThrow(/500/);
+  });
+
   it('não redireciona em loop se já está em /login', async () => {
     vi.stubGlobal('location', { pathname: '/login', assign: vi.fn() });
     stubFetch({ status: 401, ok: false });

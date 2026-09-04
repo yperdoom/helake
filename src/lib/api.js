@@ -1,3 +1,11 @@
+export class ApiError extends Error {
+  constructor(message, status) {
+    super(message);
+    this.name = 'ApiError';
+    this.status = status;
+  }
+}
+
 const TOKEN_KEY = 'helake_token';
 const ROLE_KEY = 'helake_role';
 const NAME_KEY = 'helake_name';
@@ -41,7 +49,18 @@ export async function apiFetch(path, options = {}) {
   if (response.status === 401) {
     clearSession();
     if (location.pathname !== '/login') location.assign('/login');
-    throw new Error('Unauthorized');
+    throw new ApiError('Unauthorized', 401);
+  }
+
+  if (!response.ok) {
+    let message = '';
+    try {
+      const data = await response.json();
+      message = data?.error || '';
+    } catch {
+      message = '';
+    }
+    throw new ApiError(message || `Request failed with status ${response.status}`, response.status);
   }
 
   return response;
