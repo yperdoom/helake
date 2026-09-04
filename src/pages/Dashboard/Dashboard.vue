@@ -50,7 +50,7 @@
               <div :class="$kpi.kpiCardIconBlue"><span class="material-symbols-outlined">payments</span></div>
             </div>
             <p :class="$kpi.kpiCardLabel">Revenue This Month</p>
-            <h3 :class="$kpi.kpiCardValue">{{ loading ? '—' : fmtCurrency(revenueThisMonth) }}</h3>
+            <h3 :class="$kpi.kpiCardValue">{{ loading ? '—' : fmtCurrency(revenueThisMonthCents) }}</h3>
           </div>
           <div :class="$kpi.kpiCard">
             <div :class="$kpi.kpiCardHeader">
@@ -99,7 +99,7 @@
                       <td>{{ o.recipe?.name || '—' }}</td>
                       <td>{{ fmtDate(o.deliveryDate) }}</td>
                       <td><span :class="statusClass(o.status)">{{ statusLabel(o.status) }}</span></td>
-                      <td class="text-right">{{ fmtCurrency(o.paidPrice) }}</td>
+                      <td class="text-right">{{ fmtCurrency(o.paidPriceCents) }}</td>
                     </tr>
                   </tbody>
                 </table>

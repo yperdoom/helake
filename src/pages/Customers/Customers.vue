@@ -65,7 +65,7 @@
                   </td>
                   <td>{{ c.phone || '—' }}</td>
                   <td>{{ c.totalOrders }}</td>
-                  <td class="text-right">{{ fmtCurrency(c.totalSpent) }}</td>
+                  <td class="text-right">{{ fmtCurrency(c.totalSpentCents) }}</td>
                   <td>{{ fmtDate(c.lastOrder) }}</td>
                   <td :class="$style.actionCell">
                     <button :class="$style.actionBtn" @click="openModal(c)"><span class="material-symbols-outlined">edit</span></button>

@@ -3,6 +3,7 @@ import kpi from '../../components/kpi.module.css';
 import main from '../../components/main.module.css';
 import deadlines from '../../components/deadlines.module.css';
 import { apiFetch } from '@/lib/api.js';
+import { fromCents } from '@/lib/money.js';
 
 export default {
   name: 'Dashboard',
@@ -10,7 +11,7 @@ export default {
     return {
       loading: false,
       activeOrders: 0,
-      revenueThisMonth: 0,
+      revenueThisMonthCents: 0,
       upcomingDeadlines: [],
       pendingOrders: [],
       ingredientAlerts: [],
@@ -30,7 +31,7 @@ export default {
         const r = await apiFetch('/api/dashboard');
         const data = await r.json();
         this.activeOrders = data.activeOrders;
-        this.revenueThisMonth = data.revenueThisMonth;
+        this.revenueThisMonthCents = data.revenueThisMonthCents;
         this.upcomingDeadlines = data.upcomingDeadlines;
         this.pendingOrders = data.pendingOrders;
         this.ingredientAlerts = data.ingredientAlerts;
@@ -42,8 +43,8 @@ export default {
       if (!d) return '—';
       return new Date(d).toLocaleDateString('pt-BR', { day: '2-digit', month: 'short' });
     },
-    fmtCurrency(v) {
-      return (v || 0).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+    fmtCurrency(cents) {
+      return fromCents(cents).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
     },
     statusLabel(status) {
       const map = { new: 'New', in_production: 'In Production', ready: 'Ready', delivered: 'Delivered', cancelled: 'Cancelled' };

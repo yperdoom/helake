@@ -72,7 +72,7 @@
                   <td>{{ ing.projectedStock?.toFixed(2) }}</td>
                   <td>{{ ing.minimumStock }}</td>
                   <td>{{ ing.unit }}</td>
-                  <td class="text-right">{{ fmtCurrency(ing.costPerUnit) }}</td>
+                  <td class="text-right">{{ fmtCurrency(ing.costPerUnitCents) }}</td>
                   <td>
                     <span v-if="stockStatus(ing) === 'critical'" :class="$style.statusCritical"><span :class="$main.statusDotOrange"></span>Critical</span>
                     <span v-else-if="stockStatus(ing) === 'low'" :class="$main.statusDecorating"><span :class="$main.statusDotOrange"></span>Low Stock</span>

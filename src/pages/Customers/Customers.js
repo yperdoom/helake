@@ -1,6 +1,7 @@
 import styles from './Customers.module.css';
 import main from '../../components/main.module.css';
 import { apiFetch } from '@/lib/api.js';
+import { fromCents } from '@/lib/money.js';
 
 const EMPTY_FORM = { name: '', phone: '', notes: '' };
 
@@ -64,8 +65,8 @@ export default {
       if (!d) return '—';
       return new Date(d).toLocaleDateString('pt-BR');
     },
-    fmtCurrency(v) {
-      return (v || 0).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+    fmtCurrency(cents) {
+      return fromCents(cents).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
     },
   },
 };

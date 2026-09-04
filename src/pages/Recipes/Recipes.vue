@@ -65,9 +65,9 @@
                     <span :class="r.category === 'Cakes' ? $style.badgeCake : $style.badgeSweet">{{ r.category }}</span>
                   </td>
                   <td>{{ r.yield }} {{ r.yieldUnit }}</td>
-                  <td class="text-right">{{ fmtCurrency(r.ingredientCost) }}</td>
-                  <td class="text-right">{{ fmtCurrency(r.totalCost) }}</td>
-                  <td class="text-right">{{ fmtCurrency(r.sellingPrice) }}</td>
+                  <td class="text-right">{{ fmtCurrency(r.ingredientCostCents) }}</td>
+                  <td class="text-right">{{ fmtCurrency(r.totalCostCents) }}</td>
+                  <td class="text-right">{{ fmtCurrency(r.sellingPriceCents) }}</td>
                   <td><span :class="marginClass(r.margin)">{{ fmtMargin(r.margin) }}</span></td>
                   <td :class="$style.actionCell">
                     <button :class="$style.actionBtn" @click="openModal(r)"><span class="material-symbols-outlined">edit</span></button>

@@ -73,19 +73,19 @@
             <div :class="$style.formGrid2">
               <div :class="$style.formRow">
                 <label :class="$style.formLabel">Gas</label>
-                <input :class="$style.formInput" v-model.number="form.gas" type="number" min="0" />
+                <input :class="$style.formInput" v-model.number="form.gas" type="number" min="0" step="0.01" />
               </div>
               <div :class="$style.formRow">
                 <label :class="$style.formLabel">Electricity</label>
-                <input :class="$style.formInput" v-model.number="form.electricity" type="number" min="0" />
+                <input :class="$style.formInput" v-model.number="form.electricity" type="number" min="0" step="0.01" />
               </div>
               <div :class="$style.formRow">
                 <label :class="$style.formLabel">Water</label>
-                <input :class="$style.formInput" v-model.number="form.water" type="number" min="0" />
+                <input :class="$style.formInput" v-model.number="form.water" type="number" min="0" step="0.01" />
               </div>
               <div :class="$style.formRow">
                 <label :class="$style.formLabel">Other</label>
-                <input :class="$style.formInput" v-model.number="form.other" type="number" min="0" />
+                <input :class="$style.formInput" v-model.number="form.other" type="number" min="0" step="0.01" />
               </div>
             </div>
             <div :class="$style.formRow">

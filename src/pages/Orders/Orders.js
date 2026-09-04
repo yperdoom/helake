@@ -1,6 +1,7 @@
 import main from '../../components/main.module.css';
 import styles from './Orders.module.css';
 import { apiFetch } from '@/lib/api.js';
+import { fromCents, toCents } from '@/lib/money.js';
 
 const STATUSES = ['new', 'in_production', 'ready', 'delivered', 'cancelled'];
 const STATUS_LABELS = {
@@ -64,7 +65,7 @@ export default {
           recipe: order.recipe?._id || order.recipe,
           quantity: order.quantity,
           deliveryDate: d,
-          paidPrice: order.paidPrice,
+          paidPrice: fromCents(order.paidPriceCents),
           notes: order.notes,
         };
       } else {
@@ -76,10 +77,11 @@ export default {
     async save() {
       const url = this.editingId ? `/api/orders/${this.editingId}` : '/api/orders';
       const method = this.editingId ? 'PUT' : 'POST';
+      const { paidPrice, ...rest } = this.form;
       await apiFetch(url, {
         method,
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(this.form),
+        body: JSON.stringify({ ...rest, paidPriceCents: toCents(paidPrice) }),
       });
       this.closeModal();
       await this.fetchOrders();
@@ -111,8 +113,8 @@ export default {
       if (!d) return '—';
       return new Date(d).toLocaleDateString('pt-BR');
     },
-    fmtCurrency(v) {
-      return (v || 0).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+    fmtCurrency(cents) {
+      return fromCents(cents).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
     },
   },
 };

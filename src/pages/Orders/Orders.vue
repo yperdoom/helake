@@ -69,7 +69,7 @@
                       <option v-for="s in STATUSES" :key="s" :value="s">{{ STATUS_LABELS[s] }}</option>
                     </select>
                   </td>
-                  <td class="text-right">{{ fmtCurrency(o.paidPrice) }}</td>
+                  <td class="text-right">{{ fmtCurrency(o.paidPriceCents) }}</td>
                   <td :class="$style.actionCell">
                     <button :class="$style.actionBtn" @click="openModal(o)"><span class="material-symbols-outlined">edit</span></button>
                     <button :class="$style.actionBtnDanger" @click="remove(o._id)"><span class="material-symbols-outlined">delete</span></button>

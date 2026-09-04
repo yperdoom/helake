@@ -1,6 +1,7 @@
 import styles from './Ingredients.module.css';
 import main from '../../components/main.module.css';
 import { apiFetch } from '@/lib/api.js';
+import { fromCents, toCents } from '@/lib/money.js';
 
 const CATEGORIES = ['Dry Goods', 'Dairy', 'Chocolate', 'Spices', 'Packaging', 'Other'];
 const UNITS = ['kg', 'g', 'un', 'L', 'ml', 'dz'];
@@ -47,7 +48,7 @@ export default {
     openModal(ingredient = null) {
       this.editingId = ingredient?._id || null;
       this.form = ingredient
-        ? { name: ingredient.name, category: ingredient.category, unit: ingredient.unit, costPerUnit: ingredient.costPerUnit, currentStock: ingredient.currentStock, minimumStock: ingredient.minimumStock }
+        ? { name: ingredient.name, category: ingredient.category, unit: ingredient.unit, costPerUnit: fromCents(ingredient.costPerUnitCents), currentStock: ingredient.currentStock, minimumStock: ingredient.minimumStock }
         : { ...EMPTY_FORM };
       this.showModal = true;
     },
@@ -55,10 +56,11 @@ export default {
     async save() {
       const url = this.editingId ? `/api/ingredients/${this.editingId}` : '/api/ingredients';
       const method = this.editingId ? 'PUT' : 'POST';
+      const { costPerUnit, ...rest } = this.form;
       await apiFetch(url, {
         method,
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(this.form),
+        body: JSON.stringify({ ...rest, costPerUnitCents: toCents(costPerUnit) }),
       });
       this.closeModal();
       await this.fetchIngredients();
@@ -73,8 +75,8 @@ export default {
       if (ing.projectedStock < ing.minimumStock) return 'low';
       return 'ok';
     },
-    fmtCurrency(v) {
-      return (v || 0).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+    fmtCurrency(cents) {
+      return fromCents(cents).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
     },
   },
 };

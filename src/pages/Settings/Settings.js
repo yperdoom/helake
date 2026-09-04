@@ -1,6 +1,7 @@
 import styles from './Settings.module.css';
 import main from '../../components/main.module.css';
 import { apiFetch } from '@/lib/api.js';
+import { fromCents, toCents } from '@/lib/money.js';
 
 const DEFAULT = {
   businessName: '', ownerName: '', whatsapp: '', currency: 'BRL',
@@ -18,7 +19,14 @@ export default {
     try {
       const r = await apiFetch('/api/settings');
       const { settings } = await r.json();
-      this.form = { ...DEFAULT, ...settings };
+      this.form = {
+        ...DEFAULT,
+        ...settings,
+        gas: fromCents(settings.gasCents),
+        electricity: fromCents(settings.electricityCents),
+        water: fromCents(settings.waterCents),
+        other: fromCents(settings.otherCents),
+      };
     } finally {
       this.loading = false;
     }
@@ -28,10 +36,17 @@ export default {
       this.loading = true;
       this.saved = false;
       try {
+        const { gas, electricity, water, other, ...rest } = this.form;
         await apiFetch('/api/settings', {
           method: 'PUT',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(this.form),
+          body: JSON.stringify({
+            ...rest,
+            gasCents: toCents(gas),
+            electricityCents: toCents(electricity),
+            waterCents: toCents(water),
+            otherCents: toCents(other),
+          }),
         });
         this.saved = true;
         setTimeout(() => { this.saved = false; }, 3000);

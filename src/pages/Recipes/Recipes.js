@@ -1,6 +1,7 @@
 import styles from './Recipes.module.css';
 import main from '../../components/main.module.css';
 import { apiFetch } from '@/lib/api.js';
+import { fromCents, toCents } from '@/lib/money.js';
 
 const CATEGORIES = ['Cakes', 'Sweets', 'Breads', 'Pastries', 'Other'];
 const YIELD_UNITS = ['un', 'fatias', 'dz', 'kg', 'L'];
@@ -53,8 +54,9 @@ export default {
         this.form = {
           name: recipe.name, category: recipe.category,
           yield: recipe.yield, yieldUnit: recipe.yieldUnit,
-          laborCost: recipe.laborCost, infraCostPercentage: recipe.infraCostPercentage,
-          sellingPrice: recipe.sellingPrice,
+          laborCost: fromCents(recipe.laborCostCents),
+          infraCostPercentage: recipe.infraCostPercentage,
+          sellingPrice: fromCents(recipe.sellingPriceCents),
           ingredients: (recipe.ingredients || []).map((i) => ({
             ingredient: i.ingredient?._id || i.ingredient,
             quantity: i.quantity,
@@ -75,8 +77,11 @@ export default {
     async save() {
       const url = this.editingId ? `/api/recipes/${this.editingId}` : '/api/recipes';
       const method = this.editingId ? 'PUT' : 'POST';
+      const { laborCost, sellingPrice, ...rest } = this.form;
       const body = {
-        ...this.form,
+        ...rest,
+        laborCostCents: toCents(laborCost),
+        sellingPriceCents: toCents(sellingPrice),
         ingredients: this.form.ingredients.filter((i) => i.ingredient),
       };
       await apiFetch(url, {
@@ -92,9 +97,9 @@ export default {
       await apiFetch(`/api/recipes/${id}`, { method: 'DELETE' });
       await this.fetchRecipes();
     },
-    fmtCurrency(v) {
-      if (v == null) return '—';
-      return (v || 0).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+    fmtCurrency(cents) {
+      if (cents == null) return '—';
+      return fromCents(cents).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
     },
     fmtMargin(v) {
       if (v == null) return '—';
