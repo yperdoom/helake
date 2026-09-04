@@ -23,7 +23,11 @@ coverage
 *.njsproj
 *.sln
 *.sw?
-*lock*
+# yarn.lock is tracked on purpose. Ignore the other package managers'
+# lockfiles so they never get mixed in.
+package-lock.json
+pnpm-lock.yaml
+bun.lockb
 
 *.tsbuildinfo
 
