@@ -12,6 +12,12 @@ export function toCents(value) {
   return Math.round(Number((number * 100).toPrecision(PRECISION)));
 }
 
+// Rounding policy for derived money: half up, after trimming float noise.
+export function roundCents(value) {
+  if (!Number.isFinite(value)) return 0;
+  return Math.round(Number(value.toPrecision(PRECISION)));
+}
+
 export function fromCents(cents) {
   if (!Number.isFinite(cents)) return 0;
   return cents / 100;

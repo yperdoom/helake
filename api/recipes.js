@@ -3,23 +3,7 @@ import Recipe from './lib/models/Recipe.js';
 import Settings from './lib/models/Settings.js';
 import { applyCors } from './lib/cors.js';
 import { requireAuth } from './lib/auth.js';
-
-function calcCosts(recipe, defaultInfraPercentage, defaultMargin) {
-  const ingredientCost = recipe.ingredients.reduce((sum, item) => {
-    const cost = item.ingredient?.costPerUnit || 0;
-    return sum + cost * item.quantity;
-  }, 0);
-
-  const infraPct = recipe.infraCostPercentage ?? defaultInfraPercentage;
-  const infraCost = ingredientCost * (infraPct / 100);
-  const totalCost = ingredientCost + infraCost + (recipe.laborCost || 0);
-  const suggestedPrice = totalCost * (1 + defaultMargin / 100);
-  const margin = recipe.sellingPrice > 0
-    ? ((recipe.sellingPrice - totalCost) / recipe.sellingPrice) * 100
-    : null;
-
-  return { ingredientCost, infraCost, totalCost, suggestedPrice, margin };
-}
+import { calcCosts } from './lib/recipeCosts.js';
 
 export default async function handler(req, res) {
   if (applyCors(req, res, ['GET', 'POST'])) return;

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { fromCents, isCents, toCents } from '../../api/lib/money.js';
+import { fromCents, isCents, roundCents, toCents } from '../../api/lib/money.js';
 
 describe('toCents', () => {
   it('converts reais to integer cents', () => {
@@ -37,6 +37,31 @@ describe('toCents', () => {
     for (const value of [0.01, 0.1, 1.005, 99.999, 12345.678]) {
       expect(Number.isInteger(toCents(value))).toBe(true);
     }
+  });
+});
+
+describe('roundCents', () => {
+  it('rounds half up', () => {
+    expect(roundCents(338.85)).toBe(339);
+    expect(roundCents(0.5)).toBe(1);
+    expect(roundCents(0.4)).toBe(0);
+  });
+
+  it('trims float noise before rounding', () => {
+    expect(roundCents(100.00000000000001)).toBe(100);
+    // Really 1151.5 with float error, so half-up must reach 1152 -- matching
+    // toCents(32.9 * 0.35).
+    expect(roundCents(1151.4999999999998)).toBe(1152);
+  });
+
+  it('leaves integers untouched', () => {
+    expect(roundCents(2259)).toBe(2259);
+    expect(roundCents(0)).toBe(0);
+  });
+
+  it('treats non-finite input as zero', () => {
+    expect(roundCents(NaN)).toBe(0);
+    expect(roundCents(Infinity)).toBe(0);
   });
 });
 
