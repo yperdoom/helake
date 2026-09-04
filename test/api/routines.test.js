@@ -1,0 +1,113 @@
+import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { bearer, mockRes, query } from '../helpers.js';
+
+vi.mock('../../api/lib/db.js', () => ({ connectDB: vi.fn() }));
+vi.mock('../../api/lib/models/Routine.js', () => ({
+  default: {
+    find: vi.fn(),
+    create: vi.fn(),
+    findOneAndUpdate: vi.fn(),
+    findOneAndDelete: vi.fn(),
+  },
+}));
+
+const { default: list } = await import('../../api/routines.js');
+const { default: item } = await import('../../api/routines/[id].js');
+const { default: Routine } = await import('../../api/lib/models/Routine.js');
+
+beforeEach(() => {
+  vi.clearAllMocks();
+});
+
+describe('/api/routines', () => {
+  it('401 sem token', async () => {
+    const res = mockRes();
+    await list({ method: 'GET', headers: {} }, res);
+    expect(res.statusCode).toBe(401);
+    expect(Routine.find).not.toHaveBeenCalled();
+  });
+
+  it('filtra pelo user do token', async () => {
+    Routine.find.mockReturnValue(query([]));
+    const res = mockRes();
+    await list({ method: 'GET', headers: bearer('u1') }, res);
+
+    expect(Routine.find).toHaveBeenCalledWith({ user: 'u1' });
+    expect(res.statusCode).toBe(200);
+  });
+
+  it('usuário B não recebe o filtro de A', async () => {
+    Routine.find.mockReturnValue(query([]));
+    await list({ method: 'GET', headers: bearer('u2') }, mockRes());
+    expect(Routine.find).toHaveBeenCalledWith({ user: 'u2' });
+  });
+
+  it('grava o user do token no POST', async () => {
+    Routine.create.mockResolvedValue({ _id: 'r1' });
+    const res = mockRes();
+    await list({ method: 'POST', headers: bearer('u1'), body: { name: 'Treino A' } }, res);
+
+    expect(Routine.create).toHaveBeenCalledWith({ name: 'Treino A', user: 'u1' });
+    expect(res.statusCode).toBe(201);
+  });
+
+  it('ignora user forjado no body do POST', async () => {
+    Routine.create.mockResolvedValue({ _id: 'r1' });
+    await list({ method: 'POST', headers: bearer('u1'), body: { name: 'X', user: 'invasor' } }, mockRes());
+
+    expect(Routine.create).toHaveBeenCalledWith({ name: 'X', user: 'u1' });
+  });
+});
+
+describe('/api/routines/[id]', () => {
+  it('401 sem token', async () => {
+    const res = mockRes();
+    await item({ method: 'PUT', headers: {}, query: { id: 'r1' }, body: {} }, res);
+    expect(res.statusCode).toBe(401);
+    expect(Routine.findOneAndUpdate).not.toHaveBeenCalled();
+  });
+
+  it('PUT filtra por _id e user', async () => {
+    Routine.findOneAndUpdate.mockResolvedValue({ _id: 'r1', name: 'Treino B' });
+    const res = mockRes();
+    await item({ method: 'PUT', headers: bearer('u1'), query: { id: 'r1' }, body: { name: 'Treino B' } }, res);
+
+    expect(Routine.findOneAndUpdate).toHaveBeenCalledWith(
+      { _id: 'r1', user: 'u1' },
+      { name: 'Treino B' },
+      expect.anything(),
+    );
+    expect(res.statusCode).toBe(200);
+  });
+
+  it('PUT em rotina de outro usuário devolve 404', async () => {
+    Routine.findOneAndUpdate.mockResolvedValue(null);
+    const res = mockRes();
+    await item({ method: 'PUT', headers: bearer('u2'), query: { id: 'r1' }, body: { name: 'hack' } }, res);
+    expect(res.statusCode).toBe(404);
+  });
+
+  it('PUT não deixa forjar user no body', async () => {
+    Routine.findOneAndUpdate.mockResolvedValue({ _id: 'r1' });
+    await item({ method: 'PUT', headers: bearer('u1'), query: { id: 'r1' }, body: { user: 'invasor' } }, mockRes());
+
+    const [, update] = Routine.findOneAndUpdate.mock.calls[0];
+    expect(update.user).toBeUndefined();
+  });
+
+  it('DELETE filtra por _id e user', async () => {
+    Routine.findOneAndDelete.mockResolvedValue({ _id: 'r1' });
+    const res = mockRes();
+    await item({ method: 'DELETE', headers: bearer('u1'), query: { id: 'r1' } }, res);
+
+    expect(Routine.findOneAndDelete).toHaveBeenCalledWith({ _id: 'r1', user: 'u1' });
+    expect(res.statusCode).toBe(200);
+  });
+
+  it('DELETE em rotina de outro usuário devolve 404', async () => {
+    Routine.findOneAndDelete.mockResolvedValue(null);
+    const res = mockRes();
+    await item({ method: 'DELETE', headers: bearer('u2'), query: { id: 'r1' } }, res);
+    expect(res.statusCode).toBe(404);
+  });
+});
