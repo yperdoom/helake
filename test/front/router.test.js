@@ -5,6 +5,7 @@ import router from '../../src/router.js';
 const CASES = [
   ['/login', 'Login'],
   ['/', 'Hub'],
+  ['/exercicios', 'Exercises'],
   ['/helake', 'Dashboard'],
   ['/helake/orders', 'Orders'],
   ['/helake/recipes', 'Recipes'],
