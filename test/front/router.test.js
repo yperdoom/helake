@@ -8,6 +8,7 @@ const CASES = [
   ['/exercicios', 'Exercises'],
   ['/treino', 'Routines'],
   ['/treino/r1/registro', 'Workout'],
+  ['/medidas', 'Measurements'],
   ['/helake', 'Dashboard'],
   ['/helake/orders', 'Orders'],
   ['/helake/recipes', 'Recipes'],
