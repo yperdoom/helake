@@ -20,4 +20,12 @@ export default defineConfig({
       '/api': 'http://localhost:3000',
     },
   },
+  test: {
+    environment: 'node',
+    globals: true,
+    setupFiles: ['./test/setup.js'],
+    coverage: {
+      include: ['api/**/*.js', 'src/**/*.js'],
+    },
+  },
 })
