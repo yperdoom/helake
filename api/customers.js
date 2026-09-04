@@ -16,7 +16,14 @@ export default async function handler(req, res) {
 
     const orderStats = await Order.aggregate([
       { $match: { status: { $ne: 'cancelled' } } },
-      { $group: { _id: '$customer', totalOrders: { $sum: 1 }, totalSpent: { $sum: '$paidPrice' }, lastOrder: { $max: '$deliveryDate' } } },
+      {
+        $group: {
+          _id: '$customer',
+          totalOrders: { $sum: 1 },
+          totalSpentCents: { $sum: '$paidPriceCents' },
+          lastOrder: { $max: '$deliveryDate' },
+        },
+      },
     ]);
 
     const statsMap = {};
@@ -25,7 +32,7 @@ export default async function handler(req, res) {
     const result = customers.map((c) => ({
       ...c,
       totalOrders: statsMap[c._id.toString()]?.totalOrders || 0,
-      totalSpent: statsMap[c._id.toString()]?.totalSpent || 0,
+      totalSpentCents: statsMap[c._id.toString()]?.totalSpentCents || 0,
       lastOrder: statsMap[c._id.toString()]?.lastOrder || null,
     }));
 

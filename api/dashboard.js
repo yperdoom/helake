@@ -19,13 +19,13 @@ export default async function handler(req, res) {
   const [allActiveOrders, ingredients, revenueData] = await Promise.all([
     Order.find({ status: { $in: ['new', 'in_production', 'ready'] } })
       .populate('customer', 'name phone')
-      .populate({ path: 'recipe', populate: { path: 'ingredients.ingredient', select: 'name unit costPerUnit currentStock minimumStock' } })
+      .populate({ path: 'recipe', populate: { path: 'ingredients.ingredient', select: 'name unit costPerUnitCents currentStock minimumStock' } })
       .sort({ deliveryDate: 1 })
       .lean(),
     Ingredient.find().lean(),
     Order.aggregate([
       { $match: { status: 'delivered', deliveryDate: { $gte: startOfMonth } } },
-      { $group: { _id: null, total: { $sum: '$paidPrice' } } },
+      { $group: { _id: null, total: { $sum: '$paidPriceCents' } } },
     ]),
   ]);
 
@@ -59,7 +59,7 @@ export default async function handler(req, res) {
 
   return res.status(200).json({
     activeOrders: allActiveOrders.length,
-    revenueThisMonth: revenueData[0]?.total || 0,
+    revenueThisMonthCents: revenueData[0]?.total || 0,
     upcomingDeadlines,
     pendingOrders,
     ingredientAlerts,
