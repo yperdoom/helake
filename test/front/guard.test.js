@@ -40,3 +40,31 @@ describe('authGuard', () => {
     expect(authGuard({ path: '/login' })).toBe('/');
   });
 });
+
+describe('authGuard com requiresAdmin', () => {
+  const rotaAdmin = { path: '/settings', fullPath: '/settings', meta: { requiresAdmin: true } };
+
+  it('manda usuário comum de volta para o hub', () => {
+    setSession({ token: 't', role: 'user', name: '' });
+    expect(authGuard(rotaAdmin)).toBe('/');
+  });
+
+  it('libera admin', () => {
+    setSession({ token: 't', role: 'admin', name: '' });
+    expect(authGuard(rotaAdmin)).toBe(true);
+  });
+
+  it('sem token vai para /login, não para o hub', () => {
+    expect(authGuard(rotaAdmin)).toMatchObject({ path: '/login' });
+  });
+
+  it('rota sem meta não exige admin', () => {
+    setSession({ token: 't', role: 'user', name: '' });
+    expect(authGuard({ path: '/treino', fullPath: '/treino' })).toBe(true);
+  });
+
+  it('meta sem requiresAdmin não exige admin', () => {
+    setSession({ token: 't', role: 'user', name: '' });
+    expect(authGuard({ path: '/treino', fullPath: '/treino', meta: {} })).toBe(true);
+  });
+});
