@@ -9,6 +9,7 @@ const CASES = [
   ['/treino', 'Routines'],
   ['/treino/r1/registro', 'Workout'],
   ['/medidas', 'Measurements'],
+  ['/settings', 'AppSettings'],
   ['/helake', 'Dashboard'],
   ['/helake/orders', 'Orders'],
   ['/helake/recipes', 'Recipes'],
@@ -20,6 +21,16 @@ const CASES = [
 describe('rotas', () => {
   it.each(CASES)('%s resolve para %s', (path, name) => {
     expect(router.resolve(path).name).toBe(name);
+  });
+
+  it('marca /settings como rota de admin', () => {
+    expect(router.resolve('/settings').meta.requiresAdmin).toBe(true);
+  });
+
+  it('não marca as rotas do Yper como admin', () => {
+    for (const path of ['/', '/treino', '/medidas', '/exercicios']) {
+      expect(router.resolve(path).meta.requiresAdmin).toBeUndefined();
+    }
   });
 
   it('não expõe mais as rotas antigas do Helake na raiz', () => {

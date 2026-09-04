@@ -71,3 +71,22 @@
     grid-template-columns: repeat(3, 1fr);
   }
 }
+
+.logout {
+  margin-top: auto;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-size: 15px;
+  font-weight: 600;
+  border: none;
+  border-radius: 12px;
+  background: transparent;
+  color: #6b6b6b;
+}
+
+.logout:active {
+  background: #f0f0f0;
+}

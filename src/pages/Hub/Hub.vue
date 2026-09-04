@@ -10,6 +10,10 @@
         <span :class="$style.label">{{ tile.label }}</span>
       </router-link>
     </nav>
+    <button :class="$style.logout" type="button" @click="logout()">
+      <span class="material-symbols-outlined">logout</span>
+      <span>Sair</span>
+    </button>
   </div>
 </template>
 
