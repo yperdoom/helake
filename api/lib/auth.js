@@ -25,3 +25,15 @@ export function requireAuth(req, res) {
     return null;
   }
 }
+
+export function requireAdmin(req, res) {
+  const auth = requireAuth(req, res);
+  if (!auth) return null;
+
+  if (auth.role !== 'admin') {
+    res.status(403).json({ error: 'Forbidden' });
+    return null;
+  }
+
+  return auth;
+}

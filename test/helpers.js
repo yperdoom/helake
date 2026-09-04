@@ -21,6 +21,7 @@ export function bearer(userId, role = 'user') {
 export function query(value) {
   const q = {
     sort: () => q,
+    select: () => q,
     populate: () => q,
     lean: () => Promise.resolve(value),
     then: (...args) => Promise.resolve(value).then(...args),
