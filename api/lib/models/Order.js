@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-import { isCents } from '../money.js';
+import { centsField } from '../money.js';
 
 const OrderSchema = new mongoose.Schema({
   customer: { type: mongoose.Schema.Types.ObjectId, ref: 'Customer', required: true },
@@ -11,7 +11,7 @@ const OrderSchema = new mongoose.Schema({
     enum: ['new', 'in_production', 'ready', 'delivered', 'cancelled'],
     default: 'new',
   },
-  paidPriceCents: { type: Number, default: 0, min: 0, validate: { validator: isCents, message: '{PATH} must be an integer amount in cents' } },
+  paidPriceCents: centsField({ default: 0 }),
   notes: { type: String, default: '' },
 }, { timestamps: true });
 

@@ -20,3 +20,12 @@ export function fromCents(cents) {
 export function isCents(value) {
   return Number.isInteger(value) && value >= 0;
 }
+
+// Mongoose field definition for a money column. Kept here so the validator and
+// its message live next to the conversion rules.
+export const centsField = (extra = {}) => ({
+  type: Number,
+  min: 0,
+  validate: { validator: isCents, message: '{PATH} must be an integer amount in cents' },
+  ...extra,
+});

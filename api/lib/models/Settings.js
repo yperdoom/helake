@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-import { isCents } from '../money.js';
+import { centsField } from '../money.js';
 
 const SINGLETON_ID = 'global';
 
@@ -9,10 +9,10 @@ const SettingsSchema = new mongoose.Schema({
   ownerName: { type: String, default: '' },
   whatsapp: { type: String, default: '' },
   currency: { type: String, default: 'BRL' },
-  gasCents: { type: Number, default: 0, min: 0, validate: { validator: isCents, message: '{PATH} must be an integer amount in cents' } },
-  electricityCents: { type: Number, default: 0, min: 0, validate: { validator: isCents, message: '{PATH} must be an integer amount in cents' } },
-  waterCents: { type: Number, default: 0, min: 0, validate: { validator: isCents, message: '{PATH} must be an integer amount in cents' } },
-  otherCents: { type: Number, default: 0, min: 0, validate: { validator: isCents, message: '{PATH} must be an integer amount in cents' } },
+  gasCents: centsField({ default: 0 }),
+  electricityCents: centsField({ default: 0 }),
+  waterCents: centsField({ default: 0 }),
+  otherCents: centsField({ default: 0 }),
   monthlyHours: { type: Number, default: 160 },
   defaultInfraPercentage: { type: Number, default: 15 },
   defaultMargin: { type: Number, default: 50 },

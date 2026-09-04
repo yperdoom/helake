@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-import { isCents } from '../money.js';
+import { centsField } from '../money.js';
 
 const IngredientSchema = new mongoose.Schema({
   name: { type: String, required: true },
@@ -13,12 +13,7 @@ const IngredientSchema = new mongoose.Schema({
     enum: ['kg', 'g', 'un', 'L', 'ml', 'dz'],
     required: true,
   },
-  costPerUnitCents: {
-    type: Number,
-    required: true,
-    min: 0,
-    validate: { validator: isCents, message: '{PATH} must be an integer amount in cents' },
-  },
+  costPerUnitCents: centsField({ required: true }),
   currentStock: { type: Number, default: 0, min: 0 },
   minimumStock: { type: Number, default: 0, min: 0 },
 }, { timestamps: true });

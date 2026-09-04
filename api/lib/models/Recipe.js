@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-import { isCents } from '../money.js';
+import { centsField } from '../money.js';
 
 const RecipeIngredientSchema = new mongoose.Schema({
   ingredient: { type: mongoose.Schema.Types.ObjectId, ref: 'Ingredient', required: true },
@@ -16,9 +16,9 @@ const RecipeSchema = new mongoose.Schema({
   yield: { type: Number, required: true },
   yieldUnit: { type: String, default: 'un' },
   ingredients: [RecipeIngredientSchema],
-  laborCostCents: { type: Number, default: 0, min: 0, validate: { validator: isCents, message: '{PATH} must be an integer amount in cents' } },
+  laborCostCents: centsField({ default: 0 }),
   infraCostPercentage: { type: Number, default: null },
-  sellingPriceCents: { type: Number, default: 0, min: 0, validate: { validator: isCents, message: '{PATH} must be an integer amount in cents' } },
+  sellingPriceCents: centsField({ default: 0 }),
 }, { timestamps: true });
 
 export default mongoose.models.Recipe || mongoose.model('Recipe', RecipeSchema);
