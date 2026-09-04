@@ -6,6 +6,7 @@ const CASES = [
   ['/login', 'Login'],
   ['/', 'Hub'],
   ['/exercicios', 'Exercises'],
+  ['/treino', 'Routines'],
   ['/helake', 'Dashboard'],
   ['/helake/orders', 'Orders'],
   ['/helake/recipes', 'Recipes'],
