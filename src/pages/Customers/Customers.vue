@@ -10,16 +10,16 @@
           </div>
         </div>
         <nav :class="$main.sidebarNav">
-          <a :class="$main.sidebarNavItem" href="/home"><span class="material-symbols-outlined">dashboard</span><span>Dashboard</span></a>
-          <a :class="$main.sidebarNavItem" href="/orders"><span class="material-symbols-outlined">shopping_bag</span><span>Orders</span></a>
-          <a :class="$main.sidebarNavItem" href="/ingredients"><span class="material-symbols-outlined">inventory_2</span><span>Inventory</span></a>
-          <a :class="$main.sidebarNavItem" href="/recipes"><span class="material-symbols-outlined">calculate</span><span>Cost Calculator</span></a>
-          <a :class="$main.sidebarNavItemActive" href="/customers"><span class="material-symbols-outlined">group</span><span>Customers</span></a>
+          <a :class="$main.sidebarNavItem" href="/helake"><span class="material-symbols-outlined">dashboard</span><span>Dashboard</span></a>
+          <a :class="$main.sidebarNavItem" href="/helake/orders"><span class="material-symbols-outlined">shopping_bag</span><span>Orders</span></a>
+          <a :class="$main.sidebarNavItem" href="/helake/ingredients"><span class="material-symbols-outlined">inventory_2</span><span>Inventory</span></a>
+          <a :class="$main.sidebarNavItem" href="/helake/recipes"><span class="material-symbols-outlined">calculate</span><span>Cost Calculator</span></a>
+          <a :class="$main.sidebarNavItemActive" href="/helake/customers"><span class="material-symbols-outlined">group</span><span>Customers</span></a>
         </nav>
         <div :class="$main.sidebarFooter">
-          <a :class="$main.sidebarNavItem" href="/settings"><span class="material-symbols-outlined">settings</span><span>Settings</span></a>
+          <a :class="$main.sidebarNavItem" href="/helake/settings"><span class="material-symbols-outlined">settings</span><span>Settings</span></a>
           <div :class="$main.sidebarNewOrderWrap">
-            <button :class="$main.sidebarNewOrderBtn" @click="$router.push('/orders')"><span class="material-symbols-outlined">add_circle</span><span>New Order</span></button>
+            <button :class="$main.sidebarNewOrderBtn" @click="$router.push('/helake/orders')"><span class="material-symbols-outlined">add_circle</span><span>New Order</span></button>
           </div>
         </div>
       </div>
