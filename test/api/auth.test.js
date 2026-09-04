@@ -12,17 +12,17 @@ function mockRes() {
 }
 
 describe('signToken / verifyToken', () => {
-  it('faz roundtrip preservando o payload', () => {
+  it('round-trips preserving the payload', () => {
     const token = signToken({ userId: '1', email: 'a@b.com', role: 'admin' });
     const decoded = verifyToken(token);
     expect(decoded).toMatchObject({ userId: '1', email: 'a@b.com', role: 'admin' });
   });
 
-  it('lança para token inválido', () => {
+  it('throws for an invalid token', () => {
     expect(() => verifyToken('not-a-token')).toThrow();
   });
 
-  it('lança para token assinado com outro segredo', () => {
+  it('throws for a token signed with another secret', () => {
     const foreign = jwt.sign({ userId: '1' }, 'outro-segredo');
     expect(() => verifyToken(foreign)).toThrow();
   });
@@ -33,7 +33,7 @@ describe('JWT_SECRET', () => {
     vi.resetModules();
   });
 
-  it('lança na importação se a env não existe', async () => {
+  it('throws on import when the env is missing', async () => {
     const original = process.env.JWT_SECRET;
     delete process.env.JWT_SECRET;
     try {
@@ -45,21 +45,21 @@ describe('JWT_SECRET', () => {
 });
 
 describe('requireAuth', () => {
-  it('devolve 401 e null sem header', () => {
+  it('returns 401 and null without a header', () => {
     const res = mockRes();
     const result = requireAuth({ headers: {} }, res);
     expect(result).toBeNull();
     expect(res.statusCode).toBe(401);
   });
 
-  it('devolve 401 e null com token inválido', () => {
+  it('returns 401 and null with an invalid token', () => {
     const res = mockRes();
     const result = requireAuth({ headers: { authorization: 'Bearer lixo' } }, res);
     expect(result).toBeNull();
     expect(res.statusCode).toBe(401);
   });
 
-  it('devolve o payload com Bearer válido', () => {
+  it('returns the payload with a valid Bearer', () => {
     const token = signToken({ userId: '1', email: 'a@b.com', role: 'user' });
     const res = mockRes();
     const result = requireAuth({ headers: { authorization: `Bearer ${token}` } }, res);

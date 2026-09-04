@@ -34,7 +34,7 @@ export default {
         const data = await response.json();
         this.history = data.measurements || [];
       } catch {
-        this.error = 'Não foi possível carregar o histórico.';
+        this.error = 'Could not load history.';
       } finally {
         this.loading = false;
       }
@@ -76,7 +76,7 @@ export default {
         this.form = emptyForm();
         await this.load();
       } catch {
-        this.error = 'Não foi possível salvar.';
+        this.error = 'Could not save.';
       } finally {
         this.saving = false;
       }
@@ -88,7 +88,7 @@ export default {
         await apiFetch(`/api/measurements/${id}`, { method: 'DELETE' });
         await this.load();
       } catch {
-        this.error = 'Não foi possível remover.';
+        this.error = 'Could not delete.';
       }
     },
   },

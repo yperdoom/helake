@@ -64,7 +64,7 @@ export default {
       await this.fetchIngredients();
     },
     async remove(id) {
-      if (!confirm('Remover ingrediente?')) return;
+      if (!confirm('Delete ingredient?')) return;
       await apiFetch(`/api/ingredients/${id}`, { method: 'DELETE' });
       await this.fetchIngredients();
     },

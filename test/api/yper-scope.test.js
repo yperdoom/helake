@@ -6,26 +6,25 @@ import { describe, expect, it } from 'vitest';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '../..');
 
-// Endpoints públicos por definição. `setup.js` se protege sozinho com
-// countDocuments() > 0 -> 403.
+// Public by definition. `setup.js` guards itself with countDocuments() > 0 -> 403.
 const PUBLIC = new Set([
   'api/auth/login.js',
   'api/auth/setup.js',
 ]);
 
-// Endpoints que, por decisão de design, NÃO filtram por dono.
-// Adicionar algo aqui tem que ser uma decisão consciente.
+// Endpoints that, by design decision, do NOT filter by owner.
+// Adding something here must be a deliberate decision.
 const UNSCOPED = new Set([
-  // Helake é single-tenant: os dois usuários compartilham os dados.
+  // Helake is single-tenant: both users share the same data.
   'api/customers.js', 'api/customers/[id].js',
   'api/dashboard.js',
   'api/ingredients.js', 'api/ingredients/[id].js',
   'api/orders.js', 'api/orders/[id].js',
   'api/recipes.js', 'api/recipes/[id].js',
   'api/settings.js',
-  // Catálogo de exercícios é compartilhado entre os dois usuários.
+  // The exercise catalog is shared between both users.
   'api/exercises.js', 'api/exercises/[id].js',
-  // Gestão de usuários é global e restrita a admin, não escopada por dono.
+  // User management is global and admin-only, not scoped by owner.
   'api/users.js', 'api/users/[id].js',
   ...PUBLIC,
 ]);
@@ -40,8 +39,8 @@ const all = endpoints();
 const protected_ = all.filter((f) => !PUBLIC.has(f));
 const scoped = all.filter((f) => !UNSCOPED.has(f));
 
-describe('varredura de endpoints', () => {
-  it('encontra os endpoints do Yper com dono', () => {
+describe('endpoint sweep', () => {
+  it('finds the owned Yper endpoints', () => {
     expect(scoped).toEqual(expect.arrayContaining([
       'api/routines.js', 'api/routines/[id].js',
       'api/workout-logs.js', 'api/workout-logs/[id].js',
@@ -49,31 +48,31 @@ describe('varredura de endpoints', () => {
     ]));
   });
 
-  it('nenhuma entrada morta nas allowlists', () => {
+  it('no dead entries in the allowlists', () => {
     const existing = new Set(all);
     for (const f of [...UNSCOPED, ...PUBLIC]) {
-      expect(existing.has(f), `${f} está na allowlist mas não existe mais`).toBe(true);
+      expect(existing.has(f), `${f} is in the allowlist but no longer exists`).toBe(true);
     }
   });
 });
 
-// Vale para TODO endpoint não público, incluindo os do Helake.
-describe.each(protected_)('%s exige identidade', (file) => {
+// Applies to EVERY non-public endpoint, including Helake's.
+describe.each(protected_)('%s requires identity', (file) => {
   const source = readFileSync(join(root, file), 'utf8');
 
-  it('chama requireAuth ou requireAdmin', () => {
+  it('calls requireAuth or requireAdmin', () => {
     expect(/require(Auth|Admin)\s*\(/.test(source)).toBe(true);
   });
 });
 
-describe.each(scoped)('%s filtra por dono', (file) => {
+describe.each(scoped)('%s filters by owner', (file) => {
   const source = readFileSync(join(root, file), 'utf8');
 
-  it('usa scopedFilter', () => {
+  it('uses scopedFilter', () => {
     expect(source).toContain('scopedFilter');
   });
 
-  it('não repassa req.body cru para o banco', () => {
+  it('does not forward raw req.body to the database', () => {
     const forwardsRawBody = /(?:create|findOneAndUpdate)\([^)]*\breq\.body\b/s.test(source);
     expect(forwardsRawBody).toBe(false);
   });

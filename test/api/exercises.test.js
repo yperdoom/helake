@@ -20,14 +20,14 @@ beforeEach(() => {
 });
 
 describe('/api/exercises', () => {
-  it('401 sem token', async () => {
+  it('401 without a token', async () => {
     const res = mockRes();
     await list({ method: 'GET', headers: {} }, res);
     expect(res.statusCode).toBe(401);
     expect(Exercise.find).not.toHaveBeenCalled();
   });
 
-  it('lista o catálogo sem filtrar por usuário', async () => {
+  it('lists the catalog without filtering by user', async () => {
     Exercise.find.mockReturnValue(query([{ name: 'Supino' }]));
     const res = mockRes();
     await list({ method: 'GET', headers: bearer('u1') }, res);
@@ -37,14 +37,14 @@ describe('/api/exercises', () => {
     expect(res.body.exercises).toHaveLength(1);
   });
 
-  it('mostra ao usuário B o exercício criado por A', async () => {
+  it('shows user B the exercise created by A', async () => {
     Exercise.find.mockReturnValue(query([{ name: 'Agachamento' }]));
     const res = mockRes();
     await list({ method: 'GET', headers: bearer('u2') }, res);
     expect(res.body.exercises[0].name).toBe('Agachamento');
   });
 
-  it('cria via POST', async () => {
+  it('creates via POST', async () => {
     Exercise.create.mockResolvedValue({ _id: 'e1', name: 'Remada' });
     const res = mockRes();
     await list({ method: 'POST', headers: bearer('u1'), body: { name: 'Remada' } }, res);
@@ -53,7 +53,7 @@ describe('/api/exercises', () => {
     expect(res.statusCode).toBe(201);
   });
 
-  it('405 para método não suportado', async () => {
+  it('405 for an unsupported method', async () => {
     const res = mockRes();
     await list({ method: 'DELETE', headers: bearer('u1') }, res);
     expect(res.statusCode).toBe(405);
@@ -61,14 +61,14 @@ describe('/api/exercises', () => {
 });
 
 describe('/api/exercises/[id]', () => {
-  it('401 sem token', async () => {
+  it('401 without a token', async () => {
     const res = mockRes();
     await item({ method: 'PUT', headers: {}, query: { id: 'e1' }, body: {} }, res);
     expect(res.statusCode).toBe(401);
     expect(Exercise.findByIdAndUpdate).not.toHaveBeenCalled();
   });
 
-  it('atualiza via PUT', async () => {
+  it('updates via PUT', async () => {
     Exercise.findByIdAndUpdate.mockResolvedValue({ _id: 'e1', name: 'Remada curvada' });
     const res = mockRes();
     await item({ method: 'PUT', headers: bearer('u1'), query: { id: 'e1' }, body: { name: 'Remada curvada' } }, res);
@@ -77,14 +77,14 @@ describe('/api/exercises/[id]', () => {
     expect(res.body.exercise.name).toBe('Remada curvada');
   });
 
-  it('404 ao atualizar id inexistente', async () => {
+  it('404 when updating a non-existent id', async () => {
     Exercise.findByIdAndUpdate.mockResolvedValue(null);
     const res = mockRes();
     await item({ method: 'PUT', headers: bearer('u1'), query: { id: 'nope' }, body: {} }, res);
     expect(res.statusCode).toBe(404);
   });
 
-  it('apaga via DELETE', async () => {
+  it('deletes via DELETE', async () => {
     Exercise.findByIdAndDelete.mockResolvedValue({ _id: 'e1' });
     const res = mockRes();
     await item({ method: 'DELETE', headers: bearer('u1'), query: { id: 'e1' } }, res);

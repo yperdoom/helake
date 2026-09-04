@@ -16,14 +16,14 @@ beforeEach(() => {
   vi.stubGlobal('location', { pathname: '/helake', assign: vi.fn() });
 });
 
-describe('sessão', () => {
-  it('grava e lê token, role e name', () => {
+describe('session', () => {
+  it('stores and reads token, role and name', () => {
     setSession({ token: 't', role: 'admin', name: 'Pedro' });
     expect(getToken()).toBe('t');
     expect(getRole()).toBe('admin');
   });
 
-  it('clearSession apaga tudo', () => {
+  it('clearSession wipes everything', () => {
     setSession({ token: 't', role: 'admin', name: 'Pedro' });
     clearSession();
     expect(getToken()).toBeNull();
@@ -32,31 +32,31 @@ describe('sessão', () => {
 });
 
 describe('apiFetch', () => {
-  it('injeta Authorization quando há token', async () => {
+  it('injects Authorization when a token exists', async () => {
     setSession({ token: 'abc', role: 'user', name: '' });
     const spy = stubFetch(ok);
     await apiFetch('/api/orders');
     expect(spy.mock.calls[0][1].headers.Authorization).toBe('Bearer abc');
   });
 
-  it('não injeta Authorization sem token', async () => {
+  it('does not inject Authorization without a token', async () => {
     const spy = stubFetch(ok);
     await apiFetch('/api/orders');
     expect(spy.mock.calls[0][1].headers.Authorization).toBeUndefined();
   });
 
-  it('define Content-Type json quando há body', async () => {
+  it('sets Content-Type json when there is a body', async () => {
     const spy = stubFetch(ok);
     await apiFetch('/api/orders', { method: 'POST', body: '{}' });
     expect(spy.mock.calls[0][1].headers['Content-Type']).toBe('application/json');
   });
 
-  it('devolve a resposta em caso de sucesso', async () => {
+  it('returns the response on success', async () => {
     stubFetch(ok);
     await expect(apiFetch('/api/orders')).resolves.toBe(ok);
   });
 
-  it('em 401 limpa a sessão e redireciona para /login', async () => {
+  it('on 401 clears the session and redirects to /login', async () => {
     setSession({ token: 'abc', role: 'user', name: '' });
     stubFetch({ status: 401, ok: false });
     await expect(apiFetch('/api/orders')).rejects.toThrow();
@@ -64,7 +64,7 @@ describe('apiFetch', () => {
     expect(location.assign).toHaveBeenCalledWith('/login');
   });
 
-  it('lança com a mensagem do servidor quando a resposta não é ok', async () => {
+  it('throws with the server message when the response is not ok', async () => {
     stubFetch({
       status: 400,
       ok: false,
@@ -75,20 +75,20 @@ describe('apiFetch', () => {
       .rejects.toThrow('Cannot delete the last admin');
   });
 
-  it('expõe o status no erro', async () => {
+  it('exposes the status on the error', async () => {
     stubFetch({ status: 409, ok: false, json: () => Promise.resolve({ error: 'duplicado' }) });
 
     await expect(apiFetch('/api/users', { method: 'POST' }))
       .rejects.toMatchObject({ status: 409 });
   });
 
-  it('lança mesmo sem corpo JSON no erro', async () => {
+  it('throws even without a JSON body on the error', async () => {
     stubFetch({ status: 500, ok: false, json: () => Promise.reject(new Error('sem corpo')) });
 
     await expect(apiFetch('/api/users')).rejects.toThrow(/500/);
   });
 
-  it('não redireciona em loop se já está em /login', async () => {
+  it('does not loop redirecting when already at /login', async () => {
     vi.stubGlobal('location', { pathname: '/login', assign: vi.fn() });
     stubFetch({ status: 401, ok: false });
     await expect(apiFetch('/api/auth/login')).rejects.toThrow();

@@ -17,7 +17,7 @@ afterEach(() => {
 });
 
 describe('applyCors', () => {
-  it('trata o preflight: devolve true, 200 e encerra', () => {
+  it('handles the preflight: returns true, 200 and ends', () => {
     const res = mockRes();
     const handled = applyCors({ method: 'OPTIONS' }, res, ['GET']);
     expect(handled).toBe(true);
@@ -25,31 +25,31 @@ describe('applyCors', () => {
     expect(res.ended).toBe(true);
   });
 
-  it('devolve false para método normal', () => {
+  it('returns false for a regular method', () => {
     const res = mockRes();
     expect(applyCors({ method: 'GET' }, res, ['GET'])).toBe(false);
   });
 
-  it('declara os métodos recebidos mais OPTIONS', () => {
+  it('declares the given methods plus OPTIONS', () => {
     const res = mockRes();
     applyCors({ method: 'GET' }, res, ['PUT', 'DELETE']);
     expect(res.headers['Access-Control-Allow-Methods']).toBe('PUT, DELETE, OPTIONS');
   });
 
-  it('permite o header Authorization', () => {
+  it('allows the Authorization header', () => {
     const res = mockRes();
     applyCors({ method: 'GET' }, res, ['GET']);
     expect(res.headers['Access-Control-Allow-Headers']).toContain('Authorization');
   });
 
-  it('reflete APP_ORIGIN quando configurada', () => {
+  it('echoes APP_ORIGIN when configured', () => {
     process.env.APP_ORIGIN = 'https://helake.vercel.app';
     const res = mockRes();
     applyCors({ method: 'GET' }, res, ['GET']);
     expect(res.headers['Access-Control-Allow-Origin']).toBe('https://helake.vercel.app');
   });
 
-  it('não libera origem nenhuma sem APP_ORIGIN', () => {
+  it('allows no origin at all without APP_ORIGIN', () => {
     const res = mockRes();
     applyCors({ method: 'GET' }, res, ['GET']);
     expect(res.headers['Access-Control-Allow-Origin']).toBeUndefined();

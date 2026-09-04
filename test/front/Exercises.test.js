@@ -17,7 +17,7 @@ beforeEach(() => {
 });
 
 describe('Exercises', () => {
-  it('carrega o catálogo', async () => {
+  it('loads the catalog', async () => {
     apiFetch.mockResolvedValue(jsonResponse({ exercises: CATALOG }));
     const vm = makeVm(Exercises);
     await vm.load();
@@ -27,7 +27,7 @@ describe('Exercises', () => {
     expect(vm.loading).toBe(false);
   });
 
-  it('guarda mensagem de erro sem lançar quando a rede falha', async () => {
+  it('stores an error message without throwing when the network fails', async () => {
     apiFetch.mockRejectedValue(new Error('offline'));
     const vm = makeVm(Exercises);
     await expect(vm.load()).resolves.toBeUndefined();
@@ -36,7 +36,7 @@ describe('Exercises', () => {
     expect(vm.loading).toBe(false);
   });
 
-  it('cria via POST quando não está editando', async () => {
+  it('creates via POST when not editing', async () => {
     apiFetch.mockResolvedValue(jsonResponse({ exercises: [] }));
     const vm = makeVm(Exercises);
     vm.form.name = 'Remada';
@@ -49,7 +49,7 @@ describe('Exercises', () => {
     expect(JSON.parse(options.body)).toMatchObject({ name: 'Remada', muscleGroup: 'Costas' });
   });
 
-  it('atualiza via PUT quando está editando', async () => {
+  it('updates via PUT when editing', async () => {
     apiFetch.mockResolvedValue(jsonResponse({ exercises: [] }));
     const vm = makeVm(Exercises);
     vm.edit(CATALOG[0]);
@@ -61,21 +61,21 @@ describe('Exercises', () => {
     expect(options.method).toBe('PUT');
   });
 
-  it('edit preenche o formulário com o exercício', () => {
+  it('edit fills the form with the exercise', () => {
     const vm = makeVm(Exercises);
     vm.edit(CATALOG[1]);
     expect(vm.editingId).toBe('e2');
     expect(vm.form.name).toBe('Agachamento');
   });
 
-  it('não salva com nome vazio', async () => {
+  it('does not save with an empty name', async () => {
     const vm = makeVm(Exercises);
     vm.form.name = '   ';
     await vm.save();
     expect(apiFetch).not.toHaveBeenCalled();
   });
 
-  it('recarrega e limpa o formulário depois de salvar', async () => {
+  it('reloads and clears the form after saving', async () => {
     apiFetch.mockResolvedValue(jsonResponse({ exercises: CATALOG }));
     const vm = makeVm(Exercises);
     vm.form.name = 'Remada';
@@ -87,7 +87,7 @@ describe('Exercises', () => {
     expect(vm.editingId).toBeNull();
   });
 
-  it('remove via DELETE e recarrega', async () => {
+  it('deletes via DELETE and reloads', async () => {
     apiFetch.mockResolvedValue(jsonResponse({ exercises: [] }));
     const vm = makeVm(Exercises);
     await vm.remove('e1');

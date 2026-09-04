@@ -30,7 +30,7 @@ export default {
         const data = await response.json();
         this.exercises = data.exercises || [];
       } catch {
-        this.error = 'Não foi possível carregar os exercícios.';
+        this.error = 'Could not load exercises.';
       } finally {
         this.loading = false;
       }
@@ -63,7 +63,7 @@ export default {
         this.cancelEdit();
         await this.load();
       } catch {
-        this.error = 'Não foi possível salvar.';
+        this.error = 'Could not save.';
       } finally {
         this.saving = false;
       }
@@ -75,7 +75,7 @@ export default {
         await apiFetch(`/api/exercises/${id}`, { method: 'DELETE' });
         await this.load();
       } catch {
-        this.error = 'Não foi possível remover.';
+        this.error = 'Could not delete.';
       }
     },
   },

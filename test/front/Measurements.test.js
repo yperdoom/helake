@@ -18,7 +18,7 @@ beforeEach(() => {
 });
 
 describe('Measurements', () => {
-  it('carrega o histórico', async () => {
+  it('loads the history', async () => {
     apiFetch.mockResolvedValue(jsonResponse({ measurements: HISTORY }));
     const vm = makeVm(Measurements);
     await vm.load();
@@ -27,7 +27,7 @@ describe('Measurements', () => {
     expect(vm.history).toHaveLength(2);
   });
 
-  it('preserva a ordem que a API devolveu', async () => {
+  it('preserves the order returned by the API', async () => {
     apiFetch.mockResolvedValue(jsonResponse({ measurements: HISTORY }));
     const vm = makeVm(Measurements);
     await vm.load();
@@ -35,24 +35,24 @@ describe('Measurements', () => {
     expect(vm.history.map((m) => m._id)).toEqual(['m2', 'm1']);
   });
 
-  it('não quebra quando a rede falha', async () => {
+  it('does not break when the network fails', async () => {
     apiFetch.mockRejectedValue(new Error('offline'));
     const vm = makeVm(Measurements);
     await expect(vm.load()).resolves.toBeUndefined();
     expect(vm.error).toBeTruthy();
   });
 
-  it('adiciona e remove campos de medida', () => {
+  it('adds and removes measurement fields', () => {
     const vm = makeVm(Measurements);
-    const inicial = vm.form.fields.length;
+    const initial = vm.form.fields.length;
     vm.addField();
-    expect(vm.form.fields).toHaveLength(inicial + 1);
+    expect(vm.form.fields).toHaveLength(initial + 1);
 
     vm.removeField(0);
-    expect(vm.form.fields).toHaveLength(inicial);
+    expect(vm.form.fields).toHaveLength(initial);
   });
 
-  it('monta o objeto de medidas a partir dos campos', async () => {
+  it('builds the measurements object from the fields', async () => {
     apiFetch.mockResolvedValue(jsonResponse({ measurements: [] }));
     const vm = makeVm(Measurements);
     vm.form.weight = 82.5;
@@ -71,7 +71,7 @@ describe('Measurements', () => {
     });
   });
 
-  it('ignora campos sem nome ou sem valor', async () => {
+  it('ignores fields without a name or a value', async () => {
     apiFetch.mockResolvedValue(jsonResponse({ measurements: [] }));
     const vm = makeVm(Measurements);
     vm.form.weight = 80;
@@ -86,7 +86,7 @@ describe('Measurements', () => {
     expect(JSON.parse(apiFetch.mock.calls[0][1].body).measurements).toEqual({ cintura: 84 });
   });
 
-  it('não salva registro totalmente vazio', async () => {
+  it('does not save a completely empty record', async () => {
     const vm = makeVm(Measurements);
     vm.form.weight = null;
     vm.form.fields = [{ key: '', value: null }];
@@ -95,7 +95,7 @@ describe('Measurements', () => {
     expect(apiFetch).not.toHaveBeenCalled();
   });
 
-  it('salva só com peso, sem medidas', async () => {
+  it('saves with weight only, without measurements', async () => {
     apiFetch.mockResolvedValue(jsonResponse({ measurements: [] }));
     const vm = makeVm(Measurements);
     vm.form.weight = 81;
@@ -106,7 +106,7 @@ describe('Measurements', () => {
     expect(JSON.parse(apiFetch.mock.calls[0][1].body).weight).toBe(81);
   });
 
-  it('limpa o formulário e recarrega depois de salvar', async () => {
+  it('clears the form and reloads after saving', async () => {
     apiFetch.mockResolvedValue(jsonResponse({ measurements: HISTORY }));
     const vm = makeVm(Measurements);
     vm.form.weight = 81;
@@ -116,7 +116,7 @@ describe('Measurements', () => {
     expect(apiFetch.mock.calls[1][0]).toBe('/api/measurements');
   });
 
-  it('remove registro e recarrega', async () => {
+  it('deletes the record and reloads', async () => {
     apiFetch.mockResolvedValue(jsonResponse({ measurements: [] }));
     const vm = makeVm(Measurements);
     await vm.remove('m1');

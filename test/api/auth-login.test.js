@@ -30,7 +30,7 @@ describe('POST /api/auth/login', () => {
     vi.clearAllMocks();
   });
 
-  it('inclui role no payload do JWT', async () => {
+  it('includes role in the JWT payload', async () => {
     User.findOne.mockResolvedValue({ _id: 'u1', email: 'a@b.com', role: 'admin', name: 'Pedro' });
     bcrypt.compare.mockResolvedValue(true);
 
@@ -41,7 +41,7 @@ describe('POST /api/auth/login', () => {
     expect(verifyToken(res.body.token)).toMatchObject({ userId: 'u1', role: 'admin' });
   });
 
-  it('devolve role e name no corpo da resposta', async () => {
+  it('returns role and name in the response body', async () => {
     User.findOne.mockResolvedValue({ _id: 'u1', email: 'a@b.com', role: 'user', name: 'Namorada' });
     bcrypt.compare.mockResolvedValue(true);
 
@@ -51,7 +51,7 @@ describe('POST /api/auth/login', () => {
     expect(res.body).toMatchObject({ role: 'user', name: 'Namorada' });
   });
 
-  it('devolve 401 com senha errada', async () => {
+  it('returns 401 with a wrong password', async () => {
     User.findOne.mockResolvedValue({ _id: 'u1', email: 'a@b.com', role: 'user' });
     bcrypt.compare.mockResolvedValue(false);
 

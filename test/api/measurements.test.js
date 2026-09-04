@@ -20,27 +20,27 @@ beforeEach(() => {
 });
 
 describe('/api/measurements', () => {
-  it('401 sem token', async () => {
+  it('401 without a token', async () => {
     const res = mockRes();
     await list({ method: 'GET', headers: {} }, res);
     expect(res.statusCode).toBe(401);
     expect(BodyMeasurement.find).not.toHaveBeenCalled();
   });
 
-  it('filtra pelo user do token', async () => {
+  it('filters by the user in the token', async () => {
     BodyMeasurement.find.mockReturnValue(query([]));
     await list({ method: 'GET', headers: bearer('u1') }, mockRes());
     expect(BodyMeasurement.find).toHaveBeenCalledWith({ user: 'u1' });
   });
 
-  it('ordena por data decrescente', async () => {
+  it('sorts by date descending', async () => {
     const sort = vi.fn().mockReturnValue({ lean: () => Promise.resolve([]) });
     BodyMeasurement.find.mockReturnValue({ sort });
     await list({ method: 'GET', headers: bearer('u1') }, mockRes());
     expect(sort).toHaveBeenCalledWith({ date: -1 });
   });
 
-  it('grava o user do token e ignora forjadura', async () => {
+  it('stores the user from the token and ignores forgery', async () => {
     BodyMeasurement.create.mockResolvedValue({ _id: 'm1' });
     const res = mockRes();
     await list({ method: 'POST', headers: bearer('u1'), body: { user: 'invasor', weight: 80 } }, res);
@@ -51,7 +51,7 @@ describe('/api/measurements', () => {
 });
 
 describe('/api/measurements/[id]', () => {
-  it('PUT filtra por _id e user', async () => {
+  it('PUT filters by _id and user', async () => {
     BodyMeasurement.findOneAndUpdate.mockResolvedValue({ _id: 'm1' });
     const res = mockRes();
     await item({ method: 'PUT', headers: bearer('u1'), query: { id: 'm1' }, body: { weight: 81 } }, res);
@@ -62,14 +62,14 @@ describe('/api/measurements/[id]', () => {
     expect(res.statusCode).toBe(200);
   });
 
-  it('PUT em medida de outro usuário devolve 404', async () => {
+  it('PUT on a measurement from another user returns 404', async () => {
     BodyMeasurement.findOneAndUpdate.mockResolvedValue(null);
     const res = mockRes();
     await item({ method: 'PUT', headers: bearer('u2'), query: { id: 'm1' }, body: {} }, res);
     expect(res.statusCode).toBe(404);
   });
 
-  it('DELETE em medida de outro usuário devolve 404', async () => {
+  it('DELETE on a measurement from another user returns 404', async () => {
     BodyMeasurement.findOneAndDelete.mockResolvedValue(null);
     const res = mockRes();
     await item({ method: 'DELETE', headers: bearer('u2'), query: { id: 'm1' } }, res);

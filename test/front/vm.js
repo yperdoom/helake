@@ -1,5 +1,5 @@
-// Instancia a lógica de um componente Options API sem montar o template.
-// A separação X.vue / X.js do projeto permite testar métodos e computed direto.
+// Instantiates the logic of an Options API component without mounting the template.
+// The project's X.vue / X.js split allows testing methods and computed directly.
 export function makeVm(definition, overrides = {}) {
   const vm = { ...(definition.data ? definition.data() : {}), ...overrides };
 

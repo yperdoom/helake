@@ -21,36 +21,36 @@ const { default: User } = await import('../../api/lib/models/User.js');
 const { default: bcrypt } = await import('bcryptjs');
 
 const admin = () => bearer('admin1', 'admin');
-const comum = () => bearer('u2', 'user');
+const regular = () => bearer('u2', 'user');
 
 beforeEach(() => {
   vi.clearAllMocks();
 });
 
-describe('permissão', () => {
-  const casos = [
+describe('permission', () => {
+  const cases = [
     ['GET', list, { method: 'GET' }],
     ['POST', list, { method: 'POST', body: { email: 'a@b.com', password: 'x' } }],
   ];
 
-  it.each(casos)('%s sem token devolve 401', async (_m, handler, req) => {
+  it.each(cases)('%s without a token returns 401', async (_m, handler, req) => {
     const res = mockRes();
     await handler({ ...req, headers: {}, query: {} }, res);
     expect(res.statusCode).toBe(401);
   });
 
-  it.each(casos)('%s com usuário comum devolve 403', async (_m, handler, req) => {
+  it.each(cases)('%s with a regular user returns 403', async (_m, handler, req) => {
     const res = mockRes();
-    await handler({ ...req, headers: comum(), query: {} }, res);
+    await handler({ ...req, headers: regular(), query: {} }, res);
     expect(res.statusCode).toBe(403);
     expect(User.find).not.toHaveBeenCalled();
     expect(User.create).not.toHaveBeenCalled();
   });
 
-  it('PUT e DELETE com usuário comum devolvem 403', async () => {
+  it('PUT and DELETE with a regular user return 403', async () => {
     for (const method of ['PUT', 'DELETE']) {
       const res = mockRes();
-      await item({ method, headers: comum(), query: { id: 'u9' }, body: {} }, res);
+      await item({ method, headers: regular(), query: { id: 'u9' }, body: {} }, res);
       expect(res.statusCode).toBe(403);
     }
     expect(User.findByIdAndUpdate).not.toHaveBeenCalled();
@@ -59,7 +59,7 @@ describe('permissão', () => {
 });
 
 describe('GET /api/users', () => {
-  it('nunca devolve o hash da senha', async () => {
+  it('never returns the password hash', async () => {
     const select = vi.fn().mockReturnValue(query([{ _id: 'u1', email: 'a@b.com' }]));
     User.find.mockReturnValue({ select });
 
@@ -73,13 +73,13 @@ describe('GET /api/users', () => {
 });
 
 describe('POST /api/users', () => {
-  it('exige email e senha', async () => {
+  it('requires email and password', async () => {
     const res = mockRes();
     await list({ method: 'POST', headers: admin(), query: {}, body: { email: 'a@b.com' } }, res);
     expect(res.statusCode).toBe(400);
   });
 
-  it('recusa email duplicado', async () => {
+  it('rejects a duplicate email', async () => {
     User.findOne.mockResolvedValue({ _id: 'existente' });
     const res = mockRes();
     await list({ method: 'POST', headers: admin(), query: {}, body: { email: 'a@b.com', password: 'x' } }, res);
@@ -87,7 +87,7 @@ describe('POST /api/users', () => {
     expect(User.create).not.toHaveBeenCalled();
   });
 
-  it('hasheia a senha e nunca grava texto puro', async () => {
+  it('hashes the password and never stores plain text', async () => {
     User.findOne.mockResolvedValue(null);
     User.create.mockResolvedValue({ _id: 'u3', email: 'nova@b.com', name: 'Ela', role: 'user' });
 
@@ -104,7 +104,7 @@ describe('POST /api/users', () => {
     expect(res.statusCode).toBe(201);
   });
 
-  it('não devolve senha na resposta da criação', async () => {
+  it('does not return a password in the creation response', async () => {
     User.findOne.mockResolvedValue(null);
     User.create.mockResolvedValue({ _id: 'u3', email: 'n@b.com', name: '', role: 'user', password: 'hashed' });
 
@@ -116,14 +116,14 @@ describe('POST /api/users', () => {
 });
 
 describe('PUT /api/users/[id]', () => {
-  it('404 para usuário inexistente', async () => {
+  it('404 for a non-existent user', async () => {
     User.findById.mockResolvedValue(null);
     const res = mockRes();
     await item({ method: 'PUT', headers: admin(), query: { id: 'nope' }, body: { name: 'X' } }, res);
     expect(res.statusCode).toBe(404);
   });
 
-  it('altera name e role', async () => {
+  it('updates name and role', async () => {
     User.findById.mockResolvedValue({ _id: 'u2', role: 'user' });
     User.findByIdAndUpdate.mockReturnValue({ select: () => Promise.resolve({ _id: 'u2', role: 'admin' }) });
 
@@ -135,7 +135,7 @@ describe('PUT /api/users/[id]', () => {
     expect(res.statusCode).toBe(200);
   });
 
-  it('hasheia senha nova', async () => {
+  it('hashes a new password', async () => {
     User.findById.mockResolvedValue({ _id: 'u2', role: 'user' });
     User.findByIdAndUpdate.mockReturnValue({ select: () => Promise.resolve({ _id: 'u2' }) });
 
@@ -145,7 +145,7 @@ describe('PUT /api/users/[id]', () => {
     expect(update.password).toBe('hashed');
   });
 
-  it('senha em branco não sobrescreve a existente', async () => {
+  it('a blank password does not overwrite the existing one', async () => {
     User.findById.mockResolvedValue({ _id: 'u2', role: 'user' });
     User.findByIdAndUpdate.mockReturnValue({ select: () => Promise.resolve({ _id: 'u2' }) });
 
@@ -156,7 +156,7 @@ describe('PUT /api/users/[id]', () => {
     expect(bcrypt.hash).not.toHaveBeenCalled();
   });
 
-  it('recusa rebaixar o último admin', async () => {
+  it('refuses to demote the last admin', async () => {
     User.findById.mockResolvedValue({ _id: 'admin1', role: 'admin' });
     User.countDocuments.mockResolvedValue(1);
 
@@ -167,7 +167,7 @@ describe('PUT /api/users/[id]', () => {
     expect(User.findByIdAndUpdate).not.toHaveBeenCalled();
   });
 
-  it('permite rebaixar admin quando existe outro', async () => {
+  it('allows demoting an admin when another one exists', async () => {
     User.findById.mockResolvedValue({ _id: 'admin2', role: 'admin' });
     User.countDocuments.mockResolvedValue(2);
     User.findByIdAndUpdate.mockReturnValue({ select: () => Promise.resolve({ _id: 'admin2' }) });
@@ -179,7 +179,7 @@ describe('PUT /api/users/[id]', () => {
 });
 
 describe('DELETE /api/users/[id]', () => {
-  it('recusa apagar a própria conta', async () => {
+  it('refuses to delete your own account', async () => {
     const res = mockRes();
     await item({ method: 'DELETE', headers: admin(), query: { id: 'admin1' }, body: {} }, res);
 
@@ -187,7 +187,7 @@ describe('DELETE /api/users/[id]', () => {
     expect(User.findByIdAndDelete).not.toHaveBeenCalled();
   });
 
-  it('recusa apagar o último admin', async () => {
+  it('refuses to delete the last admin', async () => {
     User.findById.mockResolvedValue({ _id: 'admin2', role: 'admin' });
     User.countDocuments.mockResolvedValue(1);
 
@@ -198,7 +198,7 @@ describe('DELETE /api/users/[id]', () => {
     expect(User.findByIdAndDelete).not.toHaveBeenCalled();
   });
 
-  it('apaga usuário comum', async () => {
+  it('deletes a regular user', async () => {
     User.findById.mockResolvedValue({ _id: 'u2', role: 'user' });
     User.findByIdAndDelete.mockResolvedValue({ _id: 'u2' });
 
@@ -209,7 +209,7 @@ describe('DELETE /api/users/[id]', () => {
     expect(res.statusCode).toBe(200);
   });
 
-  it('404 para usuário inexistente', async () => {
+  it('404 for a non-existent user', async () => {
     User.findById.mockResolvedValue(null);
     const res = mockRes();
     await item({ method: 'DELETE', headers: admin(), query: { id: 'nope' }, body: {} }, res);

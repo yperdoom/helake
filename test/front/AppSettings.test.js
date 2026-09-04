@@ -17,7 +17,7 @@ beforeEach(() => {
 });
 
 describe('AppSettings', () => {
-  it('carrega a lista de usuários', async () => {
+  it('loads the user list', async () => {
     apiFetch.mockResolvedValue(jsonResponse({ users: USERS }));
     const vm = makeVm(AppSettings);
     await vm.load();
@@ -26,7 +26,7 @@ describe('AppSettings', () => {
     expect(vm.users).toHaveLength(2);
   });
 
-  it('mostra a mensagem do servidor quando a API recusa', async () => {
+  it('shows the server message when the API refuses', async () => {
     apiFetch.mockRejectedValue(Object.assign(new Error('Forbidden'), { status: 403 }));
     const vm = makeVm(AppSettings);
     await vm.load();
@@ -34,7 +34,7 @@ describe('AppSettings', () => {
     expect(vm.error).toContain('Forbidden');
   });
 
-  it('cria usuário com email, nome, senha e papel', async () => {
+  it('creates a user with email, name, password and role', async () => {
     apiFetch.mockResolvedValue(jsonResponse({ users: [] }));
     const vm = makeVm(AppSettings);
     vm.form.email = 'nova@b.com';
@@ -51,14 +51,14 @@ describe('AppSettings', () => {
     });
   });
 
-  it('não cria sem email ou senha', async () => {
+  it('does not create without email or password', async () => {
     const vm = makeVm(AppSettings);
     vm.form.email = 'nova@b.com';
     await vm.save();
     expect(apiFetch).not.toHaveBeenCalled();
   });
 
-  it('edit preenche o formulário e trava o email', () => {
+  it('edit fills the form and locks the email', () => {
     const vm = makeVm(AppSettings);
     vm.edit(USERS[1]);
 
@@ -69,7 +69,7 @@ describe('AppSettings', () => {
     expect(vm.isEditing).toBe(true);
   });
 
-  it('ao editar manda só name e role, sem senha em branco', async () => {
+  it('when editing sends only name and role, without a blank password', async () => {
     apiFetch.mockResolvedValue(jsonResponse({ users: [] }));
     const vm = makeVm(AppSettings);
     vm.edit(USERS[1]);
@@ -82,7 +82,7 @@ describe('AppSettings', () => {
     expect(JSON.parse(options.body)).toEqual({ name: 'Ela', role: 'admin' });
   });
 
-  it('ao editar com senha nova, inclui a senha', async () => {
+  it('when editing with a new password, includes the password', async () => {
     apiFetch.mockResolvedValue(jsonResponse({ users: [] }));
     const vm = makeVm(AppSettings);
     vm.edit(USERS[1]);
@@ -92,7 +92,7 @@ describe('AppSettings', () => {
     expect(JSON.parse(apiFetch.mock.calls[0][1].body).password).toBe('trocada');
   });
 
-  it('limpa o formulário e recarrega depois de salvar', async () => {
+  it('clears the form and reloads after saving', async () => {
     apiFetch.mockResolvedValue(jsonResponse({ users: USERS }));
     const vm = makeVm(AppSettings);
     vm.form.email = 'n@b.com';
@@ -104,7 +104,7 @@ describe('AppSettings', () => {
     expect(apiFetch.mock.calls[1][0]).toBe('/api/users');
   });
 
-  it('remove usuário e recarrega', async () => {
+  it('deletes the user and reloads', async () => {
     apiFetch.mockResolvedValue(jsonResponse({ users: [] }));
     const vm = makeVm(AppSettings);
     await vm.remove('u2');
@@ -113,7 +113,7 @@ describe('AppSettings', () => {
     expect(apiFetch).toHaveBeenCalledTimes(2);
   });
 
-  it('mostra o motivo quando o servidor recusa a remoção', async () => {
+  it('shows the reason when the server refuses the deletion', async () => {
     apiFetch.mockRejectedValue(
       Object.assign(new Error('Cannot delete the last admin'), { status: 400 }),
     );

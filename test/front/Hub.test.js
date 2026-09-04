@@ -9,46 +9,46 @@ beforeEach(() => {
 });
 
 describe('Hub', () => {
-  it('expõe os três blocos base para usuário comum', () => {
+  it('exposes the three base tiles for a regular user', () => {
     setSession({ token: 't', role: 'user', name: 'Ela' });
     const { tiles } = makeVm(Hub);
-    expect(tiles.map((t) => t.label)).toEqual(['Treino', 'Medidas', 'Helake']);
+    expect(tiles.map((t) => t.label)).toEqual(['Workouts', 'Measurements', 'Helake']);
   });
 
-  it('aponta cada bloco para o destino correto', () => {
+  it('points each tile at the right destination', () => {
     setSession({ token: 't', role: 'user', name: '' });
     const { tiles } = makeVm(Hub);
-    const destinos = Object.fromEntries(tiles.map((t) => [t.label, t.to]));
-    expect(destinos).toMatchObject({
-      Treino: '/treino',
-      Medidas: '/medidas',
+    const destinations = Object.fromEntries(tiles.map((t) => [t.label, t.to]));
+    expect(destinations).toMatchObject({
+      Workouts: '/workouts',
+      Measurements: '/measurements',
       Helake: '/helake',
     });
   });
 
-  it('não mostra Configurações para usuário comum', () => {
+  it('does not show Settings to a regular user', () => {
     setSession({ token: 't', role: 'user', name: '' });
     expect(makeVm(Hub).tiles.map((t) => t.to)).not.toContain('/settings');
   });
 
-  it('mostra Configurações para admin', () => {
+  it('shows Settings to an admin', () => {
     setSession({ token: 't', role: 'admin', name: 'Pedro' });
     const { tiles } = makeVm(Hub);
     expect(tiles.map((t) => t.to)).toContain('/settings');
     expect(tiles).toHaveLength(4);
   });
 
-  it('mostra o nome do usuário da sessão', () => {
+  it('shows the user name from the session', () => {
     setSession({ token: 't', role: 'user', name: 'Pedro' });
     expect(makeVm(Hub).userName).toBe('Pedro');
   });
 
-  it('não quebra sem nome na sessão', () => {
+  it('does not break without a name in the session', () => {
     setSession({ token: 't', role: 'user', name: '' });
     expect(makeVm(Hub).userName).toBe('');
   });
 
-  it('logout limpa a sessão e vai para /login', () => {
+  it('logout clears the session and goes to /login', () => {
     setSession({ token: 't', role: 'admin', name: 'Pedro' });
     const push = vi.fn();
     const vm = makeVm(Hub, { $router: { push } });
@@ -60,7 +60,7 @@ describe('Hub', () => {
     expect(push).toHaveBeenCalledWith('/login');
   });
 
-  it('todo bloco tem ícone', () => {
+  it('every tile has an icon', () => {
     setSession({ token: 't', role: 'admin', name: '' });
     for (const tile of makeVm(Hub).tiles) {
       expect(tile.icon).toBeTruthy();

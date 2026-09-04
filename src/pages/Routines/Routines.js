@@ -3,7 +3,7 @@ import { apiFetch } from '@/lib/api.js';
 
 const emptyForm = () => ({ name: '', exercises: [] });
 
-// A API popula exercises.exercise, então a ficha volta com objeto no lugar do id.
+// The API populates exercises.exercise, so a routine comes back with an object, not an id.
 const toId = (value) => (value && typeof value === 'object' ? value._id : value);
 
 export default {
@@ -39,7 +39,7 @@ export default {
         this.routines = routinesData.routines || [];
         this.catalog = catalogData.exercises || [];
       } catch {
-        this.error = 'Não foi possível carregar as fichas.';
+        this.error = 'Could not load routines.';
       } finally {
         this.loading = false;
       }
@@ -99,7 +99,7 @@ export default {
         this.cancelEdit();
         await this.load();
       } catch {
-        this.error = 'Não foi possível salvar a ficha.';
+        this.error = 'Could not save routine.';
       } finally {
         this.saving = false;
       }
@@ -111,7 +111,7 @@ export default {
         await apiFetch(`/api/routines/${id}`, { method: 'DELETE' });
         await this.load();
       } catch {
-        this.error = 'Não foi possível remover a ficha.';
+        this.error = 'Could not delete routine.';
       }
     },
   },

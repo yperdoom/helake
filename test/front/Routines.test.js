@@ -12,7 +12,7 @@ const CATALOG = [
   { _id: 'e2', name: 'Agachamento', muscleGroup: 'Perna' },
 ];
 
-// Como a API popula exercises.exercise, a ficha volta com objeto, não com id.
+// Since the API populates exercises.exercise, a routine comes back with an object, not an id.
 const ROUTINE = {
   _id: 'r1',
   name: 'Treino A',
@@ -35,7 +35,7 @@ beforeEach(() => {
 });
 
 describe('Routines', () => {
-  it('carrega fichas e catálogo', async () => {
+  it('loads routines and the catalog', async () => {
     routeApi();
     const vm = makeVm(Routines);
     await vm.load();
@@ -47,21 +47,21 @@ describe('Routines', () => {
     expect(vm.catalog).toHaveLength(2);
   });
 
-  it('não quebra quando a rede falha', async () => {
+  it('does not break when the network fails', async () => {
     apiFetch.mockRejectedValue(new Error('offline'));
     const vm = makeVm(Routines);
     await expect(vm.load()).resolves.toBeUndefined();
     expect(vm.error).toBeTruthy();
   });
 
-  it('adiciona exercício à ficha em edição', () => {
+  it('adds an exercise to the routine being edited', () => {
     const vm = makeVm(Routines);
     vm.addExercise('e1');
     vm.addExercise('e2');
     expect(vm.form.exercises.map((e) => e.exercise)).toEqual(['e1', 'e2']);
   });
 
-  it('remove exercício por posição', () => {
+  it('removes an exercise by position', () => {
     const vm = makeVm(Routines);
     vm.addExercise('e1');
     vm.addExercise('e2');
@@ -69,7 +69,7 @@ describe('Routines', () => {
     expect(vm.form.exercises.map((e) => e.exercise)).toEqual(['e2']);
   });
 
-  it('normaliza o exercício populado para id ao editar', () => {
+  it('normalizes the populated exercise to an id when editing', () => {
     const vm = makeVm(Routines);
     vm.edit(ROUTINE);
 
@@ -78,7 +78,7 @@ describe('Routines', () => {
     expect(vm.form.exercises.map((e) => e.exercise)).toEqual(['e1', 'e2']);
   });
 
-  it('grava a ordem a partir da posição na lista', async () => {
+  it('stores order from the position in the list', async () => {
     routeApi();
     const vm = makeVm(Routines);
     vm.form.name = 'Treino B';
@@ -94,7 +94,7 @@ describe('Routines', () => {
     ]);
   });
 
-  it('cria via POST e atualiza via PUT', async () => {
+  it('creates via POST and updates via PUT', async () => {
     routeApi();
     const vm = makeVm(Routines);
 
@@ -111,14 +111,14 @@ describe('Routines', () => {
     expect(apiFetch.mock.calls[0][1].method).toBe('PUT');
   });
 
-  it('não salva ficha sem nome', async () => {
+  it('does not save a routine without a name', async () => {
     const vm = makeVm(Routines);
     vm.form.name = '  ';
     await vm.save();
     expect(apiFetch).not.toHaveBeenCalled();
   });
 
-  it('remove ficha e recarrega', async () => {
+  it('deletes the routine and reloads', async () => {
     routeApi();
     const vm = makeVm(Routines);
     await vm.remove('r1');
@@ -127,7 +127,7 @@ describe('Routines', () => {
     expect(apiFetch.mock.calls.map(([p]) => p)).toContain('/api/routines');
   });
 
-  it('limpa o formulário depois de salvar', async () => {
+  it('clears the form after saving', async () => {
     routeApi();
     const vm = makeVm(Routines);
     vm.form.name = 'Nova';

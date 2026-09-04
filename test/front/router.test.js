@@ -5,10 +5,10 @@ import router from '../../src/router.js';
 const CASES = [
   ['/login', 'Login'],
   ['/', 'Hub'],
-  ['/exercicios', 'Exercises'],
-  ['/treino', 'Routines'],
-  ['/treino/r1/registro', 'Workout'],
-  ['/medidas', 'Measurements'],
+  ['/exercises', 'Exercises'],
+  ['/workouts', 'Routines'],
+  ['/workouts/r1/log', 'Workout'],
+  ['/measurements', 'Measurements'],
   ['/settings', 'AppSettings'],
   ['/helake', 'Dashboard'],
   ['/helake/orders', 'Orders'],
@@ -18,22 +18,22 @@ const CASES = [
   ['/helake/settings', 'HelakeSettings'],
 ];
 
-describe('rotas', () => {
-  it.each(CASES)('%s resolve para %s', (path, name) => {
+describe('routes', () => {
+  it.each(CASES)('%s resolves to %s', (path, name) => {
     expect(router.resolve(path).name).toBe(name);
   });
 
-  it('marca /settings como rota de admin', () => {
+  it('marks /settings as an admin route', () => {
     expect(router.resolve('/settings').meta.requiresAdmin).toBe(true);
   });
 
-  it('não marca as rotas do Yper como admin', () => {
-    for (const path of ['/', '/treino', '/medidas', '/exercicios']) {
+  it('does not mark the Yper routes as admin', () => {
+    for (const path of ['/', '/workouts', '/measurements', '/exercises']) {
       expect(router.resolve(path).meta.requiresAdmin).toBeUndefined();
     }
   });
 
-  it('não expõe mais as rotas antigas do Helake na raiz', () => {
+  it('no longer exposes the old Helake routes at the root', () => {
     for (const old of ['/orders', '/recipes', '/customers', '/ingredients', '/home']) {
       expect(router.resolve(old).matched).toHaveLength(0);
     }

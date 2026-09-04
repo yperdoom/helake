@@ -2,12 +2,12 @@ import styles from './Hub.module.css';
 import { clearSession, getName, getRole } from '@/lib/api.js';
 
 const BASE_TILES = [
-  { label: 'Treino', to: '/treino', icon: 'fitness_center' },
-  { label: 'Medidas', to: '/medidas', icon: 'straighten' },
+  { label: 'Workouts', to: '/workouts', icon: 'fitness_center' },
+  { label: 'Measurements', to: '/measurements', icon: 'straighten' },
   { label: 'Helake', to: '/helake', icon: 'storefront' },
 ];
 
-const ADMIN_TILE = { label: 'Configurações', to: '/settings', icon: 'settings' };
+const ADMIN_TILE = { label: 'Settings', to: '/settings', icon: 'settings' };
 
 export default {
   name: 'Hub',

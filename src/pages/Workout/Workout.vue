@@ -1,14 +1,14 @@
 <template>
   <div :class="$style.page">
     <header :class="$style.header">
-      <router-link :class="$style.back" to="/treino">
+      <router-link :class="$style.back" to="/workouts">
         <span class="material-symbols-outlined">arrow_back</span>
       </router-link>
-      <h1 :class="$style.title">{{ routine ? routine.name : 'Treino' }}</h1>
+      <h1 :class="$style.title">{{ routine ? routine.name : 'Workout' }}</h1>
     </header>
 
     <p v-if="error" :class="$style.error">{{ error }}</p>
-    <p v-if="loading" :class="$style.empty">Carregando...</p>
+    <p v-if="loading" :class="$style.empty">Loading...</p>
 
     <template v-else-if="routine">
       <ul :class="$style.list">
@@ -19,8 +19,8 @@
               <template v-if="row.targetSets || row.targetReps">
                 {{ row.targetSets || '?' }}x{{ row.targetReps || '?' }}
               </template>
-              <template v-if="row.lastLoad !== null"> · última {{ row.lastLoad }}kg</template>
-              <template v-else-if="row.targetLoad"> · alvo {{ row.targetLoad }}kg</template>
+              <template v-if="row.lastLoad !== null"> · last {{ row.lastLoad }}kg</template>
+              <template v-else-if="row.targetLoad"> · target {{ row.targetLoad }}kg</template>
             </span>
           </div>
           <input
@@ -33,10 +33,10 @@
         </li>
       </ul>
 
-      <input v-model="notes" :class="$style.notes" placeholder="Observações do treino">
+      <input v-model="notes" :class="$style.notes" placeholder="Workout notes">
 
       <button :class="$style.primary" type="button" :disabled="saving" @click="save()">
-        Salvar treino
+        Save workout
       </button>
     </template>
   </div>

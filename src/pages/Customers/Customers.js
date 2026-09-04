@@ -56,7 +56,7 @@ export default {
       await this.fetchCustomers();
     },
     async remove(id) {
-      if (!confirm('Remover cliente?')) return;
+      if (!confirm('Delete customer?')) return;
       await apiFetch(`/api/customers/${id}`, { method: 'DELETE' });
       await this.fetchCustomers();
     },

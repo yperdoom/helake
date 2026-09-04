@@ -1,29 +1,29 @@
 <template>
   <div :class="$style.page">
     <header :class="$style.header">
-      <router-link :class="$style.back" to="/treino">
+      <router-link :class="$style.back" to="/workouts">
         <span class="material-symbols-outlined">arrow_back</span>
       </router-link>
-      <h1 :class="$style.title">Exercícios</h1>
+      <h1 :class="$style.title">Exercises</h1>
     </header>
 
     <form :class="$style.form" @submit.prevent="save()">
-      <input v-model="form.name" :class="$style.input" placeholder="Nome do exercício">
-      <input v-model="form.muscleGroup" :class="$style.input" placeholder="Grupo muscular">
-      <input v-model="form.notes" :class="$style.input" placeholder="Observações">
+      <input v-model="form.name" :class="$style.input" placeholder="Exercise name">
+      <input v-model="form.muscleGroup" :class="$style.input" placeholder="Muscle group">
+      <input v-model="form.notes" :class="$style.input" placeholder="Notes">
       <div :class="$style.formActions">
         <button :class="$style.primary" type="submit" :disabled="saving">
-          {{ editingId ? 'Salvar' : 'Adicionar' }}
+          {{ editingId ? 'Save' : 'Add' }}
         </button>
         <button v-if="editingId" :class="$style.secondary" type="button" @click="cancelEdit()">
-          Cancelar
+          Cancel
         </button>
       </div>
     </form>
 
     <p v-if="error" :class="$style.error">{{ error }}</p>
-    <p v-if="loading" :class="$style.empty">Carregando...</p>
-    <p v-else-if="!exercises.length" :class="$style.empty">Nenhum exercício cadastrado ainda.</p>
+    <p v-if="loading" :class="$style.empty">Loading...</p>
+    <p v-else-if="!exercises.length" :class="$style.empty">No exercises yet.</p>
 
     <ul v-else :class="$style.list">
       <li v-for="exercise in exercises" :key="exercise._id" :class="$style.item">

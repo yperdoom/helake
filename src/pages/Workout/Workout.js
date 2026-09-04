@@ -3,8 +3,8 @@ import { apiFetch } from '@/lib/api.js';
 
 const toId = (value) => (value && typeof value === 'object' ? value._id : value);
 
-// Os logs já vêm por data decrescente, então a primeira ocorrência de cada
-// exercício é a mais recente. Uma requisição resolve todas as últimas cargas.
+// Logs already come sorted by date descending, so the first occurrence of each
+// exercise is the most recent one. A single request resolves every last load.
 function lastLoadByExercise(logs) {
   const map = {};
   for (const log of logs) {
@@ -52,7 +52,7 @@ export default {
         this.routine = routine;
 
         if (!routine) {
-          this.error = 'Ficha não encontrada.';
+          this.error = 'Routine not found.';
           return;
         }
 
@@ -72,7 +72,7 @@ export default {
             };
           });
       } catch {
-        this.error = 'Não foi possível carregar o treino.';
+        this.error = 'Could not load workout.';
       } finally {
         this.loading = false;
       }
@@ -96,9 +96,9 @@ export default {
             notes: this.notes,
           }),
         });
-        this.$router.push('/treino');
+        this.$router.push('/workouts');
       } catch {
-        this.error = 'Não foi possível salvar o treino.';
+        this.error = 'Could not save workout.';
       } finally {
         this.saving = false;
       }

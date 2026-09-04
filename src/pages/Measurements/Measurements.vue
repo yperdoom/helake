@@ -4,7 +4,7 @@
       <router-link :class="$style.back" to="/">
         <span class="material-symbols-outlined">arrow_back</span>
       </router-link>
-      <h1 :class="$style.title">Medidas</h1>
+      <h1 :class="$style.title">Measurements</h1>
     </header>
 
     <form :class="$style.form" @submit.prevent="save()">
@@ -13,11 +13,11 @@
         :class="$style.input"
         type="number"
         inputmode="decimal"
-        placeholder="Peso (kg)"
+        placeholder="Weight (kg)"
       >
 
       <div v-for="(field, index) in form.fields" :key="index" :class="$style.fieldRow">
-        <input v-model="field.key" :class="$style.input" placeholder="Medida (ex: cintura)">
+        <input v-model="field.key" :class="$style.input" placeholder="Measurement (e.g. waist)">
         <input v-model.number="field.value" :class="$style.value" type="number" placeholder="cm">
         <button :class="$style.iconBtn" type="button" @click="removeField(index)">
           <span class="material-symbols-outlined">close</span>
@@ -25,14 +25,14 @@
       </div>
 
       <button :class="$style.secondary" type="button" @click="addField()">
-        Adicionar medida
+        Add measurement
       </button>
-      <button :class="$style.primary" type="submit" :disabled="saving">Salvar</button>
+      <button :class="$style.primary" type="submit" :disabled="saving">Save</button>
     </form>
 
     <p v-if="error" :class="$style.error">{{ error }}</p>
-    <p v-if="loading" :class="$style.empty">Carregando...</p>
-    <p v-else-if="!history.length" :class="$style.empty">Nenhum registro ainda.</p>
+    <p v-if="loading" :class="$style.empty">Loading...</p>
+    <p v-else-if="!history.length" :class="$style.empty">No records yet.</p>
 
     <ul v-else :class="$style.list">
       <li v-for="item in history" :key="item._id" :class="$style.item">

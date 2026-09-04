@@ -4,8 +4,8 @@ import { apiFetch } from '@/lib/api.js';
 
 const STATUSES = ['new', 'in_production', 'ready', 'delivered', 'cancelled'];
 const STATUS_LABELS = {
-  new: 'Novo', in_production: 'Em Produção', ready: 'Pronto',
-  delivered: 'Entregue', cancelled: 'Cancelado',
+  new: 'New', in_production: 'In Production', ready: 'Ready',
+  delivered: 'Delivered', cancelled: 'Cancelled',
 };
 const EMPTY_FORM = {
   customer: '', recipe: '', quantity: 1, deliveryDate: '',
@@ -93,7 +93,7 @@ export default {
       await this.fetchOrders();
     },
     async remove(id) {
-      if (!confirm('Remover pedido?')) return;
+      if (!confirm('Delete order?')) return;
       await apiFetch(`/api/orders/${id}`, { method: 'DELETE' });
       await this.fetchOrders();
     },

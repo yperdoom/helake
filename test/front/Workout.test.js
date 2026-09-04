@@ -41,7 +41,7 @@ beforeEach(() => {
 });
 
 describe('Workout', () => {
-  it('acha a ficha pelo id da rota', async () => {
+  it('finds the routine by the route id', async () => {
     routeApi();
     const vm = vmFor();
     await vm.load();
@@ -50,7 +50,7 @@ describe('Workout', () => {
     expect(vm.rows).toHaveLength(2);
   });
 
-  it('faz só duas requisições, sem uma por exercício', async () => {
+  it('makes only two requests, not one per exercise', async () => {
     routeApi();
     const vm = vmFor();
     await vm.load();
@@ -58,7 +58,7 @@ describe('Workout', () => {
     expect(apiFetch).toHaveBeenCalledTimes(2);
   });
 
-  it('usa a carga mais recente de cada exercício', async () => {
+  it('uses the most recent load of each exercise', async () => {
     routeApi();
     const vm = vmFor();
     await vm.load();
@@ -68,7 +68,7 @@ describe('Workout', () => {
     expect(byId.e2).toBe(75);
   });
 
-  it('deixa lastLoad nulo para exercício sem histórico', async () => {
+  it('leaves lastLoad null for an exercise without history', async () => {
     routeApi({ logs: [] });
     const vm = vmFor();
     await vm.load();
@@ -76,7 +76,7 @@ describe('Workout', () => {
     expect(vm.rows.every((r) => r.lastLoad === null)).toBe(true);
   });
 
-  it('marca erro se a ficha não existe', async () => {
+  it('flags an error when the routine does not exist', async () => {
     routeApi();
     const vm = vmFor('inexistente');
     await vm.load();
@@ -85,7 +85,7 @@ describe('Workout', () => {
     expect(vm.error).toBeTruthy();
   });
 
-  it('envia só os exercícios com carga preenchida', async () => {
+  it('sends only the exercises with a filled load', async () => {
     routeApi();
     const vm = vmFor();
     await vm.load();
@@ -99,7 +99,7 @@ describe('Workout', () => {
     expect(body.entries).toEqual([{ exercise: 'e1', load: 70 }]);
   });
 
-  it('não envia nada se nenhuma carga foi preenchida', async () => {
+  it('sends nothing when no load was filled', async () => {
     routeApi();
     const vm = vmFor();
     await vm.load();
@@ -109,17 +109,17 @@ describe('Workout', () => {
     expect(apiFetch).not.toHaveBeenCalled();
   });
 
-  it('volta para a lista de fichas depois de salvar', async () => {
+  it('goes back to the routine list after saving', async () => {
     routeApi();
     const vm = vmFor();
     await vm.load();
     vm.rows[0].load = 70;
     await vm.save();
 
-    expect(push).toHaveBeenCalledWith('/treino');
+    expect(push).toHaveBeenCalledWith('/workouts');
   });
 
-  it('não redireciona e mostra erro se o POST falha', async () => {
+  it('does not redirect and shows an error when the POST fails', async () => {
     routeApi();
     const vm = vmFor();
     await vm.load();

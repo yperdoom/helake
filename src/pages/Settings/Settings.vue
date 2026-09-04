@@ -58,7 +58,7 @@
             <div :class="$style.formRow">
               <label :class="$style.formLabel">Currency</label>
               <select :class="$style.formInput" v-model="form.currency">
-                <option value="BRL">BRL — Real Brasileiro</option>
+                <option value="BRL">BRL — Brazilian Real</option>
                 <option value="USD">USD — US Dollar</option>
               </select>
             </div>

@@ -5,13 +5,13 @@ import Routine from '../../../api/lib/models/Routine.js';
 const oid = () => new mongoose.Types.ObjectId().toString();
 
 describe('Routine schema', () => {
-  it('exige user e name', () => {
+  it('requires user and name', () => {
     const error = new Routine({}).validateSync();
     expect(error?.errors?.user).toBeDefined();
     expect(error?.errors?.name).toBeDefined();
   });
 
-  it('valida uma rotina completa', () => {
+  it('validates a complete routine', () => {
     const routine = new Routine({
       user: oid(),
       name: 'Treino A',
@@ -20,13 +20,13 @@ describe('Routine schema', () => {
     expect(routine.validateSync()).toBeUndefined();
   });
 
-  it('exige exercise em cada item', () => {
+  it('requires exercise on every item', () => {
     const routine = new Routine({ user: oid(), name: 'A', exercises: [{ targetSets: 3 }] });
     const error = routine.validateSync();
     expect(error).toBeDefined();
   });
 
-  it('rejeita alvos negativos', () => {
+  it('rejects negative targets', () => {
     const routine = new Routine({
       user: oid(), name: 'A',
       exercises: [{ exercise: oid(), targetLoad: -1 }],
@@ -34,11 +34,11 @@ describe('Routine schema', () => {
     expect(routine.validateSync()).toBeDefined();
   });
 
-  it('indexa user', () => {
+  it('indexes user', () => {
     expect(Routine.schema.path('user').options.index).toBe(true);
   });
 
-  it('não gera _id nos itens de exercises', () => {
+  it('does not generate _id on exercises items', () => {
     const routine = new Routine({ user: oid(), name: 'A', exercises: [{ exercise: oid() }] });
     expect(routine.exercises[0]._id).toBeUndefined();
   });

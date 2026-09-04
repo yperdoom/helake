@@ -147,7 +147,7 @@
 	font-size: 0.95rem;
 	font-weight: 600;
 }
-/* Estilos exclusivos para a tela de pedidos */
+/* Styles exclusive to the orders screen */
 .ordersBg {
 	display: flex;
 	min-height: 100vh;

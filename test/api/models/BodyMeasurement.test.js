@@ -5,17 +5,17 @@ import BodyMeasurement from '../../../api/lib/models/BodyMeasurement.js';
 const oid = () => new mongoose.Types.ObjectId().toString();
 
 describe('BodyMeasurement schema', () => {
-  it('exige user', () => {
+  it('requires user', () => {
     const error = new BodyMeasurement({}).validateSync();
     expect(error?.errors?.user).toBeDefined();
   });
 
-  it('usa a data de hoje por padrão', () => {
+  it('defaults the date to today', () => {
     const m = new BodyMeasurement({ user: oid() });
     expect(m.date).toBeInstanceOf(Date);
   });
 
-  it('aceita medidas arbitrárias como números', () => {
+  it('accepts arbitrary measurements as numbers', () => {
     const m = new BodyMeasurement({
       user: oid(),
       weight: 82.5,
@@ -25,17 +25,17 @@ describe('BodyMeasurement schema', () => {
     expect(m.measurements.get('cintura')).toBe(84);
   });
 
-  it('rejeita medida não numérica', () => {
+  it('rejects a non-numeric measurement', () => {
     const m = new BodyMeasurement({ user: oid(), measurements: { peito: 'grande' } });
     expect(m.validateSync()).toBeDefined();
   });
 
-  it('rejeita peso negativo', () => {
+  it('rejects a negative weight', () => {
     const m = new BodyMeasurement({ user: oid(), weight: -1 });
     expect(m.validateSync()).toBeDefined();
   });
 
-  it('indexa user', () => {
+  it('indexes user', () => {
     expect(BodyMeasurement.schema.path('user').options.index).toBe(true);
   });
 });

@@ -24,33 +24,33 @@ beforeEach(() => {
 });
 
 describe('/api/workout-logs', () => {
-  it('401 sem token', async () => {
+  it('401 without a token', async () => {
     const res = mockRes();
     await list({ method: 'GET', headers: {}, query: {} }, res);
     expect(res.statusCode).toBe(401);
     expect(WorkoutLog.find).not.toHaveBeenCalled();
   });
 
-  it('filtra pelo user do token', async () => {
+  it('filters by the user in the token', async () => {
     WorkoutLog.find.mockReturnValue(query([]));
     await list({ method: 'GET', headers: bearer('u1'), query: {} }, mockRes());
     expect(WorkoutLog.find).toHaveBeenCalledWith({ user: 'u1' });
   });
 
-  it('filtra por exercise quando pedido', async () => {
+  it('filters by exercise when requested', async () => {
     WorkoutLog.find.mockReturnValue(query([]));
     await list({ method: 'GET', headers: bearer('u1'), query: { exercise: 'e1' } }, mockRes());
     expect(WorkoutLog.find).toHaveBeenCalledWith({ user: 'u1', 'entries.exercise': 'e1' });
   });
 
-  it('ordena por data decrescente', async () => {
+  it('sorts by date descending', async () => {
     const sort = vi.fn().mockReturnValue({ lean: () => Promise.resolve([]) });
     WorkoutLog.find.mockReturnValue({ populate: () => ({ sort }) });
     await list({ method: 'GET', headers: bearer('u1'), query: {} }, mockRes());
     expect(sort).toHaveBeenCalledWith({ date: -1 });
   });
 
-  it('grava o user do token e ignora forjadura no POST', async () => {
+  it('stores the user from the token and ignores forgery on POST', async () => {
     WorkoutLog.create.mockResolvedValue({ _id: 'w1' });
     const res = mockRes();
     await list({ method: 'POST', headers: bearer('u1'), query: {}, body: { user: 'invasor', notes: 'ok' } }, res);
@@ -59,7 +59,7 @@ describe('/api/workout-logs', () => {
     expect(res.statusCode).toBe(201);
   });
 
-  it('recusa POST apontando para rotina de outro usuário', async () => {
+  it('rejects a POST pointing at a routine from another user', async () => {
     Routine.exists.mockResolvedValue(null);
     const res = mockRes();
     await list({ method: 'POST', headers: bearer('u2'), query: {}, body: { routine: 'r1' } }, res);
@@ -69,7 +69,7 @@ describe('/api/workout-logs', () => {
     expect(WorkoutLog.create).not.toHaveBeenCalled();
   });
 
-  it('aceita POST com rotina própria', async () => {
+  it('accepts a POST with an owned routine', async () => {
     Routine.exists.mockResolvedValue({ _id: 'r1' });
     WorkoutLog.create.mockResolvedValue({ _id: 'w1' });
     const res = mockRes();
@@ -79,7 +79,7 @@ describe('/api/workout-logs', () => {
 });
 
 describe('/api/workout-logs/[id]', () => {
-  it('PUT filtra por _id e user', async () => {
+  it('PUT filters by _id and user', async () => {
     WorkoutLog.findOneAndUpdate.mockResolvedValue({ _id: 'w1' });
     const res = mockRes();
     await item({ method: 'PUT', headers: bearer('u1'), query: { id: 'w1' }, body: { notes: 'x' } }, res);
@@ -90,14 +90,14 @@ describe('/api/workout-logs/[id]', () => {
     expect(res.statusCode).toBe(200);
   });
 
-  it('PUT em log de outro usuário devolve 404', async () => {
+  it('PUT on a log from another user returns 404', async () => {
     WorkoutLog.findOneAndUpdate.mockResolvedValue(null);
     const res = mockRes();
     await item({ method: 'PUT', headers: bearer('u2'), query: { id: 'w1' }, body: {} }, res);
     expect(res.statusCode).toBe(404);
   });
 
-  it('DELETE em log de outro usuário devolve 404', async () => {
+  it('DELETE on a log from another user returns 404', async () => {
     WorkoutLog.findOneAndDelete.mockResolvedValue(null);
     const res = mockRes();
     await item({ method: 'DELETE', headers: bearer('u2'), query: { id: 'w1' } }, res);

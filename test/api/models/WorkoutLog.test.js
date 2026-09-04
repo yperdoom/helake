@@ -5,17 +5,17 @@ import WorkoutLog from '../../../api/lib/models/WorkoutLog.js';
 const oid = () => new mongoose.Types.ObjectId().toString();
 
 describe('WorkoutLog schema', () => {
-  it('exige user', () => {
+  it('requires user', () => {
     const error = new WorkoutLog({}).validateSync();
     expect(error?.errors?.user).toBeDefined();
   });
 
-  it('usa a data de hoje por padrão', () => {
+  it('defaults the date to today', () => {
     const log = new WorkoutLog({ user: oid() });
     expect(log.date).toBeInstanceOf(Date);
   });
 
-  it('valida um log completo', () => {
+  it('validates a complete log', () => {
     const log = new WorkoutLog({
       user: oid(),
       routine: oid(),
@@ -25,7 +25,7 @@ describe('WorkoutLog schema', () => {
     expect(log.validateSync()).toBeUndefined();
   });
 
-  it('exige exercise em cada entry', () => {
+  it('requires exercise on every entry', () => {
     const log = new WorkoutLog({ user: oid(), entries: [{ load: 40 }] });
     expect(log.validateSync()).toBeDefined();
   });
@@ -35,12 +35,12 @@ describe('WorkoutLog schema', () => {
     expect(log.validateSync()).toBeDefined();
   });
 
-  it('não guarda séries individuais, só carga por exercício', () => {
+  it('stores no individual sets, only load per exercise', () => {
     expect(WorkoutLog.schema.path('entries').schema.path('sets')).toBeUndefined();
     expect(WorkoutLog.schema.path('entries').schema.path('load')).toBeDefined();
   });
 
-  it('indexa user', () => {
+  it('indexes user', () => {
     expect(WorkoutLog.schema.path('user').options.index).toBe(true);
   });
 });

@@ -46,7 +46,7 @@ export default {
       return (v || 0).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
     },
     statusLabel(status) {
-      const map = { new: 'Novo', in_production: 'Em Produção', ready: 'Pronto', delivered: 'Entregue', cancelled: 'Cancelado' };
+      const map = { new: 'New', in_production: 'In Production', ready: 'Ready', delivered: 'Delivered', cancelled: 'Cancelled' };
       return map[status] || status;
     },
     statusClass(status) {

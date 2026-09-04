@@ -9,31 +9,31 @@ const read = (p) => readFileSync(join(root, p), 'utf8');
 describe('manifest', () => {
   const manifest = JSON.parse(read('public/manifest.webmanifest'));
 
-  it('identifica o app como Yper', () => {
+  it('identifies the app as Yper', () => {
     expect(manifest.name).toBe('Yper');
     expect(manifest.short_name).toBe('Yper');
   });
 
-  it('abre no hub, em modo standalone', () => {
+  it('opens at the hub, in standalone mode', () => {
     expect(manifest.start_url).toBe('/');
     expect(manifest.display).toBe('standalone');
   });
 
-  it('define cores de tema e fundo', () => {
+  it('defines theme and background colors', () => {
     expect(manifest.theme_color).toMatch(/^#[0-9a-f]{6}$/i);
     expect(manifest.background_color).toMatch(/^#[0-9a-f]{6}$/i);
   });
 
-  it('declara ícones 192 e 512', () => {
+  it('declares 192 and 512 icons', () => {
     const sizes = manifest.icons.map((icon) => icon.sizes);
     expect(sizes).toContain('192x192');
     expect(sizes).toContain('512x512');
   });
 
-  it('todo ícone declarado existe em disco e não está vazio', () => {
+  it('every declared icon exists on disk and is not empty', () => {
     for (const icon of manifest.icons) {
       const path = join(root, 'public', icon.src.replace(/^\//, ''));
-      expect(existsSync(path), `${icon.src} não existe`).toBe(true);
+      expect(existsSync(path), `${icon.src} does not exist`).toBe(true);
       expect(statSync(path).size).toBeGreaterThan(0);
     }
   });
@@ -42,22 +42,22 @@ describe('manifest', () => {
 describe('index.html', () => {
   const html = read('index.html');
 
-  it('usa Yper como título', () => {
+  it('uses Yper as the title', () => {
     expect(html).toMatch(/<title>Yper<\/title>/);
   });
 
-  it('aponta para o manifest', () => {
+  it('points at the manifest', () => {
     expect(html).toContain('rel="manifest"');
     expect(html).toContain('/manifest.webmanifest');
   });
 
-  it('declara theme-color', () => {
+  it('declares theme-color', () => {
     expect(html).toContain('name="theme-color"');
   });
 
-  it('declara apple-touch-icon, que o iOS exige em PNG', () => {
+  it('declares apple-touch-icon, which iOS requires as PNG', () => {
     const match = html.match(/rel="apple-touch-icon"[^>]*href="([^"]+)"/);
-    expect(match, 'apple-touch-icon ausente').toBeTruthy();
+    expect(match, 'apple-touch-icon missing').toBeTruthy();
     expect(match[1]).toMatch(/\.png$/);
     expect(existsSync(join(root, 'public', match[1].replace(/^\//, '')))).toBe(true);
   });

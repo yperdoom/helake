@@ -62,23 +62,23 @@ async function call(load, method, headers) {
   try {
     await handler(req, res);
   } catch {
-    // happy path pode falhar com model mockado; aqui só o status importa
+    // The happy path may fail with a mocked model; only the status matters here.
   }
   return res;
 }
 
 describe.each(ENDPOINTS)('%s', (file, method, load) => {
-  it('devolve 401 sem header Authorization', async () => {
+  it('returns 401 without an Authorization header', async () => {
     const res = await call(load, method, {});
     expect(res.statusCode).toBe(401);
   });
 
-  it('devolve 401 com token inválido', async () => {
+  it('returns 401 with an invalid token', async () => {
     const res = await call(load, method, { authorization: 'Bearer lixo' });
     expect(res.statusCode).toBe(401);
   });
 
-  it('não devolve 401 com Bearer válido', async () => {
+  it('does not return 401 with a valid Bearer', async () => {
     const token = signToken({ userId: 'u1', email: 'a@b.com', role: 'admin' });
     const res = await call(load, method, { authorization: `Bearer ${token}` });
     expect(res.statusCode).not.toBe(401);

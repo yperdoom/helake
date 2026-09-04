@@ -91,7 +91,7 @@
         <div :class="$style.modalBody">
           <div :class="$style.formRow">
             <label :class="$style.formLabel">Name *</label>
-            <input :class="$style.formInput" v-model="form.name" type="text" placeholder="e.g. Bolo de Chocolate" />
+            <input :class="$style.formInput" v-model="form.name" type="text" placeholder="e.g. Chocolate Cake" />
           </div>
           <div :class="$style.formGrid2">
             <div :class="$style.formRow">

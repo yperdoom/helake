@@ -20,14 +20,14 @@ beforeEach(() => {
 });
 
 describe('/api/routines', () => {
-  it('401 sem token', async () => {
+  it('401 without a token', async () => {
     const res = mockRes();
     await list({ method: 'GET', headers: {} }, res);
     expect(res.statusCode).toBe(401);
     expect(Routine.find).not.toHaveBeenCalled();
   });
 
-  it('filtra pelo user do token', async () => {
+  it('filters by the user in the token', async () => {
     Routine.find.mockReturnValue(query([]));
     const res = mockRes();
     await list({ method: 'GET', headers: bearer('u1') }, res);
@@ -36,13 +36,13 @@ describe('/api/routines', () => {
     expect(res.statusCode).toBe(200);
   });
 
-  it('usuário B não recebe o filtro de A', async () => {
+  it('user B does not get the filter of user A', async () => {
     Routine.find.mockReturnValue(query([]));
     await list({ method: 'GET', headers: bearer('u2') }, mockRes());
     expect(Routine.find).toHaveBeenCalledWith({ user: 'u2' });
   });
 
-  it('grava o user do token no POST', async () => {
+  it('stores the user from the token on POST', async () => {
     Routine.create.mockResolvedValue({ _id: 'r1' });
     const res = mockRes();
     await list({ method: 'POST', headers: bearer('u1'), body: { name: 'Treino A' } }, res);
@@ -51,7 +51,7 @@ describe('/api/routines', () => {
     expect(res.statusCode).toBe(201);
   });
 
-  it('ignora user forjado no body do POST', async () => {
+  it('ignores a forged user in the POST body', async () => {
     Routine.create.mockResolvedValue({ _id: 'r1' });
     await list({ method: 'POST', headers: bearer('u1'), body: { name: 'X', user: 'invasor' } }, mockRes());
 
@@ -60,14 +60,14 @@ describe('/api/routines', () => {
 });
 
 describe('/api/routines/[id]', () => {
-  it('401 sem token', async () => {
+  it('401 without a token', async () => {
     const res = mockRes();
     await item({ method: 'PUT', headers: {}, query: { id: 'r1' }, body: {} }, res);
     expect(res.statusCode).toBe(401);
     expect(Routine.findOneAndUpdate).not.toHaveBeenCalled();
   });
 
-  it('PUT filtra por _id e user', async () => {
+  it('PUT filters by _id and user', async () => {
     Routine.findOneAndUpdate.mockResolvedValue({ _id: 'r1', name: 'Treino B' });
     const res = mockRes();
     await item({ method: 'PUT', headers: bearer('u1'), query: { id: 'r1' }, body: { name: 'Treino B' } }, res);
@@ -80,14 +80,14 @@ describe('/api/routines/[id]', () => {
     expect(res.statusCode).toBe(200);
   });
 
-  it('PUT em rotina de outro usuário devolve 404', async () => {
+  it('PUT on a routine from another user returns 404', async () => {
     Routine.findOneAndUpdate.mockResolvedValue(null);
     const res = mockRes();
     await item({ method: 'PUT', headers: bearer('u2'), query: { id: 'r1' }, body: { name: 'hack' } }, res);
     expect(res.statusCode).toBe(404);
   });
 
-  it('PUT não deixa forjar user no body', async () => {
+  it('PUT does not allow forging user in the body', async () => {
     Routine.findOneAndUpdate.mockResolvedValue({ _id: 'r1' });
     await item({ method: 'PUT', headers: bearer('u1'), query: { id: 'r1' }, body: { user: 'invasor' } }, mockRes());
 
@@ -95,7 +95,7 @@ describe('/api/routines/[id]', () => {
     expect(update.user).toBeUndefined();
   });
 
-  it('DELETE filtra por _id e user', async () => {
+  it('DELETE filters by _id and user', async () => {
     Routine.findOneAndDelete.mockResolvedValue({ _id: 'r1' });
     const res = mockRes();
     await item({ method: 'DELETE', headers: bearer('u1'), query: { id: 'r1' } }, res);
@@ -104,7 +104,7 @@ describe('/api/routines/[id]', () => {
     expect(res.statusCode).toBe(200);
   });
 
-  it('DELETE em rotina de outro usuário devolve 404', async () => {
+  it('DELETE on a routine from another user returns 404', async () => {
     Routine.findOneAndDelete.mockResolvedValue(null);
     const res = mockRes();
     await item({ method: 'DELETE', headers: bearer('u2'), query: { id: 'r1' } }, res);
