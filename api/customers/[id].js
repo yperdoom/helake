@@ -1,15 +1,12 @@
 import { connectDB } from '../lib/db.js';
 import Customer from '../lib/models/Customer.js';
-
-const CORS = {
-  'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Methods': 'PUT, DELETE, OPTIONS',
-  'Access-Control-Allow-Headers': 'Content-Type',
-};
+import { applyCors } from '../lib/cors.js';
+import { requireAuth } from '../lib/auth.js';
 
 export default async function handler(req, res) {
-  Object.entries(CORS).forEach(([k, v]) => res.setHeader(k, v));
-  if (req.method === 'OPTIONS') return res.status(200).end();
+  if (applyCors(req, res, ['PUT', 'DELETE'])) return;
+
+  if (!requireAuth(req, res)) return;
 
   await connectDB();
   const { id } = req.query;

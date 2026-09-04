@@ -1,16 +1,13 @@
 import { connectDB } from './lib/db.js';
 import Order from './lib/models/Order.js';
 import Ingredient from './lib/models/Ingredient.js';
-
-const CORS = {
-  'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Methods': 'GET, OPTIONS',
-  'Access-Control-Allow-Headers': 'Content-Type',
-};
+import { applyCors } from './lib/cors.js';
+import { requireAuth } from './lib/auth.js';
 
 export default async function handler(req, res) {
-  Object.entries(CORS).forEach(([k, v]) => res.setHeader(k, v));
-  if (req.method === 'OPTIONS') return res.status(200).end();
+  if (applyCors(req, res, ['GET'])) return;
+
+  if (!requireAuth(req, res)) return;
   if (req.method !== 'GET') return res.status(405).json({ error: 'Method not allowed' });
 
   await connectDB();

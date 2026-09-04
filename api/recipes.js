@@ -1,12 +1,8 @@
 import { connectDB } from './lib/db.js';
 import Recipe from './lib/models/Recipe.js';
 import Settings from './lib/models/Settings.js';
-
-const CORS = {
-  'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
-  'Access-Control-Allow-Headers': 'Content-Type',
-};
+import { applyCors } from './lib/cors.js';
+import { requireAuth } from './lib/auth.js';
 
 function calcCosts(recipe, defaultInfraPercentage, defaultMargin) {
   const ingredientCost = recipe.ingredients.reduce((sum, item) => {
@@ -26,8 +22,9 @@ function calcCosts(recipe, defaultInfraPercentage, defaultMargin) {
 }
 
 export default async function handler(req, res) {
-  Object.entries(CORS).forEach(([k, v]) => res.setHeader(k, v));
-  if (req.method === 'OPTIONS') return res.status(200).end();
+  if (applyCors(req, res, ['GET', 'POST'])) return;
+
+  if (!requireAuth(req, res)) return;
 
   await connectDB();
 
