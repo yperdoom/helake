@@ -24,6 +24,7 @@ export default defineConfig({
     environment: 'node',
     globals: true,
     setupFiles: ['./test/setup.js'],
+    exclude: ['test/integration/**', 'node_modules/**', 'dist/**'],
     coverage: {
       include: ['api/**/*.js', 'src/**/*.js'],
     },
