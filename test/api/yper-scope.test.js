@@ -8,30 +8,30 @@ const root = join(dirname(fileURLToPath(import.meta.url)), '../..');
 
 // Public by definition. `setup.js` guards itself with countDocuments() > 0 -> 403.
 const PUBLIC = new Set([
-  'api/auth/login.js',
-  'api/auth/setup.js',
+  'api/_routes/auth/login.js',
+  'api/_routes/auth/setup.js',
 ]);
 
 // Endpoints that, by design decision, do NOT filter by owner.
 // Adding something here must be a deliberate decision.
 const UNSCOPED = new Set([
   // Helake is single-tenant: both users share the same data.
-  'api/customers.js', 'api/customers/[id].js',
-  'api/dashboard.js',
-  'api/ingredients.js', 'api/ingredients/[id].js',
-  'api/orders.js', 'api/orders/[id].js',
-  'api/recipes.js', 'api/recipes/[id].js',
-  'api/settings.js',
+  'api/_routes/customers.js', 'api/_routes/customers/[id].js',
+  'api/_routes/dashboard.js',
+  'api/_routes/ingredients.js', 'api/_routes/ingredients/[id].js',
+  'api/_routes/orders.js', 'api/_routes/orders/[id].js',
+  'api/_routes/recipes.js', 'api/_routes/recipes/[id].js',
+  'api/_routes/settings.js',
   // The exercise catalog is shared between both users.
-  'api/exercises.js', 'api/exercises/[id].js',
+  'api/_routes/exercises.js', 'api/_routes/exercises/[id].js',
   // User management is global and admin-only, not scoped by owner.
-  'api/users.js', 'api/users/[id].js',
+  'api/_routes/users.js', 'api/_routes/users/[id].js',
   ...PUBLIC,
 ]);
 
 function endpoints() {
   return globSync('api/**/*.js', { cwd: root })
-    .filter((f) => !f.startsWith('api/lib/'))
+    .filter((f) => !f.startsWith('api/_lib/') && f !== 'api/[...path].js')
     .map((f) => f.split('\\').join('/'));
 }
 
@@ -42,9 +42,9 @@ const scoped = all.filter((f) => !UNSCOPED.has(f));
 describe('endpoint sweep', () => {
   it('finds the owned Yper endpoints', () => {
     expect(scoped).toEqual(expect.arrayContaining([
-      'api/routines.js', 'api/routines/[id].js',
-      'api/workout-logs.js', 'api/workout-logs/[id].js',
-      'api/measurements.js', 'api/measurements/[id].js',
+      'api/_routes/routines.js', 'api/_routes/routines/[id].js',
+      'api/_routes/workout-logs.js', 'api/_routes/workout-logs/[id].js',
+      'api/_routes/measurements.js', 'api/_routes/measurements/[id].js',
     ]));
   });
 

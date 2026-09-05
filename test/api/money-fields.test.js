@@ -1,17 +1,17 @@
 import { describe, expect, it } from 'vitest';
 import mongoose from 'mongoose';
-import { isCents } from '../../api/lib/money.js';
+import { isCents } from '../../api/_lib/money.js';
 
-import Ingredient from '../../api/lib/models/Ingredient.js';
-import Order from '../../api/lib/models/Order.js';
-import Recipe from '../../api/lib/models/Recipe.js';
-import Settings from '../../api/lib/models/Settings.js';
-import Customer from '../../api/lib/models/Customer.js';
-import User from '../../api/lib/models/User.js';
-import Exercise from '../../api/lib/models/Exercise.js';
-import Routine from '../../api/lib/models/Routine.js';
-import WorkoutLog from '../../api/lib/models/WorkoutLog.js';
-import BodyMeasurement from '../../api/lib/models/BodyMeasurement.js';
+import Ingredient from '../../api/_lib/models/Ingredient.js';
+import Order from '../../api/_lib/models/Order.js';
+import Recipe from '../../api/_lib/models/Recipe.js';
+import Settings from '../../api/_lib/models/Settings.js';
+import Customer from '../../api/_lib/models/Customer.js';
+import User from '../../api/_lib/models/User.js';
+import Exercise from '../../api/_lib/models/Exercise.js';
+import Routine from '../../api/_lib/models/Routine.js';
+import WorkoutLog from '../../api/_lib/models/WorkoutLog.js';
+import BodyMeasurement from '../../api/_lib/models/BodyMeasurement.js';
 
 const MODELS = [
   Ingredient, Order, Recipe, Settings, Customer, User,

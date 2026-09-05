@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import mongoose from 'mongoose';
-import Routine from '../../../api/lib/models/Routine.js';
+import Routine from '../../../api/_lib/models/Routine.js';
 
 const oid = () => new mongoose.Types.ObjectId().toString();
 

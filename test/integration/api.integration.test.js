@@ -21,28 +21,28 @@ beforeAll(async () => {
   mongo = await MongoMemoryServer.create();
   process.env.MONGODB_URI = mongo.getUri('helake-test');
 
-  ({ default: Ingredient } = await import('../../api/lib/models/Ingredient.js'));
-  ({ default: Recipe } = await import('../../api/lib/models/Recipe.js'));
-  ({ default: Order } = await import('../../api/lib/models/Order.js'));
-  ({ default: Settings } = await import('../../api/lib/models/Settings.js'));
-  ({ default: User } = await import('../../api/lib/models/User.js'));
-  ({ default: Routine } = await import('../../api/lib/models/Routine.js'));
-  ({ default: WorkoutLog } = await import('../../api/lib/models/WorkoutLog.js'));
-  ({ default: BodyMeasurement } = await import('../../api/lib/models/BodyMeasurement.js'));
+  ({ default: Ingredient } = await import('../../api/_lib/models/Ingredient.js'));
+  ({ default: Recipe } = await import('../../api/_lib/models/Recipe.js'));
+  ({ default: Order } = await import('../../api/_lib/models/Order.js'));
+  ({ default: Settings } = await import('../../api/_lib/models/Settings.js'));
+  ({ default: User } = await import('../../api/_lib/models/User.js'));
+  ({ default: Routine } = await import('../../api/_lib/models/Routine.js'));
+  ({ default: WorkoutLog } = await import('../../api/_lib/models/WorkoutLog.js'));
+  ({ default: BodyMeasurement } = await import('../../api/_lib/models/BodyMeasurement.js'));
 
-  ({ default: ingredients } = await import('../../api/ingredients.js'));
-  ({ default: ingredientById } = await import('../../api/ingredients/[id].js'));
-  ({ default: recipes } = await import('../../api/recipes.js'));
-  ({ default: orders } = await import('../../api/orders.js'));
-  ({ default: dashboard } = await import('../../api/dashboard.js'));
-  ({ default: customers } = await import('../../api/customers.js'));
-  ({ default: settings } = await import('../../api/settings.js'));
-  ({ default: routines } = await import('../../api/routines.js'));
-  ({ default: routineById } = await import('../../api/routines/[id].js'));
-  ({ default: workoutLogs } = await import('../../api/workout-logs.js'));
-  ({ default: measurements } = await import('../../api/measurements.js'));
-  ({ default: users } = await import('../../api/users.js'));
-  ({ default: usersById } = await import('../../api/users/[id].js'));
+  ({ default: ingredients } = await import('../../api/_routes/ingredients.js'));
+  ({ default: ingredientById } = await import('../../api/_routes/ingredients/[id].js'));
+  ({ default: recipes } = await import('../../api/_routes/recipes.js'));
+  ({ default: orders } = await import('../../api/_routes/orders.js'));
+  ({ default: dashboard } = await import('../../api/_routes/dashboard.js'));
+  ({ default: customers } = await import('../../api/_routes/customers.js'));
+  ({ default: settings } = await import('../../api/_routes/settings.js'));
+  ({ default: routines } = await import('../../api/_routes/routines.js'));
+  ({ default: routineById } = await import('../../api/_routes/routines/[id].js'));
+  ({ default: workoutLogs } = await import('../../api/_routes/workout-logs.js'));
+  ({ default: measurements } = await import('../../api/_routes/measurements.js'));
+  ({ default: users } = await import('../../api/_routes/users.js'));
+  ({ default: usersById } = await import('../../api/_routes/users/[id].js'));
 }, 300000);
 
 afterAll(async () => {
@@ -332,7 +332,7 @@ describe('order stock adjustment', () => {
       body: { customer: customer.insertedId, recipe: recipe._id, quantity: 4, deliveryDate: new Date(), paidPriceCents: 5000 },
     });
 
-    const { default: orderById } = await import('../../api/orders/[id].js');
+    const { default: orderById } = await import('../../api/_routes/orders/[id].js');
     await call(orderById, {
       method: 'PUT', headers: asA(),
       query: { id: created.body.order._id.toString() }, body: { status: 'in_production' },

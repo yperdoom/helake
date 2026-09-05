@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import Exercise from '../../../api/lib/models/Exercise.js';
+import Exercise from '../../../api/_lib/models/Exercise.js';
 
 describe('Exercise schema', () => {
   it('requires name', () => {

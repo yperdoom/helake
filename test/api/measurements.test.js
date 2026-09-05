@@ -1,8 +1,8 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { bearer, mockRes, query } from '../helpers.js';
 
-vi.mock('../../api/lib/db.js', () => ({ connectDB: vi.fn() }));
-vi.mock('../../api/lib/models/BodyMeasurement.js', () => ({
+vi.mock('../../api/_lib/db.js', () => ({ connectDB: vi.fn() }));
+vi.mock('../../api/_lib/models/BodyMeasurement.js', () => ({
   default: {
     find: vi.fn(),
     create: vi.fn(),
@@ -11,9 +11,9 @@ vi.mock('../../api/lib/models/BodyMeasurement.js', () => ({
   },
 }));
 
-const { default: list } = await import('../../api/measurements.js');
-const { default: item } = await import('../../api/measurements/[id].js');
-const { default: BodyMeasurement } = await import('../../api/lib/models/BodyMeasurement.js');
+const { default: list } = await import('../../api/_routes/measurements.js');
+const { default: item } = await import('../../api/_routes/measurements/[id].js');
+const { default: BodyMeasurement } = await import('../../api/_lib/models/BodyMeasurement.js');
 
 beforeEach(() => {
   vi.clearAllMocks();

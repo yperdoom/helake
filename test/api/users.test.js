@@ -1,8 +1,8 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { bearer, mockRes, query } from '../helpers.js';
 
-vi.mock('../../api/lib/db.js', () => ({ connectDB: vi.fn() }));
-vi.mock('../../api/lib/models/User.js', () => ({
+vi.mock('../../api/_lib/db.js', () => ({ connectDB: vi.fn() }));
+vi.mock('../../api/_lib/models/User.js', () => ({
   default: {
     find: vi.fn(),
     findOne: vi.fn(),
@@ -15,9 +15,9 @@ vi.mock('../../api/lib/models/User.js', () => ({
 }));
 vi.mock('bcryptjs', () => ({ default: { hash: vi.fn(async () => 'hashed') } }));
 
-const { default: list } = await import('../../api/users.js');
-const { default: item } = await import('../../api/users/[id].js');
-const { default: User } = await import('../../api/lib/models/User.js');
+const { default: list } = await import('../../api/_routes/users.js');
+const { default: item } = await import('../../api/_routes/users/[id].js');
+const { default: User } = await import('../../api/_lib/models/User.js');
 const { default: bcrypt } = await import('bcryptjs');
 
 const admin = () => bearer('admin1', 'admin');

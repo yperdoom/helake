@@ -1,4 +1,4 @@
-import { signToken } from '../api/lib/auth.js';
+import { signToken } from '../api/_lib/auth.js';
 
 export function mockRes() {
   return {

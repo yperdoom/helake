@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import mongoose from 'mongoose';
-import BodyMeasurement from '../../../api/lib/models/BodyMeasurement.js';
+import BodyMeasurement from '../../../api/_lib/models/BodyMeasurement.js';
 
 const oid = () => new mongoose.Types.ObjectId().toString();
 

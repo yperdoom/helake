@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from 'vitest';
-import { signToken } from '../../api/lib/auth.js';
+import { signToken } from '../../api/_lib/auth.js';
 
 const { model } = vi.hoisted(() => {
   function chainable() {
@@ -22,13 +22,13 @@ const { model } = vi.hoisted(() => {
   };
 });
 
-vi.mock('../../api/lib/db.js', () => ({ connectDB: vi.fn() }));
-vi.mock('../../api/lib/models/Customer.js', model);
-vi.mock('../../api/lib/models/Ingredient.js', model);
-vi.mock('../../api/lib/models/Order.js', model);
-vi.mock('../../api/lib/models/Recipe.js', model);
-vi.mock('../../api/lib/models/Settings.js', model);
-vi.mock('../../api/lib/models/User.js', model);
+vi.mock('../../api/_lib/db.js', () => ({ connectDB: vi.fn() }));
+vi.mock('../../api/_lib/models/Customer.js', model);
+vi.mock('../../api/_lib/models/Ingredient.js', model);
+vi.mock('../../api/_lib/models/Order.js', model);
+vi.mock('../../api/_lib/models/Recipe.js', model);
+vi.mock('../../api/_lib/models/Settings.js', model);
+vi.mock('../../api/_lib/models/User.js', model);
 
 function mockRes() {
   return {
@@ -43,16 +43,16 @@ function mockRes() {
 }
 
 const ENDPOINTS = [
-  ['api/customers.js', 'GET', () => import('../../api/customers.js')],
-  ['api/dashboard.js', 'GET', () => import('../../api/dashboard.js')],
-  ['api/ingredients.js', 'GET', () => import('../../api/ingredients.js')],
-  ['api/orders.js', 'GET', () => import('../../api/orders.js')],
-  ['api/recipes.js', 'GET', () => import('../../api/recipes.js')],
-  ['api/settings.js', 'GET', () => import('../../api/settings.js')],
-  ['api/customers/[id].js', 'PUT', () => import('../../api/customers/[id].js')],
-  ['api/ingredients/[id].js', 'PUT', () => import('../../api/ingredients/[id].js')],
-  ['api/orders/[id].js', 'PUT', () => import('../../api/orders/[id].js')],
-  ['api/recipes/[id].js', 'PUT', () => import('../../api/recipes/[id].js')],
+  ['api/customers.js', 'GET', () => import('../../api/_routes/customers.js')],
+  ['api/dashboard.js', 'GET', () => import('../../api/_routes/dashboard.js')],
+  ['api/ingredients.js', 'GET', () => import('../../api/_routes/ingredients.js')],
+  ['api/orders.js', 'GET', () => import('../../api/_routes/orders.js')],
+  ['api/recipes.js', 'GET', () => import('../../api/_routes/recipes.js')],
+  ['api/settings.js', 'GET', () => import('../../api/_routes/settings.js')],
+  ['api/customers/[id].js', 'PUT', () => import('../../api/_routes/customers/[id].js')],
+  ['api/ingredients/[id].js', 'PUT', () => import('../../api/_routes/ingredients/[id].js')],
+  ['api/orders/[id].js', 'PUT', () => import('../../api/_routes/orders/[id].js')],
+  ['api/recipes/[id].js', 'PUT', () => import('../../api/_routes/recipes/[id].js')],
 ];
 
 async function call(load, method, headers) {

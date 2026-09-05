@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import User from '../../../api/lib/models/User.js';
+import User from '../../../api/_lib/models/User.js';
 
 describe('User schema', () => {
   it('defaults role to "user"', () => {

@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { calcCosts } from '../../api/lib/recipeCosts.js';
-import { isCents } from '../../api/lib/money.js';
+import { calcCosts } from '../../api/_lib/recipeCosts.js';
+import { isCents } from '../../api/_lib/money.js';
 
 const ing = (cents, quantity) => ({ ingredient: { costPerUnitCents: cents }, quantity });
 

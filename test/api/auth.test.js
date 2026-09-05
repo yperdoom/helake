@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import jwt from 'jsonwebtoken';
-import { requireAuth, signToken, verifyToken } from '../../api/lib/auth.js';
+import { requireAuth, signToken, verifyToken } from '../../api/_lib/auth.js';
 
 function mockRes() {
   return {
@@ -37,7 +37,7 @@ describe('JWT_SECRET', () => {
     const original = process.env.JWT_SECRET;
     delete process.env.JWT_SECRET;
     try {
-      await expect(import('../../api/lib/auth.js?missing')).rejects.toThrow(/JWT_SECRET/);
+      await expect(import('../../api/_lib/auth.js?missing')).rejects.toThrow(/JWT_SECRET/);
     } finally {
       process.env.JWT_SECRET = original;
     }

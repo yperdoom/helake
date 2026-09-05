@@ -1,9 +1,9 @@
 import { describe, expect, it } from 'vitest';
 import mongoose from 'mongoose';
-import Ingredient from '../../../api/lib/models/Ingredient.js';
-import Order from '../../../api/lib/models/Order.js';
-import Recipe from '../../../api/lib/models/Recipe.js';
-import Settings from '../../../api/lib/models/Settings.js';
+import Ingredient from '../../../api/_lib/models/Ingredient.js';
+import Order from '../../../api/_lib/models/Order.js';
+import Recipe from '../../../api/_lib/models/Recipe.js';
+import Settings from '../../../api/_lib/models/Settings.js';
 
 const oid = () => new mongoose.Types.ObjectId().toString();
 

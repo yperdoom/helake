@@ -1,22 +1,22 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { bearer, mockRes, query } from '../helpers.js';
 
-vi.mock('../../api/lib/db.js', () => ({ connectDB: vi.fn() }));
-vi.mock('../../api/lib/models/Order.js', () => ({
+vi.mock('../../api/_lib/db.js', () => ({ connectDB: vi.fn() }));
+vi.mock('../../api/_lib/models/Order.js', () => ({
   default: { find: vi.fn(), aggregate: vi.fn() },
 }));
-vi.mock('../../api/lib/models/Customer.js', () => ({
+vi.mock('../../api/_lib/models/Customer.js', () => ({
   default: { find: vi.fn(), create: vi.fn() },
 }));
-vi.mock('../../api/lib/models/Ingredient.js', () => ({
+vi.mock('../../api/_lib/models/Ingredient.js', () => ({
   default: { find: vi.fn() },
 }));
 
-const { default: dashboard } = await import('../../api/dashboard.js');
-const { default: customers } = await import('../../api/customers.js');
-const { default: Order } = await import('../../api/lib/models/Order.js');
-const { default: Customer } = await import('../../api/lib/models/Customer.js');
-const { default: Ingredient } = await import('../../api/lib/models/Ingredient.js');
+const { default: dashboard } = await import('../../api/_routes/dashboard.js');
+const { default: customers } = await import('../../api/_routes/customers.js');
+const { default: Order } = await import('../../api/_lib/models/Order.js');
+const { default: Customer } = await import('../../api/_lib/models/Customer.js');
+const { default: Ingredient } = await import('../../api/_lib/models/Ingredient.js');
 
 // A wrong field name in an aggregation is silent: Mongo returns nothing and the
 // value shows as zero forever. These tests pin the field name in the pipeline.

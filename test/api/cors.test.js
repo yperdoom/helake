@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import { applyCors } from '../../api/lib/cors.js';
+import { applyCors } from '../../api/_lib/cors.js';
 
 function mockRes() {
   return {

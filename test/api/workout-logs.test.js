@@ -1,8 +1,8 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { bearer, mockRes, query } from '../helpers.js';
 
-vi.mock('../../api/lib/db.js', () => ({ connectDB: vi.fn() }));
-vi.mock('../../api/lib/models/WorkoutLog.js', () => ({
+vi.mock('../../api/_lib/db.js', () => ({ connectDB: vi.fn() }));
+vi.mock('../../api/_lib/models/WorkoutLog.js', () => ({
   default: {
     find: vi.fn(),
     create: vi.fn(),
@@ -10,14 +10,14 @@ vi.mock('../../api/lib/models/WorkoutLog.js', () => ({
     findOneAndDelete: vi.fn(),
   },
 }));
-vi.mock('../../api/lib/models/Routine.js', () => ({
+vi.mock('../../api/_lib/models/Routine.js', () => ({
   default: { exists: vi.fn() },
 }));
 
-const { default: list } = await import('../../api/workout-logs.js');
-const { default: item } = await import('../../api/workout-logs/[id].js');
-const { default: WorkoutLog } = await import('../../api/lib/models/WorkoutLog.js');
-const { default: Routine } = await import('../../api/lib/models/Routine.js');
+const { default: list } = await import('../../api/_routes/workout-logs.js');
+const { default: item } = await import('../../api/_routes/workout-logs/[id].js');
+const { default: WorkoutLog } = await import('../../api/_lib/models/WorkoutLog.js');
+const { default: Routine } = await import('../../api/_lib/models/Routine.js');
 
 beforeEach(() => {
   vi.clearAllMocks();

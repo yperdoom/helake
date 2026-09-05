@@ -1,15 +1,15 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-vi.mock('../../api/lib/db.js', () => ({ connectDB: vi.fn() }));
-vi.mock('../../api/lib/models/User.js', () => ({
+vi.mock('../../api/_lib/db.js', () => ({ connectDB: vi.fn() }));
+vi.mock('../../api/_lib/models/User.js', () => ({
   default: { findOne: vi.fn() },
 }));
 vi.mock('bcryptjs', () => ({ default: { compare: vi.fn() } }));
 
-const { default: handler } = await import('../../api/auth/login.js');
-const { default: User } = await import('../../api/lib/models/User.js');
+const { default: handler } = await import('../../api/_routes/auth/login.js');
+const { default: User } = await import('../../api/_lib/models/User.js');
 const { default: bcrypt } = await import('bcryptjs');
-const { verifyToken } = await import('../../api/lib/auth.js');
+const { verifyToken } = await import('../../api/_lib/auth.js');
 
 function mockRes() {
   return {

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { fromCents, isCents, roundCents, toCents } from '../../api/lib/money.js';
+import { fromCents, isCents, roundCents, toCents } from '../../api/_lib/money.js';
 
 describe('toCents', () => {
   it('converts reais to integer cents', () => {

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { scopedFilter } from '../../api/lib/ownership.js';
+import { scopedFilter } from '../../api/_lib/ownership.js';
 
 const auth = { userId: 'u1', email: 'a@b.com', role: 'user' };
 
